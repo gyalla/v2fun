@@ -1,0 +1,127 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,latexsym,amsfonts,amsthm,graphicx,subcaption}
+\usepackage[margin=1in]{geometry} \usepackage{tikz,caption}
+\usetikzlibrary{backgrounds} \usepackage{fancyhdr}
+\usepackage{multicol} \usepackage{caption} \usepackage{empheq}
+%\setlist{parsep=0pt,listparindent=\parindent}
+\usepackage{listings} 
+
+\definecolor{light-gray}{gray}{0.95}
+
+\lstset{%numbers=right, 
+                %numberstyle=\tiny, 
+                breaklines=true,
+                backgroundcolor=\color{light-gray},
+                %numbersep=5pt,
+                xleftmargin=.25in,
+                xrightmargin=0in} 
+
+
+
+\newcommand{\ep}{\epsilon} \newcommand{\noi}{\noindent}
+\newcommand{\sol}{\subsubsection*{Solution}}
+\newcommand{\R}{\mathbb{R}} \newcommand{\inti}{\int_{-\infty}^\infty}
+\newcommand{\wto}{\rightharpoonup} \newcommand{\bd}{\partial \Omega}
+\newcommand{\pb}[1]{\subsection*{Problem #1}}
+\newcommand{\ang}[2]{\langle #1 , #2 \rangle} \newcommand{\<}{\langle}
+\newcommand{\sa}{\sigma\text{-algebra}}
+\newcommand{\pr}{\partial}
+\begin{document} 
+\thispagestyle{fancy} 
+\chead{CSE380: Final Project Proposal} 
+\lhead{Gopal Yalla} 
+\rhead{11/11/2016}
+
+\section{$v^2$-$f$ Model}
+
+\subsection{Equations} 
+\begin{align}
+	\pr_t u_i + u_j d_j u_i &= \frac{-1}{\rho} \pr_i \left( P +
+	\frac{2}{3} \rho k \right) + \pr_j \left[ (v + \nu_T)(\pr_j u_i + \pr_i
+	u_j)]\right] \\
+	\nu_T &= C_\mu \overline{v^2} T \\ 
+	\pr_t k + u_j d_j k &= \mathcal{P}- \ep + \pr_j \left( (v +\nu_T)d_j
+	k\right)\\
+	\pr_t \ep + u_j d_j \ep &= \frac{C_{\ep 1}\mathcal{P} - C_{\ep 2}
+	\ep}{T} + \pr_j \left( (v + \frac{\nu_T}{\sigma_\ep}) \pr_j \ep \right)\\
+	\pr_t \overline{v^2} + u_j d_j \overline{v^2} + \ep
+	\frac{\overline{v^2}}{k} &= kf + \pr_k [ \nu_T \pr_k \overline{v^2}] + v
+	\nabla^2 \overline{v^2} \\
+	L^2 \nabla^2 f - f &= -c_2 \frac{\mathcal{P}}{k} + \frac{c_1}{T} \left(
+	\frac{\overline{v^2}}{k} - \frac{2}{3} \right) 
+	\label{eq:v2f}
+\end{align}
+
+\subsection{Constants} 
+
+\begin{multicols}{2}
+\begin{enumerate}
+	\item $C_\mu = 0.09$
+	\item $\sigma_\ep = 1.3$
+	\item $c_2 = 0.3$	
+	\item $C_L = ?$
+\end{enumerate}
+\columnbreak 
+
+\begin{itemize}
+	\item[5.] $c_1 = 0.4$
+	\item[6.] $C_{\ep 1} = 1.4[1 + 0.045 (k/v^2)^{1/2}]$
+	\item[7.] $C_{\ep 2} = 1.92$  
+	\item[8.] $C_\eta = ?$
+\end{itemize}
+\end{multicols}
+
+\subsection{Terms and Unknowns}
+
+\textbf{Unknowns:}
+\begin{itemize}
+	\item $u_i = i^{th}$ component of the mean velocity. 
+	\item $\nu_T = $ eddy viscosity.
+	\item $k =$ turbulent kinetic energy. 
+	\item $\ep =$ energy dissapation (to eddy viscosity.)
+	\item $\overline{v^2} =$ Velocity scale to capture anisotropy near wall
+	\item $f =$ ``redistribution term.''
+\end{itemize}
+
+\noi \textbf{Other Terms:} 
+\begin{itemize}
+	\item $\mathcal{P} = $ rate at which mean flow is converted to turbulent
+		fluctuation. \newline
+		$= - \overline{u_i u_j} \pr_j u_i$ \newline
+		$= 2 \nu_T |S|^2$ for incompressible flow. 
+
+	\item $S = $ mean rate of strain tensor \newline
+		$= 1/2 ( \pr_i u_j + \pr_j u_i)$ \newline
+		$= 1/2 d_y u$ for steady state problem
+	\item $T = $ turbulent length scale. \newline
+		$= k/\ep$ 
+	\item $L = $ length scale \newline
+		$= \max \left\{ C_L \frac{k^{3/2}}{\ep}, C_\eta (
+		\frac{v^3}{\ep} )^{1/4} \right\}$
+		
+\end{itemize}
+
+\subsection{Steady State Equations for Fully Developed Flow}
+
+\begin{align}
+	(v + \nu_T) \frac{\pr^2 u}{\pr y^2} + \frac{\pr u}{\pr y}
+	\frac{\pr \nu_T}{\pr y} - \frac{1}{\rho} \frac{\pr P }{\pr x} &= 0 \\
+	\nu_T - C_\mu \overline{v^2} T &=0 \\
+	\mathcal{P} - \ep + ( v + \nu_T) \frac{\pr^2 k }{\pr y^2} +
+	\frac{\pr k}{\pr y} \frac{\pr \nu_T}{\pr y} &=0\\
+	\frac{C_{\ep 1 } \mathcal{P} - C_{\ep 2 } \ep}{T} + \left( v +
+	\frac{\nu_T}{ \sigma_\ep}
+	\right) \frac{\pr^2 \ep}{\pr y^2 } + \frac{1}{\sigma_\ep}
+	\frac{\pr \ep}{\pr y} \frac{\pr \nu_T}{\pr y} &= 0 \\
+	kf + (v + \nu_T) \frac{\pr^2 \overline{v^2}}{\pr y^2} +
+	\frac{\pr \overline{v^2}}{\pr y} \frac{\pr \nu_T}{\pr y} -
+	\frac{\ep \overline{v^2}}{k} &= 0 \\
+	L^2 \frac{d^2 f }{dy^2} - f + c_2 \frac{\mathcal{P}}{k} -
+	\frac{c_1}{T} \left( \frac{\overline{v^2}}{k} - \frac{2}{3}\right) &=0
+	\label{eq:ssv2f}
+\end{align}
+
+
+
+\end{document} 
+
