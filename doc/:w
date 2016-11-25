@@ -26,38 +26,10 @@
 \newcommand{\ang}[2]{\langle #1 , #2 \rangle} \newcommand{\<}{\langle}
 \newcommand{\sa}{\sigma\text{-algebra}}
 \newcommand{\pr}{\partial}
-\newcommand{\secDif}[1]{ \left( \frac{ {#1}_{i+1}^{n+1} - 2 {#1}_{i}^{n+1} +
-{#1}_{i-1}^{n+1} }{\Delta \eta^2} \right) }
-\newcommand{\secDifEnd}[1]{\left( \frac{2 {#1}_{I-1}^{n+1} - 2 {#1}_I^{n+1}
-}{\Delta \eta^2 } \right)}
-\newcommand{\Dif}[1]{ \left( \frac{ {#1}_{i+1}^{n+1} - {#1}_{i-1}^{n+1}}{ 2\Delta
-\eta} \right)}
-\newcommand{\tDif}[1]{ \frac{ {#1}_i^{n+1} - {#1}_i^{n}}{\Delta t}}
-\newcommand{\tDifEnd}[1]{ \left( \frac{ {#1}_{I}^{n+1} - {#1}_I^{n}}{\Delta t }
-\right)}
-
-
-
+\newcommand{\secDif}[1]{ \frac{ {#1}_{i+1}^{n+1} - 2 {#1}_{i}^{n+1} +
+{#1}_{i-1}^{n+1} }{\Delta \eta^2}}
 \begin{document} 
-
-%------------------------------------------------------
-% Document
-%------------------------------------------------------
-\thispagestyle{empty} 
-\title{ {\Large CSE380: Tools and Techniques of Computational Science }\\ {\large Final
-Project Proposal}}
-\author{Gopal Yalla}
-\date{November 28, 2016}
-\maketitle
-\newpage 
-
-\thispagestyle{empty} 
-\tableofcontents
-\newpage 
-
-\setcounter{page}{1}
-
-
+\thispagestyle{fancy} 
 \chead{CSE380: Final Project Proposal} 
 \lhead{Gopal Yalla} 
 \rhead{11/11/2016}
@@ -119,8 +91,8 @@ is required.
 
 Closing the RANS equations is accomplished by various turbulence models.
 Here, we will focus on the $\overline{v^2}-f$ model, first proposed by Durbin
-in 1995 \cite{v2f}. The $\overline{v^2}-f$ model is the primary RANS model used by the PECOS
-group in their hybrid RANS/LES models \cite{thesis}. The $\overline{v^2}-f$
+(CITE). The $\overline{v^2}-f$ model is the primary RANS model used by the PECOS
+group in their hybrid RANS/LES models (CITE SIGFRIED) The $\overline{v^2}-f$
 equations are: 
 \begin{align}
 	\pr_t U_i + U_j d_j U_i &= \frac{-1}{\rho} \pr_i \left( P +
@@ -187,11 +159,10 @@ equations are:
 For this project, we only consider fully developed channgel flow, through a rectangular duct of
 height $h=2 \delta$. The bottom and top walls are at $y = 0$ and $y =
 2 \delta$ with the mid plane being $y = \delta$. In the fully developed region,
-the flow is entirely in the axial direction, i.e,  staistics no longer vary with
-$x$ \cite{pope}. Hence, the
+the flow is entirely in the axial direction, i.e,  staistics no longer vary with $x$. Hence, the
 fully developed channel flow being considered is statistically stationary and
-statistically one-dimensional, with velocity statistics depending only on $y$
-\cite{pope}. Moreover, the flow is statistically symmetric about the mid-plane $y = \delta$.
+statistically one-dimensional, with velocity statistics depending only on $y$.
+Moreover, the flow is statistically symmetric about the mid-plane $y = \delta$.
 The steady state $\overline{v^2}-f$ equations for fully developed flow are given
 by, 
 
@@ -356,129 +327,23 @@ Let $\xi^{n+1}$ be the vector of uknowns at $t = (n+1) \cdot \Delta t$, i.e.,
 	k_2^{n+1} \\ \vdots \\ f_{I-1}^{n+1} \\ {U^+}_I^{n+1} \\ k_I^{n+1} \\ \ep_I^{n+1} \\
 {\overline{v^2}}_I^{n+1} \\ f_I^{n+1} \end{matrix} \right] \]  
 
-\noi Then, from equations
-(\ref{eq:ndv2f1})- (\ref{eq:ndv2f2}) plus time marching, we wish to solve
-$F(\xi^{n+1})=0$ for each time step, where  
+\noi Then, the system of equations we wish to solve (equations
+(\ref{eq:ndv2f1})- (\ref{eq:ndv2f2}) plus time marching) for each time step is given by, 
 
 \begin{equation*}
-	\hspace{-1in}
 	F(\xi^{n+1}) = \left(
 	\begin{matrix} 
-		\ep_0^{n+1} - \frac{2k_1^{n+1}}{Re_\tau \Delta \eta^2} \\ 
-		f_0^{n+1} - \frac{20 \overline{v^2}}{Re_\tau^3 \ep_0^{n+1} \Delta \eta^4}\\
-		\vdots \\
-		\tDif{U^+} + \left(
-		\frac{1}{Re_\tau} + {\nu_T}_i^{n+1} \right) \secDif{ {U^+}} +
-		\Dif{ U^+} \Dif{\nu_T} + 1 \\ 
-		\tDif{k} + \mathcal{P}_i^{n+1} - \ep_i^{n+1} + \left( \frac{1}{Re_\tau} +
-		{\nu_T}_{i}^{n+1} \right) \secDif{k} + \Dif{k} \Dif{\nu_T} \\
-		\tDif{\ep} +\frac{C_{\ep 1} \mathcal{P}_i^{n+1} -  C_{\ep 2}
-		\ep_{i}^{n+1}}{T_i^{n+1}} + \left( \frac{1}{Re_\tau} +
-		\frac{ {\nu_T}_{i}^{n+1}}{\sigma_\ep} \right) \secDif{\ep} +
-		\frac{1}{\sigma_\ep} \Dif{\ep} \Dif{\nu_T} \\ 
-		\tDif{\overline{v^2}} + k_i^{n+1} f_i^{n+1} + \left( \frac{1}{Re_\tau} +
-		{\nu_T}_i^{n+1}  \right) \secDif{\overline{v^2}} +
-		\Dif{\overline{v^2}} \Dif{\nu_T} - \ep_i^{n+1}
-		\frac{ {\overline{v^2}_i^{n+1}}}{k_i^{n+1}} \\
-		\tDif{f} + (L_i^{n+1})^2 \secDif{f} - f_i^{n+1} + C_2
-		\frac{\mathcal{P}_i^{n+1}}{k_i^{n+1}} -
-		\frac{C_1}{T_i^{n+1}} \left( \frac{
-			{\overline{v^2}}_i^{n+1}}{k_i^{n+1}} -
-			\frac{2}{3} \right) \\
-		\vdots \\
-		\tDifEnd{U^+} + \left( \frac{1}{Re_\tau} + {\nu_T}_I^{n+1}
-		\right) \secDifEnd{U^+} + 1 \\ 
-		\tDifEnd{k} + \mathcal{P}_I^{n+1} - \ep_{I}^{n+1} + \left(
-		\frac{1}{Re_\tau} + {\nu_T}_I^{n+1}\right) \secDifEnd{k} \\
-		\tDifEnd{\ep} + \frac{C_{\ep 1} \mathcal{P}_I^{n+1}-C_{\ep 2}
-		\ep_I^{n+1}}{T_I^{n+1}} + \left( \frac{1}{Re_\tau} +
-		\frac{ {\nu_T}_I^{n+1}}{\sigma \ep} \right) \secDifEnd{\ep} \\
-		\tDifEnd{\overline{v^2}} + k_I^{n+1} f_{I}^{n+1} + \left(
-		\frac{1}{Re_\tau} + {\nu_T}_I^{n+1} \right)
-		\secDifEnd{\overline{v^2}} \\
-		\tDifEnd{f} + \left( L_i^{n+1} \right)^2 \secDifEnd{f} -
-		f_I^{n+1} + C_2 \frac{\mathcal{P}_I^{n+1}}{k_I^{n+1}} -
-		\frac{C_1}{T_{I}^{n+1}} \left(
-		\frac{\overline{v^2}_I^{n+1}}{k_I^{n+1}} - \frac{2}{3} \right)
+		\frac{2k_1^{n+1}}{Re_\tau \Delta \eta^2} \\ 
+		\frac{20 \overline{v^2}}{Re_\tau^3 \ep_0^{n+1} \Delta \eta^4}\\
+		\vdots 
+		\frac{ {U^+}_i^{n+1} - {U^+}_i^{n}}{\Delta t} + \left(
+		\frac{1}{Re_\tau} + {\nu_T}_i^{n+1} \right) \left(
+		{U^+}_{i+1}^{n+1} - 2 {U^+}_{i}^{n+1} + {U^+}_{i-1}<++>
+		\right)<++>
 	\end{matrix}
 	\right)
 \end{equation*}
 
-\noi The initial conditions will be interpolated from the direct numerical
-simulation data performed by Dr. Moser and Dr. Lee on
-turbulence.ices.utexas.edu. 
-
-\subsection{External Software}
-
-We plan to make use of GSL's multi-dimensional root solvers (e.g. GSL's newton
-solver) and GRVY for input parsing. Regarding input options we will allow a
-choice of model paramters and constants, step size, and make use of various log
-levels to control standard output.  
-
-%------------------------------------------------------
-\section{Verification Plan}
-%-----------------------------------------------------
-
-\subsection{Regression Tests}
-
-In order to test the accuracy of the numerical method, we will perform
-asympotic error analysis. To do this we compute the solution for a large number
-of steps, $N$, and use this as our ``true'' solution. Then we compute the
-solution for small $N$ and plot the error vs $N$ on a log-log plot. The slope of
-the line should be the order of the numerical method (2 in this case). Moreover, we
-can save the computed solutions to make sure we can recover them in the future. 
-
-To test the actual physics opposed to the numerical scheme, we will check the
-convergce of certain statistical quantities; however, more research needs to be done
-to determine which quanities to check. 
-
-Lastely, if time permits (or possibly over break), we will implement a method of manufactured
-solutions ---  a technique by which numerical methods within codes can be verified
-to ensure that they have been coded correctly and do, in fact, solve the
-equations that they claim to solve.
-
-\subsection{Unit Tests}
-
-Unit testing will play a major role in the project, as there will be several
-routines that compute quanities, which we will need to test. The best way to do
-this is to test each function with dummy quanities and compare the result to the
-true value, which will be computed by hand. 
-
-%-----------------------------------------------------
-\section{Other Design Considerations}
-%--------------------------------------------------
-
-\subsection{Build Systems}
-
-We will use GNU make to link in all 3rd party libraries that the applicaiton
-requires. It will have an option to run a suite of the aforementioned regression
-tests via the ``make check'' check target.  
-
-\subsection{Version Control} 
-
-Git will be used for version control. 
-
-\subsection{Profiling and Performance Optimization} 
-Once the code is complete and we are confident in the answer, we will worry
-about performance optimization. First off, performance timing
-measurements for key kernels within the code will be included using the GRVY
-library. If the program takes longer to run than desired, we will use gprof for
-profiling to see which parts of the code to optimize.    
-
-
-
-
-
-
-
-
-
-
-
-
-
-\newpage 
-\addcontentsline{toc}{section}{References}
 \bibliography{Problem_Statement}
 \bibliographystyle{ieeetr}
 \end{document} 
