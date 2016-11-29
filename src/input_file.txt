@@ -1,0 +1,23 @@
+###
+# The input file for Lib GRVY
+#
+# Original code (gyalla)
+###
+
+#--------------------------------
+# Global input variables
+#--------------------------------
+
+
+reyn = 2000			# Reynolds number 
+Cmu = 0.19			# model constants...
+C1  = 0.4 
+C2 = 0.3
+sigmaEp = 1.3
+CL = 0.3 
+Cep2 = 1.9
+Cep1 = 1.55
+Ceta = 70 
+
+filename = ../data/Reyn_2000_data.txt
+#filename = ../data/temp.data
