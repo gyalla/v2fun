@@ -16,8 +16,14 @@ $(EXEC): $(OBJ)
 %.o: %.cc
 	$(COMPILE.c)  $< -o $@ $(INC)
 
-main.o: options.h
+main.o: setup.h
+main.o: computeTerms.h
 
-.PHONY: clean 
+.PHONY: clobber clean echo 
+clobber: clean
+	$(RM) $(EXEC)
 clean: 
-	rm $(OBJ) $(EXEC)
+	rm $(OBJ)
+echo: 
+	@echo $(OBJ)
+

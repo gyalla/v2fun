@@ -1,12 +1,13 @@
 #include<cstdlib>
 #include<iostream>
-#include"options.h"
+#include"setup.h"
 #include<grvy.h>
 #include<gsl/gsl_multiroots.h>
 #include<gsl/gsl_vector.h>
 #include<gsl/gsl_matrix.h>
 #include<math.h>
 #include<fstream>
+#include"computeTerms.h"
 using namespace GRVY;
 using namespace std; 
 
@@ -26,14 +27,18 @@ int main(int argc, char ** argv)
 		gsl_vector * ep = gsl_vector_calloc(1/deltaEta + 1); //energy dissipation
 		gsl_vector * v2 = gsl_vector_calloc(1/deltaEta + 1); //turbulent velocity scale
 		gsl_vector * f  = gsl_vector_calloc(1/deltaEta + 1); // redistribution term 
+		gsl_vector * P  = gsl_vector_calloc(1/deltaEta + 1); 
+		gsl_vector * T  = gsl_vector_calloc(1/deltaEta + 1); 
+		gsl_vector * L  = gsl_vector_calloc(1/deltaEta + 1); 
+		gsl_vector * vT = gsl_vector_calloc(1/deltaEta + 1); 
 
 	SolveIC(U,k,ep,v2,deltaEta,filename);	
-	for (int i =0;i<U->size;i++)
-	{
-		cout << gsl_vector_get(U,i) << endl;
-	}
-	return 0; 
 
+	ComputeT(k,ep,reyn,T); 
+	ComputeEddyVisc(v2,T,Cmu,vT); 
+	ComputeP(U,vT,deltaEta,P);
+	ComputeL(k,ep,reyn,CL,Ceta,L); 
+	Solve4f0(k,ep,v2,P,T,L,reyn,C2,C1,deltaEta,f); 
 
 }
 

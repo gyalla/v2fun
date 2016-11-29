@@ -14,14 +14,14 @@ int ComputeT(gsl_vector * k, gsl_vector * ep, int reyn, gsl_vector * T)
 		if (!isfinite(firstTerm))
 		{
 			cerr << "Error: non-finite (" << firstTerm << ")" << endl; 
-			return 1; 
+			return 0; 
 		}
 
 		secondTerm = 6*sqrt(1/(reyn*gsl_vector_get(ep,i)));
 		if(!isfinite(secondTerm))
 		{
 			cerr << "Error: non-finite (" << secondTerm << ")" << endl;
-			return 1; 
+			return 0; 
 		}
 
 		if (firstTerm >= secondTerm)
@@ -30,7 +30,7 @@ int ComputeT(gsl_vector * k, gsl_vector * ep, int reyn, gsl_vector * T)
 			gsl_vector_set(T,i,secondTerm);
 
 	}
-	return 0; 
+	return 1; 
 }
 
 int ComputeL(gsl_vector * k,gsl_vector * ep,int reyn, double CL,double Ceta,gsl_vector * L)
@@ -42,14 +42,14 @@ int ComputeL(gsl_vector * k,gsl_vector * ep,int reyn, double CL,double Ceta,gsl_
 		if (!isfinite(firstTerm))
 		{
 			cerr << "Error: non-finite (" << firstTerm << ")" << endl;
-			return 1; 
+			return 0; 
 		}
 		
 		secondTerm = Ceta*pow(1/(pow(reyn,3)*gsl_vector_get(ep,i)),0.25);
 		if (!isfinite(secondTerm))
 		{
 			cerr << "Error: non-finite (" << secondTerm << ")" << endl;
-			return 1; 
+			return 0; 
 		}
 
 		if (firstTerm >= secondTerm)
@@ -58,7 +58,7 @@ int ComputeL(gsl_vector * k,gsl_vector * ep,int reyn, double CL,double Ceta,gsl_
 			gsl_vector_set(L,i,CL*secondTerm);
 	}
 
-	return 0;
+	return 1;
 
 }
 
@@ -78,5 +78,24 @@ int ComputeEddyVisc(gsl_vector * v2, gsl_vector * T, double Cmu, gsl_vector * vT
 	return 0; 
 }
 
+int ComputeP(gsl_vector * U,gsl_vector *vT,double deltaEta,gsl_vector *P)
+{
+	double val; 
+	
+	for (int i = 0;i< (P->size-1);i++)
+	{
+		if (i==0)
+			val = gsl_vector_get(vT,i)*(gsl_vector_get(U,i+1)/(deltaEta)); //must use forward difference approximation
+		else
+			val = gsl_vector_get(vT,i)*( (gsl_vector_get(U,i+1)-gsl_vector_get(U,i-1))/(2*deltaEta));
+		if (!isfinite(val))
+		{
+			cerr << "Error: non-finite (" << val << ")" << endl;
+			return 0; 
+		}
+		gsl_vector_set(P,i,val);
+	}
+	return 1; 
+}
 
 
