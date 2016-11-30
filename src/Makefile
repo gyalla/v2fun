@@ -12,12 +12,14 @@ INC     := -I$$TACC_GRVY_INC -I$$TACC_GSL_INC
 
 # RULES
 $(EXEC): $(OBJ)
-	$(LINK.o) $(LDLIBS) $(INC) $(LDFLAGS) -o $@ $^
+	$(LINK.o) -g -Wall $(LDLIBS) $(INC) $(LDFLAGS) -o $@ $^
 %.o: %.cc
-	$(COMPILE.c)  $< -o $@ $(INC)
+	$(COMPILE.c) -g -Wall  $< -o $@ $(INC)
 
-main.o: setup.h
-main.o: computeTerms.h
+main.o systemSolve.o computeTerms.o: setup.h
+main.o systemSolve.o: computeTerms.h
+systemSolve.o: finiteDiff.h
+
 
 .PHONY: clobber clean echo 
 clobber: clean

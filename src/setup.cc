@@ -2,7 +2,7 @@
 #include<cstdlib>
 #include<iostream>
 #include<grvy.h>
-#include "options.h"
+#include "setup.h"
 #include<gsl/gsl_vector.h>
 #include<gsl/gsl_matrix.h>
 #include<gsl/gsl_blas.h>
@@ -12,39 +12,39 @@
 using namespace std;
 using namespace GRVY;
 
-int Grvy_Input_Parse(double & reyn, double & Cmu, double & C1, double & C2, double & sigmaEp, double & CL, double & Cep2, double & Cep1, double & Ceta, string & filename)
+int Grvy_Input_Parse(constants * modelConst,string & filename)
 {
 	GRVY_Input_Class iparse; // parsing object
 
 	if(! iparse.Open("./input_file.txt"))
 		exit(1);
 
-	if(iparse.Read_Var("reyn", &reyn))
-		printf("---> %-11s = %f\n","reyn",reyn);
+	if(iparse.Read_Var("reyn", &(modelConst->reyn)))
+		printf("---> %-11s = %f\n","reyn",(modelConst->reyn));
 	
-	if(iparse.Read_Var("Cmu", &Cmu))
-		printf("---> %-11s = %f\n","Cmu",Cmu);
+	if(iparse.Read_Var("Cmu", &(modelConst->Cmu)))
+		printf("---> %-11s = %f\n","Cmu",(modelConst->Cmu));
 
-	if(iparse.Read_Var("C1", &C1))
-		printf("---> %-11s = %f\n","C1",C1);
+	if(iparse.Read_Var("C1", &(modelConst->C1)))
+		printf("---> %-11s = %f\n","C1",(modelConst->C1));
 
-	if(iparse.Read_Var("C2", &C2))
-		printf("---> %-11s = %f\n","C2",C2);
+	if(iparse.Read_Var("C2", &(modelConst->C2)))
+		printf("---> %-11s = %f\n","C2",(modelConst->C2));
 
-	if(iparse.Read_Var("sigmaEp", &sigmaEp))
-		printf("---> %-11s = %f\n","sigmaEp",sigmaEp);
+	if(iparse.Read_Var("sigmaEp", &(modelConst->sigmaEp)))
+		printf("---> %-11s = %f\n","sigmaEp",(modelConst->sigmaEp));
 
-	if(iparse.Read_Var("CL", &CL))
-		printf("---> %-11s = %f\n","CL",CL);
+	if(iparse.Read_Var("CL", &(modelConst->CL)))
+		printf("---> %-11s = %f\n","CL",(modelConst->CL));
 
-	if(iparse.Read_Var("Cep1", &Cep1))
-		printf("---> %-11s = %f\n","Cep1",Cep1);
+	if(iparse.Read_Var("Cep1",&(modelConst->Cep1)))
+		printf("---> %-11s = %f\n","Cep1",(modelConst->Cep1));
 
-	if(iparse.Read_Var("Cep2", &Cep2))
-		printf("---> %-11s = %f\n","Cep2",Cep2);
+	if(iparse.Read_Var("Cep2", &(modelConst->Cep2)))
+		printf("---> %-11s = %f\n","Cep2",(modelConst->Cep2));
 
-	if(iparse.Read_Var("Ceta", &Ceta))
-		printf("---> %-11s = %f\n","Ceta",Ceta);
+	if(iparse.Read_Var("Ceta", &(modelConst->Ceta)))
+		printf("---> %-11s = %f\n","Ceta",modelConst->Ceta);
 
 	if(iparse.Read_Var("filename",&filename))
 		cout << "---> filename = " << filename << endl; 
@@ -81,7 +81,7 @@ int SolveIC(gsl_vector * U, gsl_vector * k, gsl_vector * ep, gsl_vector * v2,dou
 
 	if (!(inFile >> pt2 >> tempU2 >> tempK2 >> tempEp2 >> tempV22))
 		return 1; 
-	for(int i=0; i<U->size;i++)
+	for(unsigned int i=0; i<U->size;i++)
 	{
 		gridPt=i*deltaEta; 
 		while ((! ((pt1 <= gridPt) && (pt2 >= gridPt))) && (!inFile.eof()))
@@ -107,16 +107,16 @@ int SolveIC(gsl_vector * U, gsl_vector * k, gsl_vector * ep, gsl_vector * v2,dou
 
 }
 
-int Solve4f0(gsl_vector * k, gsl_vector * ep, gsl_vector * v2, gsl_vector * P, gsl_vector *  T,gsl_vector * L, double reyn, double C2,double C1, double deltaEta, gsl_vector * f)
+int Solve4f0(gsl_vector * k, gsl_vector * ep, gsl_vector * v2, gsl_vector * P, gsl_vector *  T,gsl_vector * L, constants * modelConst,double deltaEta, gsl_vector * f)
 {
 	gsl_matrix * A = gsl_matrix_calloc(k->size,k->size);
 	gsl_vector * b = gsl_vector_calloc(A->size1); 
 	double val; 
 	double LOvrEta; 
 	double LHS1,LHS2; 
-	int i; 
+	unsigned int i; 
 
-	val = (20*gsl_vector_get(v2,1))/( pow(reyn,3)*gsl_vector_get(ep,0)*pow(deltaEta,4));  
+	val = (20*gsl_vector_get(v2,1))/( pow(modelConst->reyn,3)*gsl_vector_get(ep,0)*pow(deltaEta,4));  
 	if (!isfinite(val))
 	{
 		cout <<"Error: non-finite (" << val << ")" << endl; 
@@ -132,8 +132,8 @@ int Solve4f0(gsl_vector * k, gsl_vector * ep, gsl_vector * v2, gsl_vector * P, g
 		gsl_matrix_set(A,i,i,-( 2*LOvrEta + 1)); 
 		gsl_matrix_set(A,i,i+1,LOvrEta); 
 
-		LHS1 = (C1/gsl_vector_get(T,i))*( (gsl_vector_get(v2,i)/gsl_vector_get(k,i)) - 2/3); 
-		LHS2 = (C2*gsl_vector_get(P,i))/gsl_vector_get(k,i);
+		LHS1 = (modelConst->C1/gsl_vector_get(T,i))*( (gsl_vector_get(v2,i)/gsl_vector_get(k,i)) - 2/3); 
+		LHS2 = (modelConst->C2*gsl_vector_get(P,i))/gsl_vector_get(k,i);
 
 		if(!isfinite(LHS1-LHS2))
 		{
@@ -149,7 +149,7 @@ int Solve4f0(gsl_vector * k, gsl_vector * ep, gsl_vector * v2, gsl_vector * P, g
 	gsl_matrix_set(A,i,i-1,2*LOvrEta);
 	gsl_matrix_set(A,i,i,-( 2*LOvrEta + 1)); 
 
-	LHS1 = (C1/gsl_vector_get(T,i))*( (gsl_vector_get(v2,i)/gsl_vector_get(k,i)) - 2/3); 
+	LHS1 = (modelConst->C1/gsl_vector_get(T,i))*( (gsl_vector_get(v2,i)/gsl_vector_get(k,i)) - 2/3); 
 	gsl_vector_set(b,i,LHS1); 
 
 	int s; 

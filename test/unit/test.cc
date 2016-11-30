@@ -1,6 +1,7 @@
 #include<iostream>
 #include"../../src/setup.h"
 #include"../../src/computeTerms.h"
+#include"../../src/systemSolve.h"
 #include<gsl/gsl_vector.h>
 
 
@@ -9,6 +10,8 @@ using namespace std;
 int test_interp();
 int ComputeT_test();
 int ComputeP_test();
+int DeConstructXi_test();
+int ReConstructXi_test();
 
 int main()
 {
@@ -17,9 +20,9 @@ int main()
 	cout << "--------------------------------------------------" << endl << endl; 
 
 	if (test_interp())
-		cout << "PASS:  Data Interpolation" << endl; 
+		cout << "PASS: Data Interpolation" << endl; 
 	else
-		cout << "FAIL:  Data Interpolation"<<endl;
+		cout << "FAIL: Data Interpolation"<<endl;
 
 	if(ComputeT_test())
 		cout << "PASS: Turbulent Time Scale Term" << endl; 
@@ -30,6 +33,15 @@ int main()
 		cout << "PASS: Production Rate Term" << endl; 
 	else
 		cout << "FAIL: Production Rate Term" << endl; 
+	if(!DeConstructXi_test())
+		cout << "PASS: Deconstructing Xi" << endl; 
+	else
+		cout << "FAIL: Deconstructing Xi" << endl;
+
+	if(!ReConstructXi_test())
+		cout << "PASS: Reconstructing Xi" << endl; 
+	else
+		cout << "FAIL: Reconstructing Xi" << endl; 
 	return 0;
 
 }
@@ -76,7 +88,9 @@ int test_interp()
 
 int ComputeT_test()
 {
-	int reyn = 2; 
+	constants Const = {
+		.reyn=2,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
+	constants * modelConst = &Const; 
 	gsl_vector * k = gsl_vector_alloc(2); 
 	gsl_vector * ep = gsl_vector_alloc(2); 
 	gsl_vector * T = gsl_vector_alloc(2); 
@@ -90,7 +104,7 @@ int ComputeT_test()
 	gsl_vector_set(trueT,0,12);
 	gsl_vector_set(trueT,1,3);
 
-	if(!ComputeT(k,ep,reyn,T))
+	if(!ComputeT(k,ep,modelConst,T))
 		return 0; 
 
 	if(!gsl_vector_equal(T,trueT))
@@ -99,7 +113,8 @@ int ComputeT_test()
 }
 
 int ComputeP_test()
-{
+{	
+	
 	double deltaEta = 0.25; 
 	gsl_vector * U = gsl_vector_calloc(3); 
 	gsl_vector * vt = gsl_vector_alloc(3); 
@@ -123,4 +138,106 @@ int ComputeP_test()
 	if(!gsl_vector_equal(P,trueP))
 		return 0; 
 	return 1; 
+}
+
+int DeConstructXi_test()
+{
+	gsl_vector * xi = gsl_vector_calloc(10);
+	gsl_vector * U  = gsl_vector_calloc(3);
+	gsl_vector * k  = gsl_vector_calloc(3);
+	gsl_vector * ep = gsl_vector_calloc(3);
+	gsl_vector * v2 = gsl_vector_calloc(3);
+	gsl_vector * f  = gsl_vector_calloc (3);
+	
+	gsl_vector *trueU = gsl_vector_calloc(3); 
+	gsl_vector *truek = gsl_vector_calloc(3);
+	gsl_vector *trueep = gsl_vector_calloc(3);
+	gsl_vector *truev2 = gsl_vector_calloc(3);
+	gsl_vector *truef = gsl_vector_calloc(3);
+
+
+	gsl_vector_set(xi,0,1);
+	gsl_vector_set(xi,1,-1);
+	gsl_vector_set(xi,2,1);
+	gsl_vector_set(xi,3,0);
+	gsl_vector_set(xi,4,5);
+	gsl_vector_set(xi,5,2);
+	gsl_vector_set(xi,6,-2);
+	gsl_vector_set(xi,7,1);
+	gsl_vector_set(xi,8,0);
+	gsl_vector_set(xi,9,6);
+	
+	gsl_vector_set(trueU,1,1);
+	gsl_vector_set(trueU,2,2);
+
+	gsl_vector_set(truek,1,-1);
+	gsl_vector_set(truek,2,-2);
+
+	gsl_vector_set(trueep,0,0);
+	gsl_vector_set(trueep,1,1);
+	gsl_vector_set(trueep,2,1);
+	
+	gsl_vector_set(truef,0,0);
+	gsl_vector_set(truef,1,5);
+	gsl_vector_set(truef,2,6);
+
+	if(DeconstructXi(xi,U,k,ep,v2,f))
+		return 1;
+	if(!gsl_vector_equal(U,trueU))
+		return 1; 
+	if(!gsl_vector_equal(k,truek))
+		return 1;
+	if(!gsl_vector_equal(ep,trueep))
+		return 1; 
+	if(!gsl_vector_equal(v2,truev2))
+		return 1;
+	if(!gsl_vector_equal(f,truef))
+		return 1; 
+	return 0; 
+}
+
+int ReConstructXi_test()
+{
+
+	gsl_vector * xi = gsl_vector_calloc(10);
+	gsl_vector * U  = gsl_vector_calloc(3);
+	gsl_vector * k  = gsl_vector_calloc(3);
+	gsl_vector * ep = gsl_vector_calloc(3);
+	gsl_vector * v2 = gsl_vector_calloc(3);
+	gsl_vector * f  = gsl_vector_calloc (3);
+	
+	gsl_vector * truexi = gsl_vector_calloc(10);
+	gsl_vector_set(truexi,0,1);
+	gsl_vector_set(truexi,1,-1);
+	gsl_vector_set(truexi,2,1);
+	gsl_vector_set(truexi,3,0);
+	gsl_vector_set(truexi,4,5);
+	gsl_vector_set(truexi,5,2);
+	gsl_vector_set(truexi,6,-2);
+	gsl_vector_set(truexi,7,1);
+	gsl_vector_set(truexi,8,0);
+	gsl_vector_set(truexi,9,6);
+	
+
+	gsl_vector_set(U,1,1);
+	gsl_vector_set(U,2,2);
+
+	gsl_vector_set(ep,0,0);
+	gsl_vector_set(ep,1,1);
+	gsl_vector_set(ep,2,1);
+	
+	
+	gsl_vector_set(k,1,-1);
+	gsl_vector_set(k,2,-2);
+	
+	gsl_vector_set(f,0,0);
+	gsl_vector_set(f,1,5);
+	gsl_vector_set(f,2,6);
+	
+	if(ReconstructXi(xi,U,k,ep,v2,f))
+		return 1; 
+	if(!gsl_vector_equal(xi,truexi))
+		return 1; 
+	return 0; 
+
 }

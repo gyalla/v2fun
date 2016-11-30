@@ -8,37 +8,73 @@
 #include<math.h>
 #include<fstream>
 #include"computeTerms.h"
+#include"systemSolve.h"
 using namespace GRVY;
 using namespace std; 
 
+int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaX);
 
 int main(int argc, char ** argv)
 {
-	double reyn, Cmu,C1,C2,sigmaEp,CL,Cep1,Cep2,Ceta;
+	struct constants Const = {
+		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
+	constants * modelConst = &Const; 
 	string filename; 
 	GRVY_Timer_Class gt; 
 	gt.BeginTimer("Getting Inputs");
-	Grvy_Input_Parse(reyn,Cmu,C1,C2,sigmaEp,CL,Cep2,Cep1,Ceta,filename); 
+	Grvy_Input_Parse(modelConst,filename); 
 	gt.EndTimer("Getting Inputs");
 
-	double deltaEta = 1/reyn;
-		gsl_vector * U = gsl_vector_calloc(1/deltaEta + 1); //mean velocity
-		gsl_vector * k = gsl_vector_calloc(1/deltaEta + 1); //turbulent kinetic energy
-		gsl_vector * ep = gsl_vector_calloc(1/deltaEta + 1); //energy dissipation
-		gsl_vector * v2 = gsl_vector_calloc(1/deltaEta + 1); //turbulent velocity scale
-		gsl_vector * f  = gsl_vector_calloc(1/deltaEta + 1); // redistribution term 
-		gsl_vector * P  = gsl_vector_calloc(1/deltaEta + 1); 
-		gsl_vector * T  = gsl_vector_calloc(1/deltaEta + 1); 
-		gsl_vector * L  = gsl_vector_calloc(1/deltaEta + 1); 
-		gsl_vector * vT = gsl_vector_calloc(1/deltaEta + 1); 
+	cout << filename << endl;
+
+	double deltaEta = 1/modelConst->reyn;
+	gsl_vector * U = gsl_vector_calloc(1/deltaEta + 1); //mean velocity
+	gsl_vector * k = gsl_vector_calloc(1/deltaEta + 1); //turbulent kinetic energy
+	gsl_vector * ep = gsl_vector_calloc(1/deltaEta + 1); //energy dissipation
+	gsl_vector * v2 = gsl_vector_calloc(1/deltaEta + 1); //turbulent velocity scale
+	gsl_vector * f  = gsl_vector_calloc(1/deltaEta + 1); // redistribution term 
+	gsl_vector * P  = gsl_vector_calloc(1/deltaEta + 1); // production rate
+	gsl_vector * T  = gsl_vector_calloc(1/deltaEta + 1); // turbulent time scale
+	gsl_vector * L  = gsl_vector_calloc(1/deltaEta + 1); // turbulent length scale 
+	gsl_vector * vT = gsl_vector_calloc(1/deltaEta + 1); // eddy viscosity 
+	gsl_vector * xi = gsl_vector_calloc(5*(U->size-1));
 
 	SolveIC(U,k,ep,v2,deltaEta,filename);	
 
-	ComputeT(k,ep,reyn,T); 
-	ComputeEddyVisc(v2,T,Cmu,vT); 
+	ComputeT(k,ep,modelConst,T); 
+	ComputeEddyVisc(v2,T,modelConst,vT); 
 	ComputeP(U,vT,deltaEta,P);
-	ComputeL(k,ep,reyn,CL,Ceta,L); 
-	Solve4f0(k,ep,v2,P,T,L,reyn,C2,C1,deltaEta,f); 
+	ComputeL(k,ep,modelConst,L); 
+	Solve4f0(k,ep,v2,P,T,L,modelConst,deltaEta,f); 
+
+	ReconstructXi(xi,U,k,ep,v2,f); 	
+	
+	gsl_vector_free(P);
+	gsl_vector_free(T);
+	gsl_vector_free(L);
+	gsl_vector_free(vT);
+	gsl_vector_free(U);
+	gsl_vector_free(ep);
+	gsl_vector_free(v2);
+	gsl_vector_free(f); 
 
 }
 
+int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
+{
+	gsl_vector *xin;
+	gsl_vector_memcpy(xin,xi); 
+
+	double deltaT = 1; 
+
+	struct FParams p = {xin,deltaT,deltaEta,modelConst}; 
+	FParams * params = &p; 
+	gsl_multiroot_function FDF = {&SysF,xi->size,params};
+
+	const gsl_multiroot_fsolver_type * T = gsl_multiroot_fsolver_dnewton;
+	gsl_multiroot_fsolver * s = gsl_multiroot_fsolver_alloc(T,xi->size);
+	gsl_multiroot_fsolver_set(s,&FDF,xi); 
+
+
+	return 0; 
+}
