@@ -48,6 +48,10 @@ int main(int argc, char ** argv)
 	Solve4f0(k,ep,v2,P,T,L,modelConst,deltaEta,f); 
 
 	ReconstructXi(xi,U,k,ep,v2,f); 	
+
+
+	NewtonSolve(xi,modelConst,deltaEta);
+
 	
 	gsl_vector_free(P);
 	gsl_vector_free(T);
@@ -74,6 +78,20 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 	const gsl_multiroot_fsolver_type * T = gsl_multiroot_fsolver_dnewton;
 	gsl_multiroot_fsolver * s = gsl_multiroot_fsolver_alloc(T,xi->size);
 	gsl_multiroot_fsolver_set(s,&FDF,xi); 
+
+	int iter = 0; 
+	int status; 
+	do
+	{
+		iter++;
+		status = gsl_multiroot_fsolver_iterate(s);
+		if(status)
+			break;
+		status = gsl_multiroot_test_residual(s->f,1);
+	}
+	while(status==GSL_CONTINUE && iter < 1);  
+	cout << gsl_strerror(status) << endl; 
+	gsl_multiroot_fsolver_free(s); 
 
 
 	return 0; 

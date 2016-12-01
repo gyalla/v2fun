@@ -44,7 +44,7 @@ int ReconstructXi(gsl_vector * xi,gsl_vector * U,gsl_vector *k,gsl_vector * ep,g
 int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 {
 	struct FParams * params = (struct FParams *)p; 
-	int vecSize = ((xi->size)-2)/double(5)+1; 
+	int vecSize = ((xi->size))/double(5)+1; 
 	
 	gsl_vector * tempxi;
 	gsl_vector_memcpy(tempxi,xi);
@@ -60,44 +60,145 @@ int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 	gsl_vector * vT = gsl_vector_calloc(vecSize); 
 
 	DeconstructXi(tempxi,U,k,ep,v2,f);
+
 	ComputeT(k,ep,params->modelConst,T);
 	ComputeL(k,ep,params->modelConst,L);
 	ComputeEddyVisc(v2,T,params->modelConst,vT);
 	ComputeP(U,vT,params->deltaEta,P); 
 
-
+	//set boundary conditions here for ep and f 
 	//set middle terms
+	SetBdryEpf(ep,f,k,v2,params,sysF);
 	SetUTerms(U,vT,params,sysF); 
 	SetKTerms(k,P,ep,vT,params,sysF);
-	SetEpTerms(ep,P,T,vT,params,sysF);
+	SetEpTerms(ep,k,P,T,vT,params,sysF);
 	SetV2Terms(v2,k,f,vT,ep,params,sysF);
 	SetFTerms(f,L,P,k,T,v2,params,sysF); 
 
+	gsl_vector_free(tempxi);
+	gsl_vector_free(U);
+	gsl_vector_free(k);
+	gsl_vector_free(ep);
+	gsl_vector_free(v2);
+	gsl_vector_free(f);
+	gsl_vector_free(P);
+	gsl_vector_free(T);
+	gsl_vector_free(L);
+	gsl_vector_free(vT);
 	return 0; 
 }
 int SetFTerms(gsl_vector *f, gsl_vector * L, gsl_vector*P, gsl_vector * k, gsl_vector * T, gsl_vector * v2,  FParams * params, gsl_vector * sysF)
 {
+	double firstTerm,secondTerm,thirdTerm,fourthTerm; 
+	unsigned int i; 
+	double xiCounter; 
+
+	for(i = 1; i<f->size-1; i++)
+	{
+		xiCounter=5*(i-1)+4; 
+		firstTerm = -(gsl_vector_get(f,i)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	
+		secondTerm = pow(gsl_vector_get(L,i),2)*Diff2(f,params->deltaEta,i); 
+		thirdTerm = params->modelConst->C2*(gsl_vector_get(P,i)/gsl_vector_get(k,i)) - gsl_vector_get(f,i);     
+		fourthTerm = -(params->modelConst->C1)/(gsl_vector_get(T,i))*( (gsl_vector_get(v2,i)/gsl_vector_get(k,i))-float(2)/3); 
+		gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+thirdTerm+fourthTerm); 
+	}
+
+	i=f->size-1; 
+	xiCounter=5*(i-1)+4; 
+	firstTerm = -(gsl_vector_get(f,i)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	
+	secondTerm = pow(gsl_vector_get(L,i),2)*BdryDiff2(f,params->deltaEta,i); 
+	thirdTerm = -gsl_vector_get(f,i) -(params->modelConst->C1)/(gsl_vector_get(T,i))*( (gsl_vector_get(v2,i)/gsl_vector_get(k,i))-float(2)/3); 
+	gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+thirdTerm); 
+
 	return 0; 
 }
 
 
 int SetV2Terms(gsl_vector * v2, gsl_vector * k, gsl_vector * f, gsl_vector * vT, gsl_vector * ep,FParams * params, gsl_vector * sysF)
 {
+	double firstTerm,secondTerm,thirdTerm,fourthTerm; 
+	unsigned int i; 
+	double xiCounter; 
+
+	for(i = 1; i<v2->size-1; i++)
+	{
+		xiCounter=5*(i-1)+3; 
+		firstTerm = -(gsl_vector_get(v2,i)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	
+		secondTerm = gsl_vector_get(k,i)*gsl_vector_get(f,i) - gsl_vector_get(ep,i)*( (gsl_vector_get(vT,i)/gsl_vector_get(k,i)));
+		thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i)/params->modelConst->sigmaEp)*Diff2(v2,params->deltaEta,i);
+		fourthTerm = (1/params->modelConst->sigmaEp)*Diff1(v2,params->deltaEta,i)*Diff1(vT,params->deltaEta,i); 
+		gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+thirdTerm+fourthTerm); 
+	}
+
+	i=v2->size-1; 
+	xiCounter=5*(i-1)+2; 
+	firstTerm = -(gsl_vector_get(v2,i)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	
+	secondTerm = gsl_vector_get(k,i)*gsl_vector_get(f,i) - gsl_vector_get(ep,i)*( (gsl_vector_get(vT,i)/gsl_vector_get(k,i)));
+	thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i)/params->modelConst->sigmaEp)*BdryDiff2(v2,params->deltaEta,i);
+	gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+thirdTerm); 
+
 	return 0; 
 }
 
 
-int SetEpTerms(gsl_vector * ep, gsl_vector * P, gsl_vector * T, gsl_vector * vT, FParams * params, gsl_vector * sysF)
+int SetEpTerms(gsl_vector * ep, gsl_vector * k, gsl_vector * P, gsl_vector * T, gsl_vector * vT, FParams * params, gsl_vector * sysF)
 {
+	double firstTerm,secondTerm,thirdTerm,fourthTerm; 
+	unsigned int i; 
+	double xiCounter; 
+	for (i = 1; i<ep->size-1;i++)
+	{
+		xiCounter=5*(i-1)+2; 
+		firstTerm = -(gsl_vector_get(ep,i)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	
+		secondTerm = (params->modelConst->Cep1*gsl_vector_get(P,i) - params->modelConst->Cep2*gsl_vector_get(ep,i))/gsl_vector_get(T,i); 
+		thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i)/params->modelConst->sigmaEp)*Diff2(ep,params->deltaEta,i);
+		fourthTerm = (1/params->modelConst->sigmaEp)*Diff1(ep,params->deltaEta,i)*Diff1(vT,params->deltaEta,i); 
+		gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+thirdTerm+fourthTerm); 
+	}
+
+	i=ep->size-1; 
+	xiCounter=5*(i-1)+2; 
+	firstTerm = -(gsl_vector_get(ep,i)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	
+	secondTerm = - (params->modelConst->Cep2*gsl_vector_get(ep,i))/gsl_vector_get(T,i); 
+	thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i)/params->modelConst->sigmaEp)*BdryDiff2(ep,params->deltaEta,i);
+	gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+thirdTerm); 
 	return 0; 
 }
 
 
+int SetKTerms(gsl_vector * k,gsl_vector * P, gsl_vector * ep, gsl_vector* vT,FParams * params,gsl_vector *sysF)
+{
+	double firstTerm, secondTerm,thirdTerm,fourthTerm; 
+	double xiCounter; 
+	unsigned int i;  
+
+	for(i=1; i<k->size-1;i++)
+	{
+		xiCounter=5*(i-1)+1;
+		firstTerm = -(gsl_vector_get(k,i)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	
+		secondTerm = gsl_vector_get(P,i) - gsl_vector_get(ep,i); 
+		thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*Diff2(k,params->deltaEta,i); 
+		fourthTerm = Diff1(k,params->deltaEta,i)*Diff1(vT,params->deltaEta,i); 
+		gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+thirdTerm+fourthTerm); 
+	}
+
+	i = k->size-1; 
+	xiCounter = 5*(i-1)+1; 
+	firstTerm = -(gsl_vector_get(k,i)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	
+	secondTerm = gsl_vector_get(ep,i); 
+	thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*BdryDiff2(k,params->deltaEta,i); 
+	gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+thirdTerm); 
+	
+	return 0; 
+
+}
 int SetUTerms(gsl_vector * U, gsl_vector * vT, FParams * params,gsl_vector * sysF)
 {
 	double firstTerm, secondTerm, thirdTerm;
 	double xiCounter;
-	for(unsigned int i=1; i<U->size-1; i++)
+	unsigned int i; 
+
+	for(i=1; i<U->size-1; i++)
 	{
 		xiCounter = 5*(i-1);
 
@@ -107,26 +208,24 @@ int SetUTerms(gsl_vector * U, gsl_vector * vT, FParams * params,gsl_vector * sys
 
 		gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+thirdTerm+1);
 	}
+
+	i = U->size-1; 
+	xiCounter = 5*(i-1); 
+	firstTerm = -(gsl_vector_get(U,i)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	
+	secondTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*BdryDiff2(U,params->deltaEta,i);
+	gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+1); 	
 	return 0; 
 }
 
-int SetKTerms(gsl_vector * k,gsl_vector * P, gsl_vector * ep, gsl_vector* vT,FParams * params,gsl_vector *sysF)
-{
-	return 0; 
-
-}
 	
-int SetFirst2(gsl_vector * ep, gsl_vector * f,gsl_vector * k,  gsl_vector * v2, FParams * params,gsl_vector * sysF)
+int SetBdryEpf(gsl_vector * ep, gsl_vector * f,gsl_vector * k,  gsl_vector * v2, FParams * params,gsl_vector * sysF)
 {
-
-	double timeComp = (gsl_vector_get(ep,0)-gsl_vector_get(params->XiN,0))/params->deltaT;
-	double spaceComp = (gsl_vector_get(ep,0) - ( (2*gsl_vector_get(k,1))/(params->modelConst->reyn*pow(params->deltaEta,2)))); 
-	gsl_vector_set(sysF,0,timeComp+spaceComp); 
-
-	timeComp = (gsl_vector_get(f,0)-gsl_vector_get(params->XiN,1))/params->deltaT;
-	spaceComp = (gsl_vector_get(f,0) - ( (20*gsl_vector_get(v2,1))/( pow(params->modelConst->reyn,3)*gsl_vector_get(ep,0)*pow(params->deltaEta,4))));
-
-	gsl_vector_set(sysF,1,timeComp+spaceComp); 
-
+	//first term enforcing boundary conditions	
+	//fourthTerm = (1/params->modelConst->sigmaEp)*( (gsl_vector_get(ep,i+1)-tempEp0)/(2*params->deltaEta))*Diff1(vT,params->deltaEta,i); 
+	//gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+thirdTerm+fourthTerm); 
+	double ep0 = ((2*gsl_vector_get(k,1))/(params->modelConst->reyn*pow(params->deltaEta,2)));
+	gsl_vector_set(ep,0,ep0);
+	double f0  = (( (20*gsl_vector_get(v2,1))/( pow(params->modelConst->reyn,3)*gsl_vector_get(ep,0)*pow(params->deltaEta,4))));
+	gsl_vector_set(f,0,f0);
 	return 0; 
 }		
