@@ -9,7 +9,7 @@ CFLAGS  := -O3
 LDFLAGS := -L$$TACC_GSL_LIB -L$$TACC_GRVY_LIB
 LDLIBS  :=  -lgsl -lgslcblas -lgrvy
 INC     := -I$$TACC_GSL_INC -I$$TACC_GRVY_INC
-OTHER   := ../../src/setup.cc ../../src/computeTerms.cc ../../src/systemSolve.cc
+OTHER   := ../../src/finiteDiff.cc ../../src/setup.cc ../../src/computeTerms.cc ../../src/systemSolve.cc
 # RULES
 $(EXEC): $(OBJ)
 	$(LINK.o) $(LDLIBS) $(OTHER) $(INC) $(LDFLAGS) -o $@ $^

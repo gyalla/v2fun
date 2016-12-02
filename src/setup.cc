@@ -116,7 +116,6 @@ int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 	gsl_matrix * A = gsl_matrix_calloc(size,size);
 	gsl_vector * b = gsl_vector_calloc(A->size1); 
 	gsl_vector * f = gsl_vector_calloc(A->size1);
-	double val; 
 	double LOvrEta; 
 	double LHS1,LHS2; 
 	unsigned int i,xiCounter; 
@@ -146,6 +145,7 @@ int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 	}
 	
 	i = size-1;	
+	xiCounter = 5*(i-1);
 	LOvrEta = pow(ComputeL(xi,modelConst,i),2)/pow(deltaEta,2);
 	gsl_matrix_set(A,i,i-1,2*LOvrEta);
 	gsl_matrix_set(A,i,i,-( 2*LOvrEta + 1)); 
@@ -158,7 +158,7 @@ int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 	gsl_linalg_LU_decomp(A,p,&s); 
 	gsl_linalg_LU_solve(A,p,b,f); 
 
-	for(int i =1; i<f->size; i++)
+	for(unsigned int i =1; i<f->size; i++)
 	{
 		xiCounter=5*(i-1)+4; 
 		gsl_vector_set(xi,xiCounter,gsl_vector_get(f,i));

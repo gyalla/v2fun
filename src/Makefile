@@ -21,11 +21,13 @@ main.o systemSolve.o: computeTerms.h
 systemSolve.o: finiteDiff.h
 
 
-.PHONY: clobber clean echo 
+.PHONY: check clobber clean echo 
 clobber: clean
 	$(RM) $(EXEC)
 clean: 
 	rm $(OBJ)
 echo: 
 	@echo $(OBJ)
+check:
+	../test/unit/test
 

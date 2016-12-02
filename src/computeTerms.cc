@@ -2,6 +2,7 @@
 #include<gsl/gsl_vector.h>
 #include<math.h>
 #include"setup.h"
+#include"finiteDiff.h"
 
 using namespace std;
 
@@ -9,6 +10,7 @@ double ComputeT(gsl_vector * xi, constants * modelConst,int i)
 {
 	double firstTerm,secondTerm; 
 	double xiCounter = 5*(i-1); 	
+	
 
 	firstTerm = (gsl_vector_get(xi,xiCounter+1)/gsl_vector_get(xi,xiCounter+2));
 	if (!isfinite(firstTerm))
@@ -28,7 +30,6 @@ double ComputeT(gsl_vector * xi, constants * modelConst,int i)
 			return firstTerm;
 	else
 			return secondTerm;
-
 	}
 
 
@@ -37,7 +38,7 @@ double ComputeL(gsl_vector * xi,constants * modelConst,int i)
 	double firstTerm,secondTerm; 
 	double xiCounter = 5*(i-1); 
 
-	firstTerm = pow(gsl_vector_get(xi,xiCounter+1),1.5)/gsl_vector_get(xi,xiCounter+3);
+	firstTerm = pow(gsl_vector_get(xi,xiCounter+1),1.5)/gsl_vector_get(xi,xiCounter+2);
 	if (!isfinite(firstTerm))
 	{
 		cerr << "Error: L non-finite (" << firstTerm << ")" << endl;
@@ -76,11 +77,12 @@ double ComputeP(gsl_vector * xi,constants * modelConst,double deltaEta,int i)
 	double val; 
 	double xiCounter = 5*(i-1);
 
-	if(i==1)
-		val = ComputeEddyVisc(xi,modelConst,i)*((gsl_vector_get(xi,xiCounter+5))/(2*deltaEta));
-	else
-		val= ComputeEddyVisc(xi,modelConst,i)*( (gsl_vector_get(xi,xiCounter+5)-gsl_vector_get(xi,xiCounter-5))/(2*deltaEta));
-
+	if (i==0)
+	{
+		cerr << "Error: i = 0" << endl; 
+		return -1; 
+	}
+	val = ComputeEddyVisc(xi,modelConst,i)*pow(Diff1(xi,deltaEta,0,i),2);
 	if (!isfinite(val))
 	{
 		cerr << "Error: P non-finite (" << val << ")" << endl;
