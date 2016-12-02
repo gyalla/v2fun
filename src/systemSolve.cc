@@ -12,7 +12,7 @@ using namespace std;
 
 int DeconstructXi(gsl_vector * xi, gsl_vector * U, gsl_vector * k,gsl_vector * ep,gsl_vector * v2, gsl_vector * f)
 {
-	int xiCounter;
+/*	int xiCounter;
 	for(unsigned int i=1; i<U->size; i++)
 	{
 		xiCounter=5*(i-1); 
@@ -22,12 +22,13 @@ int DeconstructXi(gsl_vector * xi, gsl_vector * U, gsl_vector * k,gsl_vector * e
 		gsl_vector_set(v2,i,gsl_vector_get(xi,xiCounter+3));
 		gsl_vector_set(f,i,gsl_vector_get(xi,xiCounter+4));
 	}
-
+*/
 	return 0; 
 }
 
 int ReconstructXi(gsl_vector * xi,gsl_vector * U,gsl_vector *k,gsl_vector * ep,gsl_vector *v2,gsl_vector * f)
 {
+	/*
 	int xiCounter; 
 	for(unsigned int i=1; i<U->size;i++)
 	{
@@ -38,15 +39,17 @@ int ReconstructXi(gsl_vector * xi,gsl_vector * U,gsl_vector *k,gsl_vector * ep,g
 		gsl_vector_set(xi,xiCounter+3,gsl_vector_get(v2,i));
 		gsl_vector_set(xi,xiCounter+4,gsl_vector_get(f,i));
 	}
+	*/
 	return 0; 
 }
 
 int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 {
+	/*
 	struct FParams * params = (struct FParams *)p; 
 	int vecSize = ((xi->size))/double(5)+1; 
 	
-	gsl_vector * tempxi;
+	gsl_vector * tempxi = gsl_vector_alloc(xi->size); 
 	gsl_vector_memcpy(tempxi,xi);
 	gsl_vector * U = gsl_vector_calloc(vecSize);
 	gsl_vector * k = gsl_vector_calloc(vecSize);
@@ -61,6 +64,29 @@ int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 
 	DeconstructXi(tempxi,U,k,ep,v2,f);
 
+	*for(int i = 0; i < k->size;i++)
+	{
+		cout << gsl_vector_get(U,i) << endl; 
+	}
+	for(int i = 0; i < k->size;i++)
+	{
+		cout << gsl_vector_get(k,i) << endl; 
+	}
+	for(int i = 0; i < k->size;i++)
+	{
+		cout << gsl_vector_get(ep,i) << endl; 
+	}
+	for(int i = 0; i < k->size;i++)
+	{
+		cout << gsl_vector_get(v2,i) << endl; 
+	}
+	for(int i = 0; i < k->size;i++)
+	{
+		cout << gsl_vector_get(f,i) << endl; 
+	}*
+
+	cout << "Computing Terms..." << endl;
+	SetBdryEpf(ep,f,k,v2,params,sysF);
 	ComputeT(k,ep,params->modelConst,T);
 	ComputeL(k,ep,params->modelConst,L);
 	ComputeEddyVisc(v2,T,params->modelConst,vT);
@@ -68,12 +94,17 @@ int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 
 	//set boundary conditions here for ep and f 
 	//set middle terms
-	SetBdryEpf(ep,f,k,v2,params,sysF);
 	SetUTerms(U,vT,params,sysF); 
 	SetKTerms(k,P,ep,vT,params,sysF);
 	SetEpTerms(ep,k,P,T,vT,params,sysF);
 	SetV2Terms(v2,k,f,vT,ep,params,sysF);
 	SetFTerms(f,L,P,k,T,v2,params,sysF); 
+
+	for(int i = 0; i<sysF->size;i++)
+	{
+		cout << gsl_vector_get(sysF,i) << endl; 
+	}
+
 
 	gsl_vector_free(tempxi);
 	gsl_vector_free(U);
@@ -85,10 +116,12 @@ int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 	gsl_vector_free(T);
 	gsl_vector_free(L);
 	gsl_vector_free(vT);
+	*/
 	return 0; 
 }
 int SetFTerms(gsl_vector *f, gsl_vector * L, gsl_vector*P, gsl_vector * k, gsl_vector * T, gsl_vector * v2,  FParams * params, gsl_vector * sysF)
 {
+	/*
 	double firstTerm,secondTerm,thirdTerm,fourthTerm; 
 	unsigned int i; 
 	double xiCounter; 
@@ -111,11 +144,13 @@ int SetFTerms(gsl_vector *f, gsl_vector * L, gsl_vector*P, gsl_vector * k, gsl_v
 	gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+thirdTerm); 
 
 	return 0; 
+	*/
 }
 
 
 int SetV2Terms(gsl_vector * v2, gsl_vector * k, gsl_vector * f, gsl_vector * vT, gsl_vector * ep,FParams * params, gsl_vector * sysF)
 {
+	/*
 	double firstTerm,secondTerm,thirdTerm,fourthTerm; 
 	unsigned int i; 
 	double xiCounter; 
@@ -131,18 +166,20 @@ int SetV2Terms(gsl_vector * v2, gsl_vector * k, gsl_vector * f, gsl_vector * vT,
 	}
 
 	i=v2->size-1; 
-	xiCounter=5*(i-1)+2; 
+	xiCounter=5*(i-1)+3; 
 	firstTerm = -(gsl_vector_get(v2,i)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	
 	secondTerm = gsl_vector_get(k,i)*gsl_vector_get(f,i) - gsl_vector_get(ep,i)*( (gsl_vector_get(vT,i)/gsl_vector_get(k,i)));
 	thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i)/params->modelConst->sigmaEp)*BdryDiff2(v2,params->deltaEta,i);
 	gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+thirdTerm); 
 
 	return 0; 
+	*/
 }
 
 
 int SetEpTerms(gsl_vector * ep, gsl_vector * k, gsl_vector * P, gsl_vector * T, gsl_vector * vT, FParams * params, gsl_vector * sysF)
 {
+	/*
 	double firstTerm,secondTerm,thirdTerm,fourthTerm; 
 	unsigned int i; 
 	double xiCounter; 
@@ -163,11 +200,13 @@ int SetEpTerms(gsl_vector * ep, gsl_vector * k, gsl_vector * P, gsl_vector * T, 
 	thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i)/params->modelConst->sigmaEp)*BdryDiff2(ep,params->deltaEta,i);
 	gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+thirdTerm); 
 	return 0; 
+	*/
 }
 
 
 int SetKTerms(gsl_vector * k,gsl_vector * P, gsl_vector * ep, gsl_vector* vT,FParams * params,gsl_vector *sysF)
 {
+	/*
 	double firstTerm, secondTerm,thirdTerm,fourthTerm; 
 	double xiCounter; 
 	unsigned int i;  
@@ -190,11 +229,12 @@ int SetKTerms(gsl_vector * k,gsl_vector * P, gsl_vector * ep, gsl_vector* vT,FPa
 	gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+thirdTerm); 
 	
 	return 0; 
+	*/
 
 }
 int SetUTerms(gsl_vector * U, gsl_vector * vT, FParams * params,gsl_vector * sysF)
 {
-	double firstTerm, secondTerm, thirdTerm;
+	/*double firstTerm, secondTerm, thirdTerm;
 	double xiCounter;
 	unsigned int i; 
 
@@ -215,17 +255,6 @@ int SetUTerms(gsl_vector * U, gsl_vector * vT, FParams * params,gsl_vector * sys
 	secondTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*BdryDiff2(U,params->deltaEta,i);
 	gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+1); 	
 	return 0; 
+	*/
 }
 
-	
-int SetBdryEpf(gsl_vector * ep, gsl_vector * f,gsl_vector * k,  gsl_vector * v2, FParams * params,gsl_vector * sysF)
-{
-	//first term enforcing boundary conditions	
-	//fourthTerm = (1/params->modelConst->sigmaEp)*( (gsl_vector_get(ep,i+1)-tempEp0)/(2*params->deltaEta))*Diff1(vT,params->deltaEta,i); 
-	//gsl_vector_set(sysF,xiCounter,firstTerm+secondTerm+thirdTerm+fourthTerm); 
-	double ep0 = ((2*gsl_vector_get(k,1))/(params->modelConst->reyn*pow(params->deltaEta,2)));
-	gsl_vector_set(ep,0,ep0);
-	double f0  = (( (20*gsl_vector_get(v2,1))/( pow(params->modelConst->reyn,3)*gsl_vector_get(ep,0)*pow(params->deltaEta,4))));
-	gsl_vector_set(f,0,f0);
-	return 0; 
-}		

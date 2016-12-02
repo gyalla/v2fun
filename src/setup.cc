@@ -3,6 +3,7 @@
 #include<iostream>
 #include<grvy.h>
 #include "setup.h"
+#include "computeTerms.h"
 #include<gsl/gsl_vector.h>
 #include<gsl/gsl_matrix.h>
 #include<gsl/gsl_blas.h>
@@ -67,23 +68,25 @@ int LinInterp(gsl_vector * Vec,double pt1,double pt2, double tempU1,double tempU
 	return 0;
 }
 
-int SolveIC(gsl_vector * U, gsl_vector * k, gsl_vector * ep, gsl_vector * v2,double deltaEta,string file)
+int SolveIC(gsl_vector * xi, double deltaEta, string file)
 {	
 	ifstream inFile; 
 	inFile.open(file.c_str()); 
 	
 	double pt1,tempU1,tempK1,tempEp1,tempV21;
 	double pt2,tempU2,tempK2,tempEp2,tempV22;
-	double gridPt;
+	double gridPt,xiCounter;
 		
 	if (!(inFile >> pt1 >> tempU1 >> tempK1 >> tempEp1 >> tempV21))
 		return 1; 
 
 	if (!(inFile >> pt2 >> tempU2 >> tempK2 >> tempEp2 >> tempV22))
 		return 1; 
-	for(unsigned int i=0; i<U->size;i++)
+	for(unsigned int i=0; i<(xi->size/float(5));i++)
 	{
-		gridPt=i*deltaEta; 
+		xiCounter=5*i;
+		
+		gridPt=(i+1)*deltaEta; 
 		while ((! ((pt1 <= gridPt) && (pt2 >= gridPt))) && (!inFile.eof()))
 		{
 			pt1 = pt2; 
@@ -94,10 +97,10 @@ int SolveIC(gsl_vector * U, gsl_vector * k, gsl_vector * ep, gsl_vector * v2,dou
 			if (! (inFile >> pt2 >> tempU2 >> tempK2 >> tempEp2 >> tempV22))
 				cout << "error" <<endl; 
 		}
-		LinInterp(U,pt1,pt2,tempU1,tempU2,gridPt,i); 	
-		LinInterp(k,pt1,pt2,tempK1,tempK2,gridPt,i); 	
-		LinInterp(ep,pt1,pt2,tempEp1,tempEp2,gridPt,i); 	
-		LinInterp(v2,pt1,pt2,tempV21,tempV22,gridPt,i); 	
+		LinInterp(xi,pt1,pt2,tempU1,tempU2,gridPt,xiCounter); 	
+		LinInterp(xi,pt1,pt2,tempK1,tempK2,gridPt,xiCounter+1); 	
+		LinInterp(xi,pt1,pt2,tempEp1,tempEp2,gridPt,xiCounter+2); 	
+		LinInterp(xi,pt1,pt2,tempV21,tempV22,gridPt,xiCounter+3); 	
 	}
 
 	inFile.close();
@@ -107,33 +110,31 @@ int SolveIC(gsl_vector * U, gsl_vector * k, gsl_vector * ep, gsl_vector * v2,dou
 
 }
 
-int Solve4f0(gsl_vector * k, gsl_vector * ep, gsl_vector * v2, gsl_vector * P, gsl_vector *  T,gsl_vector * L, constants * modelConst,double deltaEta, gsl_vector * f)
+int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 {
-	gsl_matrix * A = gsl_matrix_calloc(k->size,k->size);
+	int size = xi->size/float(5) + 1; 
+	gsl_matrix * A = gsl_matrix_calloc(size,size);
 	gsl_vector * b = gsl_vector_calloc(A->size1); 
+	gsl_vector * f = gsl_vector_calloc(A->size1);
 	double val; 
 	double LOvrEta; 
 	double LHS1,LHS2; 
-	unsigned int i; 
+	unsigned int i,xiCounter; 
 
-	val = (20*gsl_vector_get(v2,1))/( pow(modelConst->reyn,3)*gsl_vector_get(ep,0)*pow(deltaEta,4));  
-	if (!isfinite(val))
-	{
-		cout <<"Error: non-finite (" << val << ")" << endl; 
-		return 1; 
-	}
 	gsl_matrix_set(A,0,0,1); 
-	gsl_vector_set(b,0,val); 
+	gsl_vector_set(b,0,Computef0(xi,modelConst,deltaEta)); 
 
 	for(i =1; i<A->size1-1;i++)
 	{
-		LOvrEta = pow(gsl_vector_get(L,i),2)/pow(deltaEta,2);
+		xiCounter = 5*(i-1);
+		
+		LOvrEta = pow(ComputeL(xi,modelConst,i),2)/pow(deltaEta,2);
 		gsl_matrix_set(A,i,i-1,LOvrEta); 
 		gsl_matrix_set(A,i,i,-( 2*LOvrEta + 1)); 
 		gsl_matrix_set(A,i,i+1,LOvrEta); 
 
-		LHS1 = (modelConst->C1/gsl_vector_get(T,i))*( (gsl_vector_get(v2,i)/gsl_vector_get(k,i)) - 2/3); 
-		LHS2 = (modelConst->C2*gsl_vector_get(P,i))/gsl_vector_get(k,i);
+		LHS1 = (modelConst->C1/ComputeT(xi,modelConst,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)) - 2/3); 
+		LHS2 = (modelConst->C2*ComputeP(xi,modelConst,deltaEta,i))/gsl_vector_get(xi,xiCounter+1);
 
 		if(!isfinite(LHS1-LHS2))
 		{
@@ -144,12 +145,12 @@ int Solve4f0(gsl_vector * k, gsl_vector * ep, gsl_vector * v2, gsl_vector * P, g
 		gsl_vector_set(b,i,LHS1-LHS2); 
 	}
 	
-	i = L->size-1;	
-	LOvrEta = pow(gsl_vector_get(L,i),2)/pow(deltaEta,2);
+	i = size-1;	
+	LOvrEta = pow(ComputeL(xi,modelConst,i),2)/pow(deltaEta,2);
 	gsl_matrix_set(A,i,i-1,2*LOvrEta);
 	gsl_matrix_set(A,i,i,-( 2*LOvrEta + 1)); 
 
-	LHS1 = (modelConst->C1/gsl_vector_get(T,i))*( (gsl_vector_get(v2,i)/gsl_vector_get(k,i)) - 2/3); 
+	LHS1 = (modelConst->C1/ComputeT(xi,modelConst,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)) - 2/3); 
 	gsl_vector_set(b,i,LHS1); 
 
 	int s; 
@@ -157,6 +158,11 @@ int Solve4f0(gsl_vector * k, gsl_vector * ep, gsl_vector * v2, gsl_vector * P, g
 	gsl_linalg_LU_decomp(A,p,&s); 
 	gsl_linalg_LU_solve(A,p,b,f); 
 
+	for(int i =1; i<f->size; i++)
+	{
+		xiCounter=5*(i-1)+4; 
+		gsl_vector_set(xi,xiCounter,gsl_vector_get(f,i));
+	}
 	return 0; 
 
 }

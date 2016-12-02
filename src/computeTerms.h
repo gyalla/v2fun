@@ -4,9 +4,11 @@
 #include<gsl/gsl_vector.h>
 #include"setup.h"
 
-int ComputeT(gsl_vector * k, gsl_vector * ep, constants * modelConst, gsl_vector * T);
-int ComputeL(gsl_vector * k,gsl_vector * ep, constants * modelConst,gsl_vector * L);
-int ComputeEddyVisc(gsl_vector * v2, gsl_vector * T, constants * modelConst, gsl_vector * vT);
-int ComputeP(gsl_vector * U,gsl_vector *vT,double deltaEta,gsl_vector *P);
+int ComputeT(gsl_vector * xi, constants * modelConst,int i);
+int ComputeL(gsl_vector * xi, constants * modelConst,int i);
+int ComputeEddyVisc(gsl_vector * xi, constants * modelConst,int i);
+int ComputeP(gsl_vector * xi,constants * modelConst,double deltaEta,int i );
 
+double Computef0(gsl_vector * xi,constants * modelConst,double deltaEta);
+double ComputeEp0(gsl_vector * xi,constants * modelConst,double deltaEta) ;
 #endif
