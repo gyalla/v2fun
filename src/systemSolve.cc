@@ -10,38 +10,6 @@
 #include"finiteDiff.h"
 using namespace std; 
 
-int DeconstructXi(gsl_vector * xi, gsl_vector * U, gsl_vector * k,gsl_vector * ep,gsl_vector * v2, gsl_vector * f)
-{
-/*	int xiCounter;
-	for(unsigned int i=1; i<U->size; i++)
-	{
-		xiCounter=5*(i-1); 
-		gsl_vector_set(U,i,gsl_vector_get(xi,xiCounter));
-		gsl_vector_set(k,i,gsl_vector_get(xi,xiCounter+1));
-		gsl_vector_set(ep,i,gsl_vector_get(xi,xiCounter+2));
-		gsl_vector_set(v2,i,gsl_vector_get(xi,xiCounter+3));
-		gsl_vector_set(f,i,gsl_vector_get(xi,xiCounter+4));
-	}
-*/
-	return 0; 
-}
-
-int ReconstructXi(gsl_vector * xi,gsl_vector * U,gsl_vector *k,gsl_vector * ep,gsl_vector *v2,gsl_vector * f)
-{
-	/*
-	int xiCounter; 
-	for(unsigned int i=1; i<U->size;i++)
-	{
-		xiCounter=5*(i-1);
-		gsl_vector_set(xi,xiCounter,gsl_vector_get(U,i));
-		gsl_vector_set(xi,xiCounter+1,gsl_vector_get(k,i));
-		gsl_vector_set(xi,xiCounter+2,gsl_vector_get(ep,i));
-		gsl_vector_set(xi,xiCounter+3,gsl_vector_get(v2,i));
-		gsl_vector_set(xi,xiCounter+4,gsl_vector_get(f,i));
-	}
-	*/
-	return 0; 
-}
 
 int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 {

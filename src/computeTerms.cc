@@ -104,7 +104,7 @@ double ComputeEp0(gsl_vector * xi,constants * modelConst,double deltaEta)
 
 double Computef0(gsl_vector * xi,constants * modelConst,double deltaEta)
 {
-	double f0  = (( (20*gsl_vector_get(xi,3))/( pow(modelConst->reyn,3)*ComputeEp0(xi,modelConst,deltaEta)*pow(deltaEta,4))));
+	double f0  = -(( (20*gsl_vector_get(xi,3))/( pow(modelConst->reyn,3)*ComputeEp0(xi,modelConst,deltaEta)*pow(deltaEta,4))));
 	if(!isfinite(f0))
 	{
 		cerr << "Error: f0 non-finite (" << f0 << ")" << endl; 

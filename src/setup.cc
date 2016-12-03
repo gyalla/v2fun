@@ -61,9 +61,9 @@ void log(int verbose, int level, string message)
 		cout << message; 
 }
 
-int LinInterp(gsl_vector * Vec,double pt1,double pt2, double tempU1,double tempU2,double gridPt,int i )
+int LinInterp(gsl_vector * Vec,double pt1,double pt2, double U1,double U2,double gridPt,int i )
 {
-	double val = tempU1 + (gridPt-pt1)*( (tempU2-tempU1)/(pt2-pt1));
+	double val = U1 + (gridPt-pt1)*( (U2-U1)/(pt2-pt1));
 	gsl_vector_set(Vec,i,val); 
 	return 0;
 }
