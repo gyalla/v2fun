@@ -4,6 +4,7 @@
 #include"../../src/systemSolve.h"
 #include"../../src/setup.h"
 #include<gsl/gsl_vector.h>
+#include<math.h>
 using namespace std;
 
 int Setuptest(gsl_vector * xi, struct constants * modelConst)
@@ -72,7 +73,7 @@ int ComputeL_test()
 	
 	for(unsigned int i=0; i<L->size;i++)
 	{
-		if( abs(ComputeL(xi,modelConst,i+1)-gsl_vector_get(L,i))>0.0000001)
+		if( fabs(ComputeL(xi,modelConst,i+1)-gsl_vector_get(L,i))>0.0000001)
 		{
 			cout << "FAIL: Compute Turbulent Length Scale, L" << endl; 
 			return 1; 
@@ -155,8 +156,23 @@ int ComputeEp0_test()
 	return 0; 
 }
 
+int Computef0_test()
+{
+	gsl_vector * xi = gsl_vector_alloc(10); 
+	struct constants Const = {
+		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
+	constants * modelConst= & Const;  
+	Setuptest(xi,modelConst);
+	double deltaEta = 0.5; 
 
-
+	if(fabs(Computef0(xi,modelConst,deltaEta)-23.333333333)>0.0000001)
+	{
+		cout << "FAIL: Compute redistribution at Wall" << endl; 
+		return 1; 
+	}
+	cout <<"PASS: Compute redistribution at Wall" << endl; 
+	return 0; 
+}
 /*
 int DeConstructXi_test()
 {

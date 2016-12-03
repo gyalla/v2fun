@@ -113,8 +113,8 @@ int SetV2Terms(gsl_vector * xi,gsl_vector * vT,FParams * params, gsl_vector * sy
 	{
 		xiCounter=5*(i-1); 
 		firstTerm = -(gsl_vector_get(xi,xiCounter+3)-gsl_vector_get(params->XiN,xiCounter+3))/params->deltaT;	
-		secondTerm = gsl_vector_get(xi,xiCounter+1)*gsl_vector_get(xi,xiCounter+4) - gsl_vector_get(xi,xiCounter+2)*( ( gsl_vector_get(vT,i)/gsl_vector_get(xi,xiCounter+1)));
-		thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i)/params->modelConst->sigmaEp)*Diff2(xi,params->deltaEta,0,xiCounter+3);
+		secondTerm = gsl_vector_get(xi,xiCounter+1)*gsl_vector_get(xi,xiCounter+4) - gsl_vector_get(xi,xiCounter+2)*( ( gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)));
+		thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*Diff2(xi,params->deltaEta,0,xiCounter+3);
 		fourthTerm = Diff1(xi,params->deltaEta,0,xiCounter+3)*Diff1vT(vT,params->deltaEta,i); 
 		gsl_vector_set(sysF,xiCounter+3,firstTerm+secondTerm+thirdTerm+fourthTerm); 
 	}
@@ -122,7 +122,7 @@ int SetV2Terms(gsl_vector * xi,gsl_vector * vT,FParams * params, gsl_vector * sy
 	i=size-1; 
 	xiCounter=5*(i-1); 
 	firstTerm = -(gsl_vector_get(xi,xiCounter+3)-gsl_vector_get(params->XiN,xiCounter+3))/params->deltaT;	
-	secondTerm = gsl_vector_get(xi,xiCounter+1)*gsl_vector_get(xi,xiCounter+4) - gsl_vector_get(xi,xiCounter+2)*( (gsl_vector_get(vT,i)/gsl_vector_get(xi,xiCounter+1)));
+	secondTerm = gsl_vector_get(xi,xiCounter+1)*gsl_vector_get(xi,xiCounter+4) - gsl_vector_get(xi,xiCounter+2)*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)));
 	thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*BdryDiff2(xi,params->deltaEta,xiCounter+3);
 	gsl_vector_set(sysF,xiCounter+3,firstTerm+secondTerm+thirdTerm); 
 
@@ -177,7 +177,7 @@ int SetKTerms(gsl_vector * xi, gsl_vector* vT,FParams * params,gsl_vector *sysF)
 	i = size-1;  
 	xiCounter = 5*(i-1); 
 	firstTerm = -(gsl_vector_get(xi,xiCounter+1)-gsl_vector_get(params->XiN,xiCounter+1))/params->deltaT;	
-	secondTerm = gsl_vector_get(xi,xiCounter+2); 
+	secondTerm = -gsl_vector_get(xi,xiCounter+2); 
 	thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*BdryDiff2(xi,params->deltaEta,xiCounter+1); 
 	gsl_vector_set(sysF,xiCounter+1,firstTerm+secondTerm+thirdTerm); 
 	

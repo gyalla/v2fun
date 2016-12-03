@@ -2,6 +2,7 @@
 #define SYSTEMSOLVE_H
 
 #include<gsl/gsl_vector.h>
+#include"setup.h"
 
 struct FParams{
 	gsl_vector * XiN;

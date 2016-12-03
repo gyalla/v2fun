@@ -1,0 +1,51 @@
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: Problem_Statement.aux
+The style file: ieeetr.bst
+Database file #1: Problem_Statement.bib
+Warning--empty school in thesis
+Warning--empty title in todd
+Warning--empty journal in todd
+Warning--empty year in todd
+You've used 6 entries,
+            1876 wiz_defined-function locations,
+            507 strings with 4138 characters,
+and the built_in function-call counts, 1169 in all, are:
+= -- 115
+> -- 36
+< -- 0
++ -- 15
+- -- 9
+* -- 68
+:= -- 175
+add.period$ -- 8
+call.type$ -- 6
+change.case$ -- 2
+chr.to.int$ -- 0
+cite$ -- 10
+duplicate$ -- 64
+empty$ -- 124
+format.name$ -- 9
+if$ -- 281
+int.to.chr$ -- 0
+int.to.str$ -- 6
+missing$ -- 7
+newline$ -- 24
+num.names$ -- 6
+pop$ -- 27
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 31
+stack$ -- 0
+substring$ -- 51
+swap$ -- 17
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 4
+while$ -- 12
+width$ -- 7
+write$ -- 54
+(There were 4 warnings)

@@ -2,6 +2,7 @@
 #include<gsl/gsl_vector.h>
 #include"../../src/setup.h"
 #include"test_computeTerms.h"
+#include"test_systemSolve.h"
 using namespace std; 
 
 int test_interp();
@@ -17,6 +18,13 @@ int main()
 	ComputeEddyVisc_test();
 	ComputeP_test();
 	ComputeEp0_test();
+	Computef0_test();
+
+	SetUTerms_test(); 
+	SetkTerms_test();
+	SetEpTerms_test();
+	Setv2Terms_test();
+	SetFTerms_test();
 }
 
 

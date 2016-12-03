@@ -1,0 +1,55 @@
+\hypertarget{computeTerms_8h}{
+\section{src/computeTerms.h File Reference}
+\label{computeTerms_8h}\index{src/computeTerms.h@{src/computeTerms.h}}
+}
+{\ttfamily \#include $<$gsl/gsl\_\-vector.h$>$}\par
+{\ttfamily \#include \char`\"{}setup.h\char`\"{}}\par
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{computeTerms_8h_a118300cdb3c7514ae2587d3eea8ae7fb}{
+double {\bfseries ComputeT} (gsl\_\-vector $\ast$xi, \hyperlink{structconstants}{constants} $\ast$modelConst, int i)}
+\label{computeTerms_8h_a118300cdb3c7514ae2587d3eea8ae7fb}
+
+\item 
+double \hyperlink{computeTerms_8h_a20f4b58c7a0fcf32b2bcf9eac4cbc2bf}{ComputeL} (gsl\_\-vector $\ast$xi, \hyperlink{structconstants}{constants} $\ast$modelConst, int i)
+\begin{DoxyCompactList}\small\item\em Compute Turbulent length scale, L. \item\end{DoxyCompactList}\item 
+\hypertarget{computeTerms_8h_a3477ef263ae11cd56420ff1f96f78b5c}{
+double {\bfseries ComputeEddyVisc} (gsl\_\-vector $\ast$xi, \hyperlink{structconstants}{constants} $\ast$modelConst, int i)}
+\label{computeTerms_8h_a3477ef263ae11cd56420ff1f96f78b5c}
+
+\item 
+\hypertarget{computeTerms_8h_a7fb6fb06e856da2213ab94b467108676}{
+double {\bfseries ComputeP} (gsl\_\-vector $\ast$xi, \hyperlink{structconstants}{constants} $\ast$modelConst, double deltaEta, int i)}
+\label{computeTerms_8h_a7fb6fb06e856da2213ab94b467108676}
+
+\item 
+\hypertarget{computeTerms_8h_a31b5610c868c00e0fe1595fc0a1d7640}{
+double {\bfseries Computef0} (gsl\_\-vector $\ast$xi, \hyperlink{structconstants}{constants} $\ast$modelConst, double deltaEta)}
+\label{computeTerms_8h_a31b5610c868c00e0fe1595fc0a1d7640}
+
+\item 
+\hypertarget{computeTerms_8h_aa685bd32e7e9463da7edac517cfb3767}{
+double {\bfseries ComputeEp0} (gsl\_\-vector $\ast$xi, \hyperlink{structconstants}{constants} $\ast$modelConst, double deltaEta)}
+\label{computeTerms_8h_aa685bd32e7e9463da7edac517cfb3767}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Function Documentation}
+\hypertarget{computeTerms_8h_a20f4b58c7a0fcf32b2bcf9eac4cbc2bf}{
+\index{computeTerms.h@{computeTerms.h}!ComputeL@{ComputeL}}
+\index{ComputeL@{ComputeL}!computeTerms.h@{computeTerms.h}}
+\subsubsection[{ComputeL}]{\setlength{\rightskip}{0pt plus 5cm}double ComputeL (gsl\_\-vector $\ast$ {\em xi}, \/  {\bf constants} $\ast$ {\em modelConst}, \/  int {\em i})}}
+\label{computeTerms_8h_a20f4b58c7a0fcf32b2bcf9eac4cbc2bf}
+
+
+Compute Turbulent length scale, L. Compute L using \[ C_L \max\{\frac{k}{\epsilon}\} \] 
+\begin{DoxyParams}{Parameters}
+\item[{\em xi}]vector of unknowns, U,k,ep,v2,f. \item[{\em modelConst}]model \hyperlink{structconstants}{constants} \item[{\em i}]position at which to compute L. \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Length scale L at i. 
+\end{DoxyReturn}

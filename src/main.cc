@@ -1,3 +1,9 @@
+/**
+ * \brief Main file to control v2-f simulation. 
+ *
+ * This program makes use of gsl's multiroot solver to solve a v2-f system for fully
+ * developed channel flow.
+ */
 #include<cstdlib>
 #include<iostream>
 #include"setup.h"
