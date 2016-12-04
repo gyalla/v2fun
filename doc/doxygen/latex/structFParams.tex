@@ -2,31 +2,50 @@
 \section{FParams Struct Reference}
 \label{structFParams}\index{FParams@{FParams}}
 }
-\subsection*{Public Attributes}
+
+
+The struct needed for gsl multiroot solvers. Defined all the parameters needed for the system.  
+
+
+{\ttfamily \#include $<$systemSolve.h$>$}\subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{structFParams_abf2e0595af66a5282a7cfc0a9e9d7a9f}{
-gsl\_\-vector $\ast$ {\bfseries XiN}}
-\label{structFParams_abf2e0595af66a5282a7cfc0a9e9d7a9f}
-
+gsl\_\-vector $\ast$ \hyperlink{structFParams_abf2e0595af66a5282a7cfc0a9e9d7a9f}{XiN}
 \item 
-\hypertarget{structFParams_a60254daf4ee837252884402b9a2653d0}{
-double {\bfseries deltaT}}
-\label{structFParams_a60254daf4ee837252884402b9a2653d0}
-
+double \hyperlink{structFParams_a60254daf4ee837252884402b9a2653d0}{deltaT}
 \item 
-\hypertarget{structFParams_ad53d99b185bdeb67f5b74e19b0596d82}{
-double {\bfseries deltaEta}}
-\label{structFParams_ad53d99b185bdeb67f5b74e19b0596d82}
-
+double \hyperlink{structFParams_ad53d99b185bdeb67f5b74e19b0596d82}{deltaEta}
 \item 
-\hypertarget{structFParams_a9ad4892b4290ef6ab958f273ff174b27}{
-\hyperlink{structconstants}{constants} $\ast$ {\bfseries modelConst}}
-\label{structFParams_a9ad4892b4290ef6ab958f273ff174b27}
-
+\hyperlink{structconstants}{constants} $\ast$ \hyperlink{structFParams_a9ad4892b4290ef6ab958f273ff174b27}{modelConst}
 \end{DoxyCompactItemize}
 
 
+\subsection{Detailed Description}
+The struct needed for gsl multiroot solvers. Defined all the parameters needed for the system. 
+
+\subsection{Member Data Documentation}
+\hypertarget{structFParams_ad53d99b185bdeb67f5b74e19b0596d82}{
+\index{FParams@{FParams}!deltaEta@{deltaEta}}
+\index{deltaEta@{deltaEta}!FParams@{FParams}}
+\subsubsection[{deltaEta}]{\setlength{\rightskip}{0pt plus 5cm}double {\bf FParams::deltaEta}}}
+\label{structFParams_ad53d99b185bdeb67f5b74e19b0596d82}
+step size in wall normal direction. \hypertarget{structFParams_a60254daf4ee837252884402b9a2653d0}{
+\index{FParams@{FParams}!deltaT@{deltaT}}
+\index{deltaT@{deltaT}!FParams@{FParams}}
+\subsubsection[{deltaT}]{\setlength{\rightskip}{0pt plus 5cm}double {\bf FParams::deltaT}}}
+\label{structFParams_a60254daf4ee837252884402b9a2653d0}
+step size in time. \hypertarget{structFParams_a9ad4892b4290ef6ab958f273ff174b27}{
+\index{FParams@{FParams}!modelConst@{modelConst}}
+\index{modelConst@{modelConst}!FParams@{FParams}}
+\subsubsection[{modelConst}]{\setlength{\rightskip}{0pt plus 5cm}{\bf constants}$\ast$ {\bf FParams::modelConst}}}
+\label{structFParams_a9ad4892b4290ef6ab958f273ff174b27}
+pointer to all of the model \hyperlink{structconstants}{constants}. \hypertarget{structFParams_abf2e0595af66a5282a7cfc0a9e9d7a9f}{
+\index{FParams@{FParams}!XiN@{XiN}}
+\index{XiN@{XiN}!FParams@{FParams}}
+\subsubsection[{XiN}]{\setlength{\rightskip}{0pt plus 5cm}gsl\_\-vector$\ast$ {\bf FParams::XiN}}}
+\label{structFParams_abf2e0595af66a5282a7cfc0a9e9d7a9f}
+vector of unknowns xi at previous time step. 
+
 The documentation for this struct was generated from the following file:\begin{DoxyCompactItemize}
 \item 
-src/systemSolve.h\end{DoxyCompactItemize}
+src/\hyperlink{systemSolve_8h}{systemSolve.h}\end{DoxyCompactItemize}

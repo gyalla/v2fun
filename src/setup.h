@@ -11,7 +11,11 @@
 #define OPTIONS_H
 
 #include<gsl/gsl_vector.h>
-using namespace std;
+#include<iostream>
+using namespace std; 
+
+/**< log level output variable */
+extern int verbose; 
 
 /**
  * \brief Holds all of the model constants. 
@@ -33,10 +37,11 @@ struct constants {
  *
  * Uses the GRVY Library to parse inputs from file.
  * \param modelConst pointer to struct containing model constants. 
- * \param filename Defines file to use for input parameters. 
+ * \param filename Defines file to use for initial conditions. 
+ * \param deltaEta step size in wall normal direction. 
  * \return Error code (0 = success).
  */
-int Grvy_Input_Parse(constants * modelConst,string &filename);
+int Grvy_Input_Parse(constants * modelConst,string &filename,double & deltaEta);
 
 /**
  * \brief Simple implementation for log-levels. 
@@ -48,6 +53,15 @@ int Grvy_Input_Parse(constants * modelConst,string &filename);
 void log(int verbose,int level, string msg);
 
 /**
+ * \brief Converts double to string. 
+ *
+ * This function converts a double to a string to make using log function easier. 
+ * The C++ 11 function to_string() doesn't seem to be on stampede. 
+ * \param Number number to convert to string. 
+ * \return Number as string. 
+ */
+string num2st(double Number);
+/**
  * \brief Solve for initial conditions.  
  * 
  * Solves for initial conditions of \f$ U,k,\epsilon,\overline{v^2}\f$ using linear 
@@ -57,6 +71,8 @@ void log(int verbose,int level, string msg);
  * \param file filename to get data from. 
  * \return Error code (0 = success). 
  */
+
+
 int SolveIC(gsl_vector* xi,double deltaEta, string file); 
 
 /**

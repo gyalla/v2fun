@@ -1,7 +1,6 @@
 ###
 # The input file for Lib GRVY
 #
-# Original code (gyalla)
 ###
 
 #--------------------------------
@@ -11,7 +10,7 @@
 
 reyn = 2000			# Reynolds number 
 Cmu = 0.19			# model constants...
-C1  = 0.4 
+C1  = 0.4 			# these are in input files since I've found several definitions in papers and want to change it easily. 
 C2 = 0.3
 sigmaEp = 1.3
 CL = 0.3 
@@ -19,5 +18,10 @@ Cep2 = 1.9
 Cep1 = 1.55
 Ceta = 70 
 
-filename = ../data/Reyn_2000_data.txt
-#filename = ../data/temp.data
+deltaEta = 0.01			#step size in wall normal direction. 
+
+filename = ../data/Reyn_2000_data.txt #filename for interpolation from moser data. 
+
+verbose = 3			#log level.   
+
+

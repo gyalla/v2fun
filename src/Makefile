@@ -1,7 +1,7 @@
 # FILES
 EXEC := main
-SRC  := $(wildcard *.cc)
-OBJ  := $(patsubst %.cc,%.o,$(SRC))
+SRC  := $(wildcard *.cpp)
+OBJ  := $(patsubst %.cpp,%.o,$(SRC))
 
 # OPTIONS
 CC      := g++ 
@@ -13,7 +13,7 @@ INC     := -I$$TACC_GRVY_INC -I$$TACC_GSL_INC
 # RULES
 $(EXEC): $(OBJ)
 	$(LINK.o) -g -Wall $(LDLIBS) $(INC) $(LDFLAGS) -o $@ $^
-%.o: %.cc
+%.o: %.cpp
 	$(COMPILE.c) -g -Wall  $< -o $@ $(INC)
 
 main.o systemSolve.o computeTerms.o: setup.h

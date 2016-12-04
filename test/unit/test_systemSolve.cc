@@ -203,7 +203,7 @@ int SetFTerms_test()
 	Setuptest_SS(xi,params); 
 	
 	SetFTerms(xi,params,sysF); 
-	gsl_vector_set(trueF,0,14849.8888888888);
+	gsl_vector_set(trueF,0,-26310.1111110979);
 	gsl_vector_set(trueF,1,76.916666666666); 
 	gsl_vector_set(trueF,2,-7959.2566001196);
 

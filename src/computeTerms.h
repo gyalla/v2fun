@@ -5,7 +5,7 @@
  * \brief Computes terms \f$T,L,P,\nu_T,\f$ as well as \f$f(0),\epsilon(0)\f$. 
  *
  * This file defines the methods to compute various terms for the v2-f equations 
- * include turublent time scale, turbulent length scale, production rate, eddy viscosity, 
+ * including turublent time scale, turbulent length scale, production rate, eddy viscosity, 
  * as well as the wall boundary terms for the dissipation and redistribution term. 
  */
 #ifndef COMPUTETERMS_H

@@ -1,0 +1,40 @@
+\hypertarget{main_8cpp}{
+\section{src/main.cpp File Reference}
+\label{main_8cpp}\index{src/main.cpp@{src/main.cpp}}
+}
+
+
+Main file to control v2-\/f simulation.  
+{\ttfamily \#include $<$cstdlib$>$}\par
+{\ttfamily \#include $<$iostream$>$}\par
+{\ttfamily \#include \char`\"{}setup.h\char`\"{}}\par
+{\ttfamily \#include $<$grvy.h$>$}\par
+{\ttfamily \#include $<$gsl/gsl\_\-multiroots.h$>$}\par
+{\ttfamily \#include $<$gsl/gsl\_\-vector.h$>$}\par
+{\ttfamily \#include $<$gsl/gsl\_\-matrix.h$>$}\par
+{\ttfamily \#include $<$math.h$>$}\par
+{\ttfamily \#include $<$fstream$>$}\par
+{\ttfamily \#include \char`\"{}computeTerms.h\char`\"{}}\par
+{\ttfamily \#include \char`\"{}systemSolve.h\char`\"{}}\par
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{main_8cpp_ad96b5f787be915e96bda5576bb8eaaf9}{
+int {\bfseries NewtonSolve} (gsl\_\-vector $\ast$xi, \hyperlink{structconstants}{constants} $\ast$modelConst, double deltaX)}
+\label{main_8cpp_ad96b5f787be915e96bda5576bb8eaaf9}
+
+\item 
+\hypertarget{main_8cpp_add85cf0db0e7f09fc4c36cb7ad5e9fa6}{
+int {\bfseries print\_\-state} (size\_\-t iter, gsl\_\-multiroot\_\-fsolver $\ast$s)}
+\label{main_8cpp_add85cf0db0e7f09fc4c36cb7ad5e9fa6}
+
+\item 
+\hypertarget{main_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{
+int {\bfseries main} (int argc, char $\ast$$\ast$argv)}
+\label{main_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Main file to control v2-\/f simulation. This program makes use of gsl's multiroot solver to solve a v2-\/f system for fully developed channel flow. 

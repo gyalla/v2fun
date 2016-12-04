@@ -165,7 +165,7 @@ int Computef0_test()
 	Setuptest(xi,modelConst);
 	double deltaEta = 0.5; 
 
-	if(fabs(Computef0(xi,modelConst,deltaEta)-23.333333333)>0.0000001)
+	if(fabs(Computef0(xi,modelConst,deltaEta)+23.333333333)>0.0000001)
 	{
 		cout << "FAIL: Compute redistribution at Wall" << endl; 
 		return 1; 

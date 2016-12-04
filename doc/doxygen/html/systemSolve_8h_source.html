@@ -41,43 +41,40 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="globals.html"><span>File&nbsp;Members</span></a></li>
     </ul>
   </div>
-<h1>src/systemSolve.h</h1><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef SYSTEMSOLVE_H</span>
-<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define SYSTEMSOLVE_H</span>
-<a name="l00003"></a>00003 <span class="preprocessor"></span>
-<a name="l00004"></a>00004 <span class="preprocessor">#include&lt;gsl/gsl_vector.h&gt;</span>
-<a name="l00005"></a>00005 <span class="preprocessor">#include&quot;setup.h&quot;</span>
-<a name="l00006"></a>00006 
-<a name="l00007"></a><a class="code" href="structFParams.html">00007</a> <span class="keyword">struct </span><a class="code" href="structFParams.html">FParams</a>{
-<a name="l00008"></a>00008         gsl_vector * XiN;
-<a name="l00009"></a>00009         <span class="keywordtype">double</span> deltaT; 
-<a name="l00010"></a>00010         <span class="keywordtype">double</span> deltaEta; 
-<a name="l00011"></a>00011         <a class="code" href="structconstants.html">constants</a> * modelConst;
-<a name="l00012"></a>00012 }; 
-<a name="l00013"></a>00013 
-<a name="l00014"></a>00014 
-<a name="l00015"></a>00015 <span class="keywordtype">int</span> DeconstructXi(gsl_vector * xi, gsl_vector * U, gsl_vector * k,gsl_vector * ep,gsl_vector * v2, gsl_vector * f);
-<a name="l00016"></a>00016 
-<a name="l00017"></a>00017 <span class="keywordtype">int</span> ReconstructXi(gsl_vector * xi,gsl_vector * U,gsl_vector *k,gsl_vector * ep,gsl_vector *v2,gsl_vector * f);
-<a name="l00018"></a>00018 
-<a name="l00019"></a>00019 <span class="keywordtype">int</span> SysF(<span class="keyword">const</span> gsl_vector * xi, <span class="keywordtype">void</span> * p, gsl_vector * sysF);
-<a name="l00020"></a>00020 
-<a name="l00021"></a>00021 <span class="keywordtype">int</span> SetUTerms(gsl_vector * xi, gsl_vector *,<a class="code" href="structFParams.html">FParams</a> * params,gsl_vector * sysF);
-<a name="l00022"></a>00022 
-<a name="l00023"></a>00023 <span class="keywordtype">int</span> SetKTerms(gsl_vector * xi,gsl_vector * vT, <a class="code" href="structFParams.html">FParams</a> * params,gsl_vector *sysF);
-<a name="l00024"></a>00024 
-<a name="l00025"></a>00025 
-<a name="l00026"></a>00026 <span class="keywordtype">int</span> SetEpTerms(gsl_vector * xi, gsl_vector * vT, <a class="code" href="structFParams.html">FParams</a> * params, gsl_vector * sysF);
-<a name="l00027"></a>00027 <span class="keywordtype">int</span> SetV2Terms(gsl_vector * xi, gsl_vector * vT,  <a class="code" href="structFParams.html">FParams</a> * params, gsl_vector * sysF);
-<a name="l00028"></a>00028 <span class="keywordtype">int</span> SetFTerms(gsl_vector * xi, <a class="code" href="structFParams.html">FParams</a> * params, gsl_vector * sysF);
-<a name="l00029"></a>00029 
-<a name="l00030"></a>00030 <span class="preprocessor">#endif</span>
+<h1>src/systemSolve.h</h1><a href="systemSolve_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
+<a name="l00010"></a>00010 <span class="preprocessor">#ifndef SYSTEMSOLVE_H</span>
+<a name="l00011"></a>00011 <span class="preprocessor"></span><span class="preprocessor">#define SYSTEMSOLVE_H</span>
+<a name="l00012"></a>00012 <span class="preprocessor"></span><span class="preprocessor">#include&lt;gsl/gsl_vector.h&gt;</span>
+<a name="l00013"></a>00013 <span class="preprocessor">#include&quot;<a class="code" href="setup_8h.html" title="Initializes terms for v2-f simulation.">setup.h</a>&quot;</span>
+<a name="l00014"></a>00014 <span class="keyword">using namespace </span>std; 
+<a name="l00015"></a>00015 
+<a name="l00020"></a><a class="code" href="structFParams.html">00020</a> <span class="keyword">struct </span><a class="code" href="structFParams.html" title="The struct needed for gsl multiroot solvers. Defined all the parameters needed for...">FParams</a>{
+<a name="l00021"></a><a class="code" href="structFParams.html#abf2e0595af66a5282a7cfc0a9e9d7a9f">00021</a>         gsl_vector * <a class="code" href="structFParams.html#abf2e0595af66a5282a7cfc0a9e9d7a9f">XiN</a>; 
+<a name="l00022"></a><a class="code" href="structFParams.html#a60254daf4ee837252884402b9a2653d0">00022</a>         <span class="keywordtype">double</span> <a class="code" href="structFParams.html#a60254daf4ee837252884402b9a2653d0">deltaT</a>; 
+<a name="l00023"></a><a class="code" href="structFParams.html#ad53d99b185bdeb67f5b74e19b0596d82">00023</a>         <span class="keywordtype">double</span> <a class="code" href="structFParams.html#ad53d99b185bdeb67f5b74e19b0596d82">deltaEta</a>; 
+<a name="l00024"></a><a class="code" href="structFParams.html#a9ad4892b4290ef6ab958f273ff174b27">00024</a>         <a class="code" href="structconstants.html" title="Holds all of the model constants.">constants</a> * <a class="code" href="structFParams.html#a9ad4892b4290ef6ab958f273ff174b27">modelConst</a>; 
+<a name="l00025"></a>00025 }; 
+<a name="l00026"></a>00026 
+<a name="l00035"></a>00035 <span class="keywordtype">int</span> SysF(<span class="keyword">const</span> gsl_vector * xi, <span class="keywordtype">void</span> * p, gsl_vector * sysF);
+<a name="l00036"></a>00036 
+<a name="l00046"></a>00046 <span class="keywordtype">int</span> SetUTerms(gsl_vector * xi, gsl_vector * vT,<a class="code" href="structFParams.html" title="The struct needed for gsl multiroot solvers. Defined all the parameters needed for...">FParams</a> * params,gsl_vector * sysF);
+<a name="l00047"></a>00047 
+<a name="l00057"></a>00057 <span class="keywordtype">int</span> SetKTerms(gsl_vector * xi,gsl_vector * vT, <a class="code" href="structFParams.html" title="The struct needed for gsl multiroot solvers. Defined all the parameters needed for...">FParams</a> * params,gsl_vector *sysF);
+<a name="l00058"></a>00058 
+<a name="l00068"></a>00068 <span class="keywordtype">int</span> SetEpTerms(gsl_vector * xi, gsl_vector * vT, <a class="code" href="structFParams.html" title="The struct needed for gsl multiroot solvers. Defined all the parameters needed for...">FParams</a> * params, gsl_vector * sysF);
+<a name="l00069"></a>00069 
+<a name="l00079"></a>00079 <span class="keywordtype">int</span> SetV2Terms(gsl_vector * xi, gsl_vector * vT,  <a class="code" href="structFParams.html" title="The struct needed for gsl multiroot solvers. Defined all the parameters needed for...">FParams</a> * params, gsl_vector * sysF);
+<a name="l00080"></a>00080 
+<a name="l00089"></a>00089 <span class="keywordtype">int</span> SetFTerms(gsl_vector * xi, <a class="code" href="structFParams.html" title="The struct needed for gsl multiroot solvers. Defined all the parameters needed for...">FParams</a> * params, gsl_vector * sysF);
+<a name="l00090"></a>00090 
+<a name="l00091"></a>00091 <span class="preprocessor">#endif</span>
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -87,7 +84,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 <hr size="1"/><address style="text-align: right;"><small>
-Generated on Sat Dec 3 14:35:48 2016 for 
+Generated on Sat Dec 3 20:12:41 2016 for 
 by&nbsp;<a href="http://www.doxygen.org/index.html">
 <em>doxygen</em></a>
 1.6.1</small></address>

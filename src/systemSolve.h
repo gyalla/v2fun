@@ -11,6 +11,7 @@
 #define SYSTEMSOLVE_H
 #include<gsl/gsl_vector.h>
 #include"setup.h"
+using namespace std; 
 
 /** 
  *\brief The struct needed for gsl multiroot solvers. Defined all the parameters

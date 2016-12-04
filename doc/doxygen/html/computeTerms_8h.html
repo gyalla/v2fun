@@ -43,27 +43,177 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <div class="contents">
-<h1>src/computeTerms.h File Reference</h1><code>#include &lt;gsl/gsl_vector.h&gt;</code><br/>
-<code>#include &quot;setup.h&quot;</code><br/>
+<h1>src/computeTerms.h File Reference</h1>
+<p>Computes terms <img class="formulaInl" alt="$T,L,P,\nu_T,$" src="form_37.png"/> as well as <img class="formulaInl" alt="$f(0),\epsilon(0)$" src="form_38.png"/>.  
+<a href="#_details">More...</a></p>
+<code>#include &lt;gsl/gsl_vector.h&gt;</code><br/>
+<code>#include &quot;<a class="el" href="setup_8h_source.html">setup.h</a>&quot;</code><br/>
 
 <p><a href="computeTerms_8h_source.html">Go to the source code of this file.</a></p>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a118300cdb3c7514ae2587d3eea8ae7fb"></a><!-- doxytag: member="computeTerms.h::ComputeT" ref="a118300cdb3c7514ae2587d3eea8ae7fb" args="(gsl_vector *xi, constants *modelConst, int i)" -->
-double&nbsp;</td><td class="memItemRight" valign="bottom"><b>ComputeT</b> (gsl_vector *xi, <a class="el" href="structconstants.html">constants</a> *modelConst, int i)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="computeTerms_8h.html#a118300cdb3c7514ae2587d3eea8ae7fb">ComputeT</a> (gsl_vector *xi, <a class="el" href="structconstants.html">constants</a> *modelConst, int i)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Compute turbulent time scale, T.  <a href="#a118300cdb3c7514ae2587d3eea8ae7fb"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="computeTerms_8h.html#a20f4b58c7a0fcf32b2bcf9eac4cbc2bf">ComputeL</a> (gsl_vector *xi, <a class="el" href="structconstants.html">constants</a> *modelConst, int i)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Compute Turbulent length scale, L.  <a href="#a20f4b58c7a0fcf32b2bcf9eac4cbc2bf"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3477ef263ae11cd56420ff1f96f78b5c"></a><!-- doxytag: member="computeTerms.h::ComputeEddyVisc" ref="a3477ef263ae11cd56420ff1f96f78b5c" args="(gsl_vector *xi, constants *modelConst, int i)" -->
-double&nbsp;</td><td class="memItemRight" valign="bottom"><b>ComputeEddyVisc</b> (gsl_vector *xi, <a class="el" href="structconstants.html">constants</a> *modelConst, int i)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7fb6fb06e856da2213ab94b467108676"></a><!-- doxytag: member="computeTerms.h::ComputeP" ref="a7fb6fb06e856da2213ab94b467108676" args="(gsl_vector *xi, constants *modelConst, double deltaEta, int i)" -->
-double&nbsp;</td><td class="memItemRight" valign="bottom"><b>ComputeP</b> (gsl_vector *xi, <a class="el" href="structconstants.html">constants</a> *modelConst, double deltaEta, int i)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a31b5610c868c00e0fe1595fc0a1d7640"></a><!-- doxytag: member="computeTerms.h::Computef0" ref="a31b5610c868c00e0fe1595fc0a1d7640" args="(gsl_vector *xi, constants *modelConst, double deltaEta)" -->
-double&nbsp;</td><td class="memItemRight" valign="bottom"><b>Computef0</b> (gsl_vector *xi, <a class="el" href="structconstants.html">constants</a> *modelConst, double deltaEta)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa685bd32e7e9463da7edac517cfb3767"></a><!-- doxytag: member="computeTerms.h::ComputeEp0" ref="aa685bd32e7e9463da7edac517cfb3767" args="(gsl_vector *xi, constants *modelConst, double deltaEta)" -->
-double&nbsp;</td><td class="memItemRight" valign="bottom"><b>ComputeEp0</b> (gsl_vector *xi, <a class="el" href="structconstants.html">constants</a> *modelConst, double deltaEta)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Compute turbulent length scale, L.  <a href="#a20f4b58c7a0fcf32b2bcf9eac4cbc2bf"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="computeTerms_8h.html#a3477ef263ae11cd56420ff1f96f78b5c">ComputeEddyVisc</a> (gsl_vector *xi, <a class="el" href="structconstants.html">constants</a> *modelConst, int i)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Compute eddy viscosity.  <a href="#a3477ef263ae11cd56420ff1f96f78b5c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="computeTerms_8h.html#a7fb6fb06e856da2213ab94b467108676">ComputeP</a> (gsl_vector *xi, <a class="el" href="structconstants.html">constants</a> *modelConst, double deltaEta, int i)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Comute production rate.  <a href="#a7fb6fb06e856da2213ab94b467108676"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="computeTerms_8h.html#a31b5610c868c00e0fe1595fc0a1d7640">Computef0</a> (gsl_vector *xi, <a class="el" href="structconstants.html">constants</a> *modelConst, double deltaEta)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Compute redistribution term at wall boundary.  <a href="#a31b5610c868c00e0fe1595fc0a1d7640"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="computeTerms_8h.html#aa685bd32e7e9463da7edac517cfb3767">ComputeEp0</a> (gsl_vector *xi, <a class="el" href="structconstants.html">constants</a> *modelConst, double deltaEta)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Compute dissipation term at wall boundary.  <a href="#aa685bd32e7e9463da7edac517cfb3767"></a><br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
+<p>Computes terms <img class="formulaInl" alt="$T,L,P,\nu_T,$" src="form_37.png"/> as well as <img class="formulaInl" alt="$f(0),\epsilon(0)$" src="form_38.png"/>. </p>
+<dl class="author"><dt><b>Author:</b></dt><dd>Gopal Yalla</dd></dl>
+<p>This file defines the methods to compute various terms for the v2-f equations including turublent time scale, turbulent length scale, production rate, eddy viscosity, as well as the wall boundary terms for the dissipation and redistribution term. </p>
 <hr/><h2>Function Documentation</h2>
+<a class="anchor" id="a3477ef263ae11cd56420ff1f96f78b5c"></a><!-- doxytag: member="computeTerms.h::ComputeEddyVisc" ref="a3477ef263ae11cd56420ff1f96f78b5c" args="(gsl_vector *xi, constants *modelConst, int i)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double ComputeEddyVisc </td>
+          <td>(</td>
+          <td class="paramtype">gsl_vector *&nbsp;</td>
+          <td class="paramname"> <em>xi</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structconstants.html">constants</a> *&nbsp;</td>
+          <td class="paramname"> <em>modelConst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>i</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Compute eddy viscosity. </p>
+<p>Compute eddy viscosity using </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \nu_T = C_\mu \overline{v^2} T \]" src="form_15.png"/>
+</p>
+ <dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_5.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>modelConst</em>&nbsp;</td><td>pointer to struct containing model <a class="el" href="structconstants.html" title="Holds all of the model constants.">constants</a>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>position at which to compute <img class="formulaInl" alt="$\nu_T$" src="form_8.png"/>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd><img class="formulaInl" alt="$\nu_T$" src="form_8.png"/> at i. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa685bd32e7e9463da7edac517cfb3767"></a><!-- doxytag: member="computeTerms.h::ComputeEp0" ref="aa685bd32e7e9463da7edac517cfb3767" args="(gsl_vector *xi, constants *modelConst, double deltaEta)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double ComputeEp0 </td>
+          <td>(</td>
+          <td class="paramtype">gsl_vector *&nbsp;</td>
+          <td class="paramname"> <em>xi</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structconstants.html">constants</a> *&nbsp;</td>
+          <td class="paramname"> <em>modelConst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>deltaEta</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Compute dissipation term at wall boundary. </p>
+<p>Compute <img class="formulaInl" alt="$\epsilon$" src="form_11.png"/> at boundary using </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \epsilon(0) = 2 \frac{k_1}{Re_\tau \Delta \eta^2}\]" src="form_17.png"/>
+</p>
+ <dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_5.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>modelConst</em>&nbsp;</td><td>pointer to struct containing model <a class="el" href="structconstants.html" title="Holds all of the model constants.">constants</a>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>deltaEta</em>&nbsp;</td><td>step size in wall normal direction. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>$$ at boundary. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a31b5610c868c00e0fe1595fc0a1d7640"></a><!-- doxytag: member="computeTerms.h::Computef0" ref="a31b5610c868c00e0fe1595fc0a1d7640" args="(gsl_vector *xi, constants *modelConst, double deltaEta)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Computef0 </td>
+          <td>(</td>
+          <td class="paramtype">gsl_vector *&nbsp;</td>
+          <td class="paramname"> <em>xi</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structconstants.html">constants</a> *&nbsp;</td>
+          <td class="paramname"> <em>modelConst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>deltaEta</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Compute redistribution term at wall boundary. </p>
+<p>Compute f at boundary using </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ f(0)= -\frac{20\overline{v^2}_1}{Re_\tau^2 \epsilon(0) \Delta \eta^4} \]" src="form_16.png"/>
+</p>
+ <dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_5.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>modelConst</em>&nbsp;</td><td>pointer to struct containing model constatns. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>deltaEta</em>&nbsp;</td><td>step size in wall normal direction. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>f at boundary. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a20f4b58c7a0fcf32b2bcf9eac4cbc2bf"></a><!-- doxytag: member="computeTerms.h::ComputeL" ref="a20f4b58c7a0fcf32b2bcf9eac4cbc2bf" args="(gsl_vector *xi, constants *modelConst, int i)" -->
 <div class="memitem">
 <div class="memproto">
@@ -95,20 +245,122 @@ double&nbsp;</td><td class="memItemRight" valign="bottom"><b>ComputeEp0</b> (gsl
 </div>
 <div class="memdoc">
 
-<p>Compute Turbulent length scale, L. </p>
+<p>Compute turbulent length scale, L. </p>
 <p>Compute L using </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ C_L \max\{\frac{k}{\epsilon}\} \]" src="form_0.png"/>
+<img class="formulaDsp" alt="\[ L = C_L \max \left\{ \frac{k^{3/2}}{\epsilon}, C_\eta \left( \frac{1}{Re_\tau^3 \epsilon} \right)^{1/4} \right\} \]" src="form_6.png"/>
 </p>
  <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>vector of unknowns, U,k,ep,v2,f. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>modelConst</em>&nbsp;</td><td>model <a class="el" href="structconstants.html">constants</a> </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns, <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_5.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>modelConst</em>&nbsp;</td><td>pointer to struct containing model <a class="el" href="structconstants.html" title="Holds all of the model constants.">constants</a>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>position at which to compute L. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>Length scale L at i. </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>L at i. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7fb6fb06e856da2213ab94b467108676"></a><!-- doxytag: member="computeTerms.h::ComputeP" ref="a7fb6fb06e856da2213ab94b467108676" args="(gsl_vector *xi, constants *modelConst, double deltaEta, int i)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double ComputeP </td>
+          <td>(</td>
+          <td class="paramtype">gsl_vector *&nbsp;</td>
+          <td class="paramname"> <em>xi</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structconstants.html">constants</a> *&nbsp;</td>
+          <td class="paramname"> <em>modelConst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>deltaEta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>i</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Comute production rate. </p>
+<p>Compute production rate using </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[P=\nu_T \left( \frac{\partial U^+}{\partial \eta} \right)^2\]" src="form_13.png"/>
+</p>
+ <dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_5.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>modelConst</em>&nbsp;</td><td>pointer to struct containing model <a class="el" href="structconstants.html" title="Holds all of the model constants.">constants</a>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>position at which to compute P. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>P at i. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a118300cdb3c7514ae2587d3eea8ae7fb"></a><!-- doxytag: member="computeTerms.h::ComputeT" ref="a118300cdb3c7514ae2587d3eea8ae7fb" args="(gsl_vector *xi, constants *modelConst, int i)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double ComputeT </td>
+          <td>(</td>
+          <td class="paramtype">gsl_vector *&nbsp;</td>
+          <td class="paramname"> <em>xi</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structconstants.html">constants</a> *&nbsp;</td>
+          <td class="paramname"> <em>modelConst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>i</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Compute turbulent time scale, T. </p>
+<p>Compute T using </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[T = \max \left\{ \frac{k}{\epsilon}, 6 \sqrt{\frac{1}{Re_\tau \epsilon}} \right\} \]" src="form_4.png"/>
+</p>
+ <dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_5.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>modelConst</em>&nbsp;</td><td>pointer to struct containing model <a class="el" href="structconstants.html" title="Holds all of the model constants.">constants</a>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>position at which to compute T. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>T at i. </dd></dl>
 
 </div>
 </div>
@@ -118,7 +370,7 @@ double&nbsp;</td><td class="memItemRight" valign="bottom"><b>ComputeEp0</b> (gsl
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -128,7 +380,7 @@ double&nbsp;</td><td class="memItemRight" valign="bottom"><b>ComputeEp0</b> (gsl
 </div>
 
 <hr size="1"/><address style="text-align: right;"><small>
-Generated on Sat Dec 3 14:35:48 2016 for 
+Generated on Sat Dec 3 20:12:41 2016 for 
 by&nbsp;<a href="http://www.doxygen.org/index.html">
 <em>doxygen</em></a>
 1.6.1</small></address>
