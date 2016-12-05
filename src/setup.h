@@ -2,10 +2,11 @@
  * \file 
  * \author Gopal Yalla
  *
- * \brief Initializes terms for v2-f simulation. 
+ * \brief Initializes terms for v2-f simulation and provides some basic routines.  
  *
  * This file defines the methods to set up the v2-f simulation, i.e., to get inputs, 
- * solve for the initial conditions, and defines struct of model constants. 
+ * solve for the initial conditions, and defines struct of model constants, as well as defines
+ * basic functions such as log level outputs and writing results to a file. 
  */
 #ifndef OPTIONS_H
 #define OPTIONS_H
@@ -38,10 +39,11 @@ struct constants {
  * Uses the GRVY Library to parse inputs from file.
  * \param modelConst pointer to struct containing model constants. 
  * \param filename Defines file to use for initial conditions. 
+ * \param outFile Defines file to write results to. 
  * \param deltaEta step size in wall normal direction. 
  * \return Error code (0 = success).
  */
-int Grvy_Input_Parse(constants * modelConst,string &filename,double & deltaEta);
+int Grvy_Input_Parse(constants * modelConst,string &filename,string & outFile,double & deltaEta);
 
 /**
  * \brief Simple implementation for log-levels. 
@@ -102,6 +104,15 @@ int LinInterp(gsl_vector * Vec,double pt1,double pt2, double U1,double U2,double
  */
 int Solve4f0(gsl_vector * xi,constants * modelConst, double deltaEta);
 
+/**
+ * \brief Writes result to file
+ *
+ * \param xi pointer to gsl_vector of unknowns. 
+ * \param filename name of output file.
+ * \param deltaEta step size in wall normal direction.
+ * \param modelConst pointer to struct of model constants. 
+ */
+void SaveResults(gsl_vector *xi,string filename,double deltaEta, constants * modelConst);
 
 #endif
 

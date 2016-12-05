@@ -4,7 +4,7 @@
 }
 
 
-Initializes terms for v2-\/f simulation.  
+Initializes terms for v2-\/f simulation and provides some basic routines.  
 {\ttfamily \#include $<$gsl/gsl\_\-vector.h$>$}\par
 {\ttfamily \#include $<$iostream$>$}\par
 \subsection*{Classes}
@@ -15,7 +15,7 @@ struct \hyperlink{structconstants}{constants}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-int \hyperlink{setup_8h_a1e73e96eabb64403d6c013db6562d46e}{Grvy\_\-Input\_\-Parse} (\hyperlink{structconstants}{constants} $\ast$modelConst, string \&filename, double \&deltaEta)
+int \hyperlink{setup_8h_a64f8b911f08c9e467a8a4a6a3fa34b15}{Grvy\_\-Input\_\-Parse} (\hyperlink{structconstants}{constants} $\ast$modelConst, string \&filename, string \&outFile, double \&deltaEta)
 \begin{DoxyCompactList}\small\item\em Parse inputs. \item\end{DoxyCompactList}\item 
 void \hyperlink{setup_8h_a65538e22f3d1f551ea61ef3513748fb6}{log} (int \hyperlink{setup_8h_a0b2caeb4b6f130be43e5a2f0267dd453}{verbose}, int level, string msg)
 \begin{DoxyCompactList}\small\item\em Simple implementation for log-\/levels. \item\end{DoxyCompactList}\item 
@@ -26,7 +26,9 @@ int \hyperlink{setup_8h_abdacdc5623a8ebd124b9b455857dd5fb}{SolveIC} (gsl\_\-vect
 int \hyperlink{setup_8h_ae27ebd7f9ab3e7933a1c189a745ddc3f}{LinInterp} (gsl\_\-vector $\ast$Vec, double pt1, double pt2, double U1, double U2, double gridPt, int i)
 \begin{DoxyCompactList}\small\item\em Linear interpolates inputs and places result in vector. \item\end{DoxyCompactList}\item 
 int \hyperlink{setup_8h_a8ac85319cc4d7ebf492af719e1780eef}{Solve4f0} (gsl\_\-vector $\ast$xi, \hyperlink{structconstants}{constants} $\ast$modelConst, double deltaEta)
-\begin{DoxyCompactList}\small\item\em Solve for initical conditions for f. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Solve for initical conditions for f. \item\end{DoxyCompactList}\item 
+void \hyperlink{setup_8h_a9c606c0129f51debf47911088d405cea}{SaveResults} (gsl\_\-vector $\ast$xi, string filename, double deltaEta, \hyperlink{structconstants}{constants} $\ast$modelConst)
+\begin{DoxyCompactList}\small\item\em Writes result to file. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
@@ -35,22 +37,22 @@ int \hyperlink{setup_8h_a0b2caeb4b6f130be43e5a2f0267dd453}{verbose}
 
 
 \subsection{Detailed Description}
-Initializes terms for v2-\/f simulation. \begin{DoxyAuthor}{Author}
+Initializes terms for v2-\/f simulation and provides some basic routines. \begin{DoxyAuthor}{Author}
 Gopal Yalla
 \end{DoxyAuthor}
-This file defines the methods to set up the v2-\/f simulation, i.e., to get inputs, solve for the initial conditions, and defines struct of model \hyperlink{structconstants}{constants}. 
+This file defines the methods to set up the v2-\/f simulation, i.e., to get inputs, solve for the initial conditions, and defines struct of model \hyperlink{structconstants}{constants}, as well as defines basic functions such as log level outputs and writing results to a file. 
 
 \subsection{Function Documentation}
-\hypertarget{setup_8h_a1e73e96eabb64403d6c013db6562d46e}{
+\hypertarget{setup_8h_a64f8b911f08c9e467a8a4a6a3fa34b15}{
 \index{setup.h@{setup.h}!Grvy\_\-Input\_\-Parse@{Grvy\_\-Input\_\-Parse}}
 \index{Grvy\_\-Input\_\-Parse@{Grvy\_\-Input\_\-Parse}!setup.h@{setup.h}}
-\subsubsection[{Grvy\_\-Input\_\-Parse}]{\setlength{\rightskip}{0pt plus 5cm}int Grvy\_\-Input\_\-Parse ({\bf constants} $\ast$ {\em modelConst}, \/  string \& {\em filename}, \/  double \& {\em deltaEta})}}
-\label{setup_8h_a1e73e96eabb64403d6c013db6562d46e}
+\subsubsection[{Grvy\_\-Input\_\-Parse}]{\setlength{\rightskip}{0pt plus 5cm}int Grvy\_\-Input\_\-Parse ({\bf constants} $\ast$ {\em modelConst}, \/  string \& {\em filename}, \/  string \& {\em outFile}, \/  double \& {\em deltaEta})}}
+\label{setup_8h_a64f8b911f08c9e467a8a4a6a3fa34b15}
 
 
 Parse inputs. Uses the GRVY Library to parse inputs from file. 
 \begin{DoxyParams}{Parameters}
-\item[{\em modelConst}]pointer to struct containing model \hyperlink{structconstants}{constants}. \item[{\em filename}]Defines file to use for initial conditions. \item[{\em deltaEta}]step size in wall normal direction. \end{DoxyParams}
+\item[{\em modelConst}]pointer to struct containing model \hyperlink{structconstants}{constants}. \item[{\em filename}]Defines file to use for initial conditions. \item[{\em outFile}]Defines file to write results to. \item[{\em deltaEta}]step size in wall normal direction. \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 Error code (0 = success). 
 \end{DoxyReturn}
@@ -90,6 +92,16 @@ Converts double to string. This function converts a double to a string to make u
 \begin{DoxyReturn}{Returns}
 Number as string. 
 \end{DoxyReturn}
+\hypertarget{setup_8h_a9c606c0129f51debf47911088d405cea}{
+\index{setup.h@{setup.h}!SaveResults@{SaveResults}}
+\index{SaveResults@{SaveResults}!setup.h@{setup.h}}
+\subsubsection[{SaveResults}]{\setlength{\rightskip}{0pt plus 5cm}void SaveResults (gsl\_\-vector $\ast$ {\em xi}, \/  string {\em filename}, \/  double {\em deltaEta}, \/  {\bf constants} $\ast$ {\em modelConst})}}
+\label{setup_8h_a9c606c0129f51debf47911088d405cea}
+
+
+Writes result to file. 
+\begin{DoxyParams}{Parameters}
+\item[{\em xi}]pointer to gsl\_\-vector of unknowns. \item[{\em filename}]name of output file. \item[{\em deltaEta}]step size in wall normal direction. \item[{\em modelConst}]pointer to struct of model \hyperlink{structconstants}{constants}. \end{DoxyParams}
 \hypertarget{setup_8h_a8ac85319cc4d7ebf492af719e1780eef}{
 \index{setup.h@{setup.h}!Solve4f0@{Solve4f0}}
 \index{Solve4f0@{Solve4f0}!setup.h@{setup.h}}

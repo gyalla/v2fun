@@ -7,11 +7,13 @@
 #include<math.h>
 #include<gsl/gsl_vector.h>
 #include<gsl/gsl_multiroots.h>
+#include<grvy.h>
 #include"computeTerms.h"
 #include"setup.h"
 #include"systemSolve.h"
 #include"finiteDiff.h"
 using namespace std; 
+using namespace GRVY;
 
 // The structure of this function is fixed by the definition of gsl_multiroot solvers. 
 int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
@@ -34,35 +36,38 @@ int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 		gsl_vector_set(vT,i,ComputeEddyVisc(tempxi,params->modelConst,i));
 	}
 
+	GRVY_Timer_Class gt; 
+	gt.BeginTimer("Setting up system");
 	//Set each term based on functions below. 
 	if(SetUTerms(tempxi,vT,params,sysF))
 	{
 		cerr << "Error setting U terms in system" << endl; 
-		return 1;
+		exit(1);
 	}
 	if(SetKTerms(tempxi,vT,params,sysF))
 	{
 		cerr << "Error setting k terms in system" << endl; 
-		return 1; 
+		exit(1); 
 	}
 
 	if(SetEpTerms(tempxi,vT,params,sysF))
 	{
 		cerr << "Error setting ep terms in system" << endl; 
-		return 1; 
+		exit(1); 
 	}
 
 	if(SetV2Terms(tempxi,vT,params,sysF))
 	{
 		cerr << "Error setting v2 terms in system" << endl; 
-		return 1; 
+		exit(1); 
 	}
 
 	if(SetFTerms(tempxi,params,sysF))
 	{
 		cerr << "Error setting F terms in system" << endl; 
-		return 1; 
+		exit(1); 
 	}
+	gt.EndTimer("Setting up system");
 //	for(unsigned int i = 0; i<sysF->size;i++)
 //	{
 //		cout << gsl_vector_get(sysF,i) << endl; 
@@ -262,4 +267,5 @@ int SetUTerms( gsl_vector * xi, gsl_vector * vT, FParams * params,gsl_vector * s
 	gsl_vector_set(sysF,xiCounter,val); 	
 	return 0; 
 }
+
 

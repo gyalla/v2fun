@@ -19,16 +19,16 @@ double ComputeT(gsl_vector * xi, constants * modelConst,int i)
 	log(verbose,3,"   Term1 = "+num2st(firstTerm) + " at " + num2st(i) + "\n");
 	if (!isfinite(firstTerm))
 	{
+		cout << gsl_vector_get(xi,xiCounter+2) << endl; 
 		cerr << "Error: T non-finite (" << firstTerm << ")" << endl; 
-		return -1; 
 	}
 
 	secondTerm = 6*sqrt(1/(modelConst->reyn*gsl_vector_get(xi,xiCounter+2)));
 	log(verbose,3,"   Term2 = " + num2st(secondTerm) + " at " + num2st(i) + "\n");
 	if(!isfinite(secondTerm))
 	{
+		cout << gsl_vector_get(xi,xiCounter+2) << endl; 
 		cerr << "Error: T non-finite (" << secondTerm << ")" << endl;
-		return -1; 
 	}
 
 	if (firstTerm >= secondTerm)
@@ -47,18 +47,12 @@ double ComputeL(gsl_vector * xi,constants * modelConst,int i)
 	firstTerm = pow(gsl_vector_get(xi,xiCounter+1),1.5)/gsl_vector_get(xi,xiCounter+2);
 	log(verbose,3,"   Term1 = " + num2st(firstTerm)+ " at " + num2st(i) +"\n");
 	if (!isfinite(firstTerm))
-	{
 		cerr << "Error: L non-finite (" << firstTerm << ")" << endl;
-		return -1; 
-	}
-	
+		
 	secondTerm = modelConst->Ceta*pow(1/(pow(modelConst->reyn,3)*gsl_vector_get(xi,xiCounter+2)),0.25);
 	log(verbose,3,"   Term2 = " + num2st(firstTerm)+ " at " + num2st(i) + "\n");
 	if (!isfinite(secondTerm))
-	{
 		cerr << "Error: L non-finite (" << secondTerm << ")" << endl;
-		return -1; 
-	}
 
 	if (firstTerm >= secondTerm)
 		return modelConst->CL*firstTerm;
@@ -76,10 +70,7 @@ double ComputeEddyVisc(gsl_vector * xi, constants * modelConst,int i)
 	val = modelConst->Cmu*gsl_vector_get(xi,xiCounter+3)*ComputeT(xi,modelConst,i);
 	log(verbose,3,"   vT = " + num2st(val) + " at " + num2st(i) + " at " + num2st(i) + "\n"); 
 	if (!isfinite(val))
-	{
 		cerr << "Error: vT non-finite (" << val << ")" << endl;
-		return -1; 
-	}
 	return val; 
 }
 
@@ -97,10 +88,7 @@ double ComputeP(gsl_vector * xi,constants * modelConst,double deltaEta,int i)
 	val = ComputeEddyVisc(xi,modelConst,i)*pow(Diff1(xi,deltaEta,0,i),2);
 	log(verbose,3,"   P = " + num2st(val) + " at " + num2st(i) + "\n");  
 	if (!isfinite(val))
-	{
 		cerr << "Error: P non-finite (" << val << ")" << endl;
-		return -1; 
-	}
 	return val; 
 }
 
@@ -110,10 +98,7 @@ double ComputeEp0(gsl_vector * xi,constants * modelConst,double deltaEta)
 	double ep0 = ((2*gsl_vector_get(xi,1))/(modelConst->reyn*pow(deltaEta,2)));
 	log(verbose,3,"   Ep(0) = " + num2st(ep0) + "\n");
 	if (!isfinite(ep0))
-	{
 		cerr << "Error: ep0 non-finite (" << ep0 << ")" << endl; 
-		return -1; 
-	}
 	return ep0; 
 }
 
@@ -123,9 +108,6 @@ double Computef0(gsl_vector * xi,constants * modelConst,double deltaEta)
 	double f0  = -(( (20*gsl_vector_get(xi,3))/( pow(modelConst->reyn,3)*ComputeEp0(xi,modelConst,deltaEta)*pow(deltaEta,4))));
 	log(verbose,3,"   f(0) = " + num2st(f0) + "\n");
 	if(!isfinite(f0))
-	{
 		cerr << "Error: f0 non-finite (" << f0 << ")" << endl; 
-		return -1; 
-	}
 	return f0; 
 }

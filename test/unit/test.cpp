@@ -47,7 +47,7 @@ int test_interp()
 	gsl_vector_set(truexi,16,1);
 	gsl_vector_set(truexi,18,-2);
 
-	SolveIC(xi,deltaX,"../test/unit/test_interp.data");
+	SolveIC(xi,deltaX,"test/unit/test_interp.data");
 
 	if (gsl_vector_equal(xi,truexi)==0)
 	{

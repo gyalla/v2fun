@@ -10,7 +10,7 @@
 \contentsline {subsection}{\numberline {3.2}Regression Tests}{7}
 \contentsline {subsection}{\numberline {3.3}Unit Tests}{7}
 \contentsline {subsection}{\numberline {3.4}Build Systems}{7}
-\contentsline {subsection}{\numberline {3.5}Version Control}{7}
+\contentsline {subsection}{\numberline {3.5}Version Control}{8}
 \contentsline {subsection}{\numberline {3.6}Profiling and Performance Optimization}{8}
 \contentsline {subsection}{\numberline {3.7}Documentation}{8}
 \contentsline {section}{References}{9}

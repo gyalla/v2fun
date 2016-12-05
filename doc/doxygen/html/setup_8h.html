@@ -44,7 +44,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="contents">
 <h1>src/setup.h File Reference</h1>
-<p>Initializes terms for v2-f simulation.  
+<p>Initializes terms for v2-f simulation and provides some basic routines.  
 <a href="#_details">More...</a></p>
 <code>#include &lt;gsl/gsl_vector.h&gt;</code><br/>
 <code>#include &lt;iostream&gt;</code><br/>
@@ -55,8 +55,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structconstants.html">constants</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Holds all of the model <a class="el" href="structconstants.html" title="Holds all of the model constants.">constants</a>.  <a href="structconstants.html#_details">More...</a><br/></td></tr>
 <tr><td colspan="2"><h2>Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="setup_8h.html#a1e73e96eabb64403d6c013db6562d46e">Grvy_Input_Parse</a> (<a class="el" href="structconstants.html">constants</a> *modelConst, string &amp;filename, double &amp;deltaEta)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parse inputs.  <a href="#a1e73e96eabb64403d6c013db6562d46e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="setup_8h.html#a64f8b911f08c9e467a8a4a6a3fa34b15">Grvy_Input_Parse</a> (<a class="el" href="structconstants.html">constants</a> *modelConst, string &amp;filename, string &amp;outFile, double &amp;deltaEta)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parse inputs.  <a href="#a64f8b911f08c9e467a8a4a6a3fa34b15"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="setup_8h.html#a65538e22f3d1f551ea61ef3513748fb6">log</a> (int <a class="el" href="setup_8h.html#a0b2caeb4b6f130be43e5a2f0267dd453">verbose</a>, int level, string msg)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Simple implementation for log-levels.  <a href="#a65538e22f3d1f551ea61ef3513748fb6"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="setup_8h.html#aaa87d7b98d01d125518a28564123301a">num2st</a> (double Number)</td></tr>
@@ -67,15 +67,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Linear interpolates inputs and places result in vector.  <a href="#ae27ebd7f9ab3e7933a1c189a745ddc3f"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="setup_8h.html#a8ac85319cc4d7ebf492af719e1780eef">Solve4f0</a> (gsl_vector *xi, <a class="el" href="structconstants.html">constants</a> *modelConst, double deltaEta)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Solve for initical conditions for f.  <a href="#a8ac85319cc4d7ebf492af719e1780eef"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="setup_8h.html#a9c606c0129f51debf47911088d405cea">SaveResults</a> (gsl_vector *xi, string filename, double deltaEta, <a class="el" href="structconstants.html">constants</a> *modelConst)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Writes result to file.  <a href="#a9c606c0129f51debf47911088d405cea"></a><br/></td></tr>
 <tr><td colspan="2"><h2>Variables</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="setup_8h.html#a0b2caeb4b6f130be43e5a2f0267dd453">verbose</a></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
-<p>Initializes terms for v2-f simulation. </p>
+<p>Initializes terms for v2-f simulation and provides some basic routines. </p>
 <dl class="author"><dt><b>Author:</b></dt><dd>Gopal Yalla</dd></dl>
-<p>This file defines the methods to set up the v2-f simulation, i.e., to get inputs, solve for the initial conditions, and defines struct of model <a class="el" href="structconstants.html" title="Holds all of the model constants.">constants</a>. </p>
+<p>This file defines the methods to set up the v2-f simulation, i.e., to get inputs, solve for the initial conditions, and defines struct of model <a class="el" href="structconstants.html" title="Holds all of the model constants.">constants</a>, as well as defines basic functions such as log level outputs and writing results to a file. </p>
 <hr/><h2>Function Documentation</h2>
-<a class="anchor" id="a1e73e96eabb64403d6c013db6562d46e"></a><!-- doxytag: member="setup.h::Grvy_Input_Parse" ref="a1e73e96eabb64403d6c013db6562d46e" args="(constants *modelConst, string &amp;filename, double &amp;deltaEta)" -->
+<a class="anchor" id="a64f8b911f08c9e467a8a4a6a3fa34b15"></a><!-- doxytag: member="setup.h::Grvy_Input_Parse" ref="a64f8b911f08c9e467a8a4a6a3fa34b15" args="(constants *modelConst, string &amp;filename, string &amp;outFile, double &amp;deltaEta)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -90,6 +92,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
           <td></td>
           <td class="paramtype">string &amp;&nbsp;</td>
           <td class="paramname"> <em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string &amp;&nbsp;</td>
+          <td class="paramname"> <em>outFile</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -112,6 +120,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>modelConst</em>&nbsp;</td><td>pointer to struct containing model <a class="el" href="structconstants.html" title="Holds all of the model constants.">constants</a>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>filename</em>&nbsp;</td><td>Defines file to use for initial conditions. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>outFile</em>&nbsp;</td><td>Defines file to write results to. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>deltaEta</em>&nbsp;</td><td>step size in wall normal direction. </td></tr>
   </table>
   </dd>
@@ -178,16 +187,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Linear interpolates inputs and places result in vector. </p>
 <p>Does linear interpolation using, </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ xi(i) = y_1 + (x - x_0)* \left( \frac{ (y_1 - y_0)}{x_1-x_0} \right) \]" src="form_34.png"/>
+<img class="formulaDsp" alt="\[ xi(i) = y_1 + (x - x_0)* \left( \frac{ (y_1 - y_0)}{x_1-x_0} \right) \]" src="form_14.png"/>
 </p>
  <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>Vec</em>&nbsp;</td><td>xi in the formula given. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>pt1</em>&nbsp;</td><td><img class="formulaInl" alt="$x_1$" src="form_21.png"/> in the formula given. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>pt2</em>&nbsp;</td><td><img class="formulaInl" alt="$x_0$" src="form_22.png"/> in the formula given. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>U1</em>&nbsp;</td><td><img class="formulaInl" alt="$y_1$" src="form_23.png"/> in the formula given. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>U2</em>&nbsp;</td><td><img class="formulaInl" alt="$y_0$" src="form_24.png"/> in the formula given. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>gridPt</em>&nbsp;</td><td><img class="formulaInl" alt="$x$" src="form_25.png"/> in the formula given. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pt1</em>&nbsp;</td><td><img class="formulaInl" alt="$x_1$" src="form_15.png"/> in the formula given. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pt2</em>&nbsp;</td><td><img class="formulaInl" alt="$x_0$" src="form_16.png"/> in the formula given. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>U1</em>&nbsp;</td><td><img class="formulaInl" alt="$y_1$" src="form_17.png"/> in the formula given. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>U2</em>&nbsp;</td><td><img class="formulaInl" alt="$y_0$" src="form_18.png"/> in the formula given. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>gridPt</em>&nbsp;</td><td><img class="formulaInl" alt="$x$" src="form_19.png"/> in the formula given. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>position in xi to place result. </td></tr>
   </table>
   </dd>
@@ -267,6 +276,56 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 </div>
 </div>
+<a class="anchor" id="a9c606c0129f51debf47911088d405cea"></a><!-- doxytag: member="setup.h::SaveResults" ref="a9c606c0129f51debf47911088d405cea" args="(gsl_vector *xi, string filename, double deltaEta, constants *modelConst)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SaveResults </td>
+          <td>(</td>
+          <td class="paramtype">gsl_vector *&nbsp;</td>
+          <td class="paramname"> <em>xi</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>deltaEta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structconstants.html">constants</a> *&nbsp;</td>
+          <td class="paramname"> <em>modelConst</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Writes result to file. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>filename</em>&nbsp;</td><td>name of output file. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>deltaEta</em>&nbsp;</td><td>step size in wall normal direction. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>modelConst</em>&nbsp;</td><td>pointer to struct of model <a class="el" href="structconstants.html" title="Holds all of the model constants.">constants</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a8ac85319cc4d7ebf492af719e1780eef"></a><!-- doxytag: member="setup.h::Solve4f0" ref="a8ac85319cc4d7ebf492af719e1780eef" args="(gsl_vector *xi, constants *modelConst, double deltaEta)" -->
 <div class="memitem">
 <div class="memproto">
@@ -302,7 +361,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Since Moser/MK data does not provide information for redistribution term, f, we solve for it using a finite difference formula. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$ U,k,\epsilon,\overline{v^2},f$" src="form_19.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$ U,k,\epsilon,\overline{v^2},f$" src="form_12.png"/>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>modelConst</em>&nbsp;</td><td>pointer to struct containing model <a class="el" href="structconstants.html" title="Holds all of the model constants.">constants</a>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>deltaEta</em>&nbsp;</td><td>step size in wall normal direction. </td></tr>
   </table>
@@ -344,10 +403,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="memdoc">
 
 <p>Solve for initial conditions. </p>
-<p>Solves for initial conditions of <img class="formulaInl" alt="$ U,k,\epsilon,\overline{v^2}$" src="form_18.png"/> using linear interpolation from Moser channel flow code. </p>
+<p>Solves for initial conditions of <img class="formulaInl" alt="$ U,k,\epsilon,\overline{v^2}$" src="form_13.png"/> using linear interpolation from Moser channel flow code. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to vector of <img class="formulaInl" alt="$ U,k,\epsilon,\overline{v^2},f$" src="form_19.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to vector of <img class="formulaInl" alt="$ U,k,\epsilon,\overline{v^2},f$" src="form_12.png"/>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>deltaEta</em>&nbsp;</td><td>step size in the wall normal direction. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>file</em>&nbsp;</td><td>filename to get data from. </td></tr>
   </table>
@@ -388,7 +447,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 <hr size="1"/><address style="text-align: right;"><small>
-Generated on Sat Dec 3 20:12:41 2016 for 
+Generated on Mon Dec 5 10:20:24 2016 for 
 by&nbsp;<a href="http://www.doxygen.org/index.html">
 <em>doxygen</em></a>
 1.6.1</small></address>

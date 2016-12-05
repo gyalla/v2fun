@@ -2,7 +2,7 @@
  * \file 
  * \author Gopal Yalla
  *
- * \brief Defined finite difference approximations. 
+ * \brief Defines finite difference approximations. 
  *
  * This file defines the method for finite difference approximations with respect to 
  * the structure of \f$\xi\f$. 

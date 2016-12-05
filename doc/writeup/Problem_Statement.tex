@@ -1,20 +1,20 @@
 \documentclass[12pt]{article}
-\usepackage{amsmath,latexsym,amsfonts,amsthm,graphicx,subcaption}
-\usepackage[margin=1in]{geometry} \usepackage{tikz,caption}
-\usetikzlibrary{backgrounds} \usepackage{fancyhdr}
+\usepackage{amsmath,latexsym,amsfonts,amsthm,graphicx}
+\usepackage[margin=1in]{geometry} 
+\usepackage{fancyhdr}
 \usepackage{multicol} \usepackage{caption} \usepackage{empheq}
 %\setlist{parsep=0pt,listparindent=\parindent}
 \usepackage{listings} 
 
-\definecolor{light-gray}{gray}{0.95}
+%\definecolor{light-gray}{gray}{0.95}
 
-\lstset{%numbers=right, 
-                %numberstyle=\tiny, 
-                breaklines=true,
-                backgroundcolor=\color{light-gray},
-                %numbersep=5pt,
-                xleftmargin=.25in,
-                xrightmargin=0in} 
+%\lstset{%numbers=right, 
+%                %numberstyle=\tiny, 
+%                breaklines=true,
+%                backgroundcolor=\color{light-gray},
+%                %numbersep=5pt,
+%                xleftmargin=.25in,
+%                xrightmargin=0in} 
 
 
 
@@ -32,8 +32,8 @@
 }{\Delta \eta^2 } \right)}
 \newcommand{\Dif}[1]{ \left( \frac{ {#1}_{i+1}^{n+1} - {#1}_{i-1}^{n+1}}{ 2\Delta
 \eta} \right)}
-\newcommand{\tDif}[1]{ \frac{ {#1}_i^{n+1} - {#1}_i^{n}}{\Delta t}}
-\newcommand{\tDifEnd}[1]{ \left( \frac{ {#1}_{I}^{n+1} - {#1}_I^{n}}{\Delta t }
+\newcommand{\tDif}[1]{ \frac{ {#1}_i^{n} - {#1}_i^{n+1}}{\Delta t}}
+\newcommand{\tDifEnd}[1]{ \left( \frac{ {#1}_{I}^{n} - {#1}_I^{n+1}}{\Delta t }
 \right)}
 
 
@@ -335,7 +335,7 @@ step,i.e., we can just take a single Newton iteration and go to the next step.
 \cite{todd}
 
 To be more specific, if $R(U)=0$ is the system to solve, we start with an
-initial guess $U = U_0$ and solve $\pr U / \pr t + R(U) = 0$ forward in time
+initial guess $U = U_0$ and solve $\pr U / \pr t = R(U)$ forward in time
 until $\pr U/\pr t = 0$. Generally, this works best if you start with a small
 time step and then gradually increase the time step until it is very large at
 which point you're essentially trying to solve the steady problem from a
@@ -350,7 +350,7 @@ size, respectively. Moreover, for each variable $\xi$, define $\xi_i^n = \xi(x_i
 \cdot\Delta \eta$, and $t_n = n\cdot\Delta t$, and define $I = 1/\Delta \eta$.
 Let $\xi^{n+1}$ be the vector of unknowns at $t = (n+1) \cdot \Delta t$, i.e., 
 
-\[ \xi^{n+1} = \left[ \begin{matrix} \ep^{n+1}_0 \\ f^{n+1}_0 \\
+\[ \xi^{n+1} = \left[ \begin{matrix}
 		{U^+}_1^{n+1} \\ k_1^{n+1} \\ \ep_1^{n+1} \\
 	{\overline{v^2}}_1^{n+1} \\ f_{1}^{n+1} \\ {U^+}_2^{n+1} \\
 	k_2^{n+1} \\ \vdots \\ f_{I-1}^{n+1} \\ {U^+}_I^{n+1} \\ k_I^{n+1} \\ \ep_I^{n+1} \\
@@ -364,8 +364,6 @@ $F(\xi^{n+1})=0$ for each time step, where
 	\hspace{-1in}
 	F(\xi^{n+1}) = \left(
 	\begin{matrix} 
-		\ep_0^{n+1} - \frac{2k_1^{n+1}}{Re_\tau \Delta \eta^2} \\ 
-		f_0^{n+1} - \frac{20 \overline{v^2}_1^{n+1}}{Re_\tau^3 \ep_0^{n+1} \Delta \eta^4}\\
 		\vdots \\
 		\tDif{U^+} + \left(
 		\frac{1}{Re_\tau} + {\nu_T}_i^{n+1} \right) \secDif{ {U^+}} +
@@ -395,8 +393,9 @@ $F(\xi^{n+1})=0$ for each time step, where
 		\frac{ {\nu_T}_I^{n+1}}{\sigma \ep} \right) \secDifEnd{\ep} \\
 		\tDifEnd{\overline{v^2}} + k_I^{n+1} f_{I}^{n+1} + \left(
 		\frac{1}{Re_\tau} + {\nu_T}_I^{n+1} \right)
-		\secDifEnd{\overline{v^2}} \\
-		\tDifEnd{f} + \left( L_i^{n+1} \right)^2 \secDifEnd{f} -
+		\secDifEnd{\overline{v^2}} -\ep_I^{n+1}
+		\frac{\overline{v^2}_I^{n+1}}{k_I^{n+1}}\\
+		\tDifEnd{f} + \left( L_I^{n+1} \right)^2 \secDifEnd{f} -
 		f_I^{n+1} - \frac{C_1}{T_{I}^{n+1}} \left(
 		\frac{\overline{v^2}_I^{n+1}}{k_I^{n+1}} - \frac{2}{3} \right)
 	\end{matrix}
@@ -405,7 +404,12 @@ $F(\xi^{n+1})=0$ for each time step, where
 
 \noi The initial conditions will be interpolated from the direct numerical
 simulation data performed by Dr. Moser and Dr. Lee on
-turbulence.ices.utexas.edu. 
+turbulence.ices.utexas.edu. Moreover, we enforce the boundary conditions on
+$\ep$ and $f$ as, 
+
+\[ \ep_0^{n+1} = \frac{2k_1^{n+1}}{Re_\tau \Delta \eta^2} \; \text{ and } \;
+f_0^{n+1} = \frac{-20 \overline{v^2}_1^{n+1}}{Re_\tau^3 \ep_0^{n+1} \Delta
+\eta^4} . \] 
 
 %------------------------------------------------------
 \section{Design Considerations}

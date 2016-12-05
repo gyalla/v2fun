@@ -7,6 +7,7 @@
 #include<cstdlib>
 #include<iostream>
 #include<sstream>
+#include<iomanip>
 #include<grvy.h>
 #include "setup.h"
 #include "computeTerms.h"
@@ -21,7 +22,7 @@ using namespace GRVY;
 
 int verbose; 
 
-int Grvy_Input_Parse(constants * modelConst,string & filename,double & deltaEta)
+int Grvy_Input_Parse(constants * modelConst,string & filename,string & outFile,double & deltaEta)
 {
 	// Use GRVY for inpute parsing as shown in grvy documentation. 
 	
@@ -70,9 +71,13 @@ int Grvy_Input_Parse(constants * modelConst,string & filename,double & deltaEta)
 		return 1; 
 	log(verbose,1," ---> Ceta = " + num2st(modelConst->Ceta) + "\n");
 	
-	if(!iparse.Read_Var("filename",&filename))
+	if(!iparse.Read_Var("input_filename",&filename))
 		return 1; 
-	log(verbose,1," ---> filename = " + filename + "\n");
+	log(verbose,1," ---> input_filename = " + filename + "\n");
+
+	if(!iparse.Read_Var("output_filename",&outFile))
+		return 1; 
+	log(verbose,1," ---> output_filename = " + outFile + "\n");
 
 	if(!iparse.Read_Var("deltaEta",&deltaEta))
 		return 1; 
@@ -243,4 +248,25 @@ int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 		gsl_vector_set(xi,xiCounter,gsl_vector_get(f,i));
 	}
 	return 0; 
+}
+
+void SaveResults(gsl_vector * xi, string filename,double deltaEta,constants * modelConst)
+{
+	ofstream outFile; 
+	outFile.open(filename.c_str(),ios::app); 
+	//output format: gridpoint U K EP V2 F 
+	outFile << setprecision(15) << 0 <<" "<<0<<" "<< 0 <<" "<< ComputeEp0(xi,modelConst,deltaEta) <<" " << 0 << " " << Computef0(xi,modelConst,deltaEta) << endl; 
+
+	for(unsigned int i = 0; i<xi->size;i+=5)
+	{
+		outFile << (i/float(5)+1)*deltaEta << " "; 	
+		outFile << gsl_vector_get(xi,i) << " "; 
+		outFile << gsl_vector_get(xi,i+1) << " "; 
+		outFile << gsl_vector_get(xi,i+2) << " "; 
+		outFile << gsl_vector_get(xi,i+3) << " "; 
+		outFile << gsl_vector_get(xi,i+4) << " " << endl; 
+	}
+
+	outFile.close();
+
 }

@@ -44,7 +44,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="contents">
 <h1>src/finiteDiff.h File Reference</h1>
-<p>Defined finite difference approximations.  
+<p>Defines finite difference approximations.  
 <a href="#_details">More...</a></p>
 <code>#include &lt;gsl/gsl_vector.h&gt;</code><br/>
 
@@ -61,9 +61,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Approximates second derivative of gsl_vector at boundary using centered difference making use of ghost points and zero Nuemann boundary conditions.  <a href="#a09446eaf9ad78461145419234fd278eb"></a><br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
-<p>Defined finite difference approximations. </p>
+<p>Defines finite difference approximations. </p>
 <dl class="author"><dt><b>Author:</b></dt><dd>Gopal Yalla</dd></dl>
-<p>This file defines the method for finite difference approximations with respect to the structure of <img class="formulaInl" alt="$\xi$" src="form_39.png"/>. </p>
+<p>This file defines the method for finite difference approximations with respect to the structure of <img class="formulaInl" alt="$\xi$" src="form_11.png"/>. </p>
 <hr/><h2>Function Documentation</h2>
 <a class="anchor" id="a09446eaf9ad78461145419234fd278eb"></a><!-- doxytag: member="finiteDiff.h::BdryDiff2" ref="a09446eaf9ad78461145419234fd278eb" args="(gsl_vector *x, double deltaEta, int i)" -->
 <div class="memitem">
@@ -99,7 +99,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Approximates second derivative of gsl_vector at boundary using centered difference making use of ghost points and zero Nuemann boundary conditions. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>pointer to vector of unknowns <img class="formulaInl" alt="$ U,k,\epsilon,\overline{v^2},f$" src="form_19.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>pointer to vector of unknowns <img class="formulaInl" alt="$ U,k,\epsilon,\overline{v^2},f$" src="form_12.png"/>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>deltaEta</em>&nbsp;</td><td>step size in wall normal direction. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>point at which to compute second derivative around (relative to ordering of xi). </td></tr>
   </table>
@@ -149,7 +149,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Approximates first derivative of gsl_vector using second order center difference. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>pointer to vector of unknowns <img class="formulaInl" alt="$ U,k,\epsilon,\overline{v^2},f$" src="form_19.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>pointer to vector of unknowns <img class="formulaInl" alt="$ U,k,\epsilon,\overline{v^2},f$" src="form_12.png"/>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>deltaEta</em>&nbsp;</td><td>step size in wall normal direction. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>bdry</em>&nbsp;</td><td>value at boundary. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>point at which to compute first derivative around (relative to ordering of xi). </td></tr>
@@ -244,7 +244,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Approximates second derivative of gsl_vector using second order center difference. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>pointer to vector of unknowns <img class="formulaInl" alt="$ U,k,\epsilon,\overline{v^2},f$" src="form_19.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>pointer to vector of unknowns <img class="formulaInl" alt="$ U,k,\epsilon,\overline{v^2},f$" src="form_12.png"/>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>deltaEta</em>&nbsp;</td><td>step size in wall normal direction. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>bdry</em>&nbsp;</td><td>value at boundary. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>point at which to compute second derivative around (relative to ordering of xi). </td></tr>
@@ -271,7 +271,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 <hr size="1"/><address style="text-align: right;"><small>
-Generated on Sat Dec 3 20:12:41 2016 for 
+Generated on Mon Dec 5 10:20:24 2016 for 
 by&nbsp;<a href="http://www.doxygen.org/index.html">
 <em>doxygen</em></a>
 1.6.1</small></address>

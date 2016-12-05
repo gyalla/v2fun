@@ -44,7 +44,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="contents">
 <h1>src/computeTerms.h File Reference</h1>
-<p>Computes terms <img class="formulaInl" alt="$T,L,P,\nu_T,$" src="form_37.png"/> as well as <img class="formulaInl" alt="$f(0),\epsilon(0)$" src="form_38.png"/>.  
+<p>Computes terms <img class="formulaInl" alt="$T,L,P,\nu_T,$" src="form_0.png"/> as well as <img class="formulaInl" alt="$f(0),\epsilon(0)$" src="form_1.png"/>.  
 <a href="#_details">More...</a></p>
 <code>#include &lt;gsl/gsl_vector.h&gt;</code><br/>
 <code>#include &quot;<a class="el" href="setup_8h_source.html">setup.h</a>&quot;</code><br/>
@@ -66,7 +66,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Compute dissipation term at wall boundary.  <a href="#aa685bd32e7e9463da7edac517cfb3767"></a><br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
-<p>Computes terms <img class="formulaInl" alt="$T,L,P,\nu_T,$" src="form_37.png"/> as well as <img class="formulaInl" alt="$f(0),\epsilon(0)$" src="form_38.png"/>. </p>
+<p>Computes terms <img class="formulaInl" alt="$T,L,P,\nu_T,$" src="form_0.png"/> as well as <img class="formulaInl" alt="$f(0),\epsilon(0)$" src="form_1.png"/>. </p>
 <dl class="author"><dt><b>Author:</b></dt><dd>Gopal Yalla</dd></dl>
 <p>This file defines the methods to compute various terms for the v2-f equations including turublent time scale, turbulent length scale, production rate, eddy viscosity, as well as the wall boundary terms for the dissipation and redistribution term. </p>
 <hr/><h2>Function Documentation</h2>
@@ -104,17 +104,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Compute eddy viscosity. </p>
 <p>Compute eddy viscosity using </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ \nu_T = C_\mu \overline{v^2} T \]" src="form_15.png"/>
+<img class="formulaDsp" alt="\[ \nu_T = C_\mu \overline{v^2} T \]" src="form_5.png"/>
 </p>
  <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_5.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_3.png"/>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>modelConst</em>&nbsp;</td><td>pointer to struct containing model <a class="el" href="structconstants.html" title="Holds all of the model constants.">constants</a>. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>position at which to compute <img class="formulaInl" alt="$\nu_T$" src="form_8.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>position at which to compute <img class="formulaInl" alt="$\nu_T$" src="form_6.png"/>. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd><img class="formulaInl" alt="$\nu_T$" src="form_8.png"/> at i. </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd><img class="formulaInl" alt="$\nu_T$" src="form_6.png"/> at i. </dd></dl>
 
 </div>
 </div>
@@ -150,13 +150,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="memdoc">
 
 <p>Compute dissipation term at wall boundary. </p>
-<p>Compute <img class="formulaInl" alt="$\epsilon$" src="form_11.png"/> at boundary using </p>
+<p>Compute <img class="formulaInl" alt="$\epsilon$" src="form_9.png"/> at boundary using </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ \epsilon(0) = 2 \frac{k_1}{Re_\tau \Delta \eta^2}\]" src="form_17.png"/>
+<img class="formulaDsp" alt="\[ \epsilon(0) = 2 \frac{k_1}{Re_\tau \Delta \eta^2}\]" src="form_10.png"/>
 </p>
  <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_5.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_3.png"/>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>modelConst</em>&nbsp;</td><td>pointer to struct containing model <a class="el" href="structconstants.html" title="Holds all of the model constants.">constants</a>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>deltaEta</em>&nbsp;</td><td>step size in wall normal direction. </td></tr>
   </table>
@@ -200,11 +200,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Compute redistribution term at wall boundary. </p>
 <p>Compute f at boundary using </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ f(0)= -\frac{20\overline{v^2}_1}{Re_\tau^2 \epsilon(0) \Delta \eta^4} \]" src="form_16.png"/>
+<img class="formulaDsp" alt="\[ f(0)= -\frac{20\overline{v^2}_1}{Re_\tau^2 \epsilon(0) \Delta \eta^4} \]" src="form_8.png"/>
 </p>
  <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_5.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_3.png"/>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>modelConst</em>&nbsp;</td><td>pointer to struct containing model constatns. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>deltaEta</em>&nbsp;</td><td>step size in wall normal direction. </td></tr>
   </table>
@@ -248,11 +248,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Compute turbulent length scale, L. </p>
 <p>Compute L using </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ L = C_L \max \left\{ \frac{k^{3/2}}{\epsilon}, C_\eta \left( \frac{1}{Re_\tau^3 \epsilon} \right)^{1/4} \right\} \]" src="form_6.png"/>
+<img class="formulaDsp" alt="\[ L = C_L \max \left\{ \frac{k^{3/2}}{\epsilon}, C_\eta \left( \frac{1}{Re_\tau^3 \epsilon} \right)^{1/4} \right\} \]" src="form_4.png"/>
 </p>
  <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns, <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_5.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns, <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_3.png"/>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>modelConst</em>&nbsp;</td><td>pointer to struct containing model <a class="el" href="structconstants.html" title="Holds all of the model constants.">constants</a>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>position at which to compute L. </td></tr>
   </table>
@@ -302,11 +302,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Comute production rate. </p>
 <p>Compute production rate using </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[P=\nu_T \left( \frac{\partial U^+}{\partial \eta} \right)^2\]" src="form_13.png"/>
+<img class="formulaDsp" alt="\[P=\nu_T \left( \frac{\partial U^+}{\partial \eta} \right)^2\]" src="form_7.png"/>
 </p>
  <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_5.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_3.png"/>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>modelConst</em>&nbsp;</td><td>pointer to struct containing model <a class="el" href="structconstants.html" title="Holds all of the model constants.">constants</a>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>position at which to compute P. </td></tr>
   </table>
@@ -350,11 +350,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Compute turbulent time scale, T. </p>
 <p>Compute T using </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[T = \max \left\{ \frac{k}{\epsilon}, 6 \sqrt{\frac{1}{Re_\tau \epsilon}} \right\} \]" src="form_4.png"/>
+<img class="formulaDsp" alt="\[T = \max \left\{ \frac{k}{\epsilon}, 6 \sqrt{\frac{1}{Re_\tau \epsilon}} \right\} \]" src="form_2.png"/>
 </p>
  <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_5.png"/>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>xi</em>&nbsp;</td><td>pointer to gsl_vector of unknowns <img class="formulaInl" alt="$U,k,\epsilon,\overline{v^2},f$" src="form_3.png"/>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>modelConst</em>&nbsp;</td><td>pointer to struct containing model <a class="el" href="structconstants.html" title="Holds all of the model constants.">constants</a>. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>i</em>&nbsp;</td><td>position at which to compute T. </td></tr>
   </table>
@@ -380,7 +380,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 
 <hr size="1"/><address style="text-align: right;"><small>
-Generated on Sat Dec 3 20:12:41 2016 for 
+Generated on Mon Dec 5 10:20:24 2016 for 
 by&nbsp;<a href="http://www.doxygen.org/index.html">
 <em>doxygen</em></a>
 1.6.1</small></address>
