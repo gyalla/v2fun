@@ -219,3 +219,62 @@ int SetFTerms_test()
 	return 0; 
 }	
 
+int SysF_test()
+{
+	gsl_vector * xi = gsl_vector_alloc(15); 
+	gsl_vector * F = gsl_vector_alloc(15); 
+	gsl_vector * trueF = gsl_vector_alloc(15);
+	gsl_vector * xiN = gsl_vector_alloc(15); 
+	struct constants Const = {
+		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
+	constants * modelConst= &Const;  
+	struct FParams p = {xiN,1.0,0.5,modelConst}; 
+	FParams * params = &p; 
+	Setuptest_SS(xi,params); 
+
+	SysF(xi,params,F);
+
+	//U TERMS
+	gsl_vector_set(trueF,0,193);
+	gsl_vector_set(trueF,5,40.92304854); 
+	gsl_vector_set(trueF,10,-420.69219382);
+
+	//K TERMS	
+	gsl_vector_set(trueF,1,3030);
+	gsl_vector_set(trueF,6,-1046.23085463); 
+	gsl_vector_set(trueF,11,-433.69219381);
+
+	//ep 
+	gsl_vector_set(trueF,2,5186.83333333);
+	gsl_vector_set(trueF,7,875.38461894); 
+	gsl_vector_set(trueF,12,-246.166604983);
+
+	gsl_vector_set(trueF,3,2.33333333);
+	gsl_vector_set(trueF,8,518.38457268119); 
+	gsl_vector_set(trueF,13,-756.051054299727);
+
+	gsl_vector_set(trueF,4,-26310.1111110979);
+	gsl_vector_set(trueF,9,76.916666666666); 
+	gsl_vector_set(trueF,14,-7959.2566001196);
+
+
+	for(unsigned int i=0; i < trueF->size;i++)
+	{
+		if(fabs(gsl_vector_get(F,i)-gsl_vector_get(trueF,i))>0.0000001)
+		{
+			cout << "FAIL: Putting system together" << endl; 
+			return 1; 
+		}
+	}
+	cout << "PASS: Putting system together" << endl; 
+	return 0; 
+}
+
+
+
+
+
+
+
+
+

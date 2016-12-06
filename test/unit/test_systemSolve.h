@@ -9,6 +9,7 @@ int SetkTerms_test();
 int SetEpTerms_test();
 int Setv2Terms_test();
 int SetFTerms_test();
+int SysF_test();
 int Setuptest_SS(gsl_vector *,struct FParams *);
 
 
