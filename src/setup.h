@@ -60,9 +60,10 @@ void log(int verbose,int level, string msg);
  * This function converts a double to a string to make using log function easier. 
  * The C++ 11 function to_string() doesn't seem to be on stampede. 
  * \param Number number to convert to string. 
+ * \param level only convert if verbose>=level
  * \return Number as string. 
  */
-string num2st(double Number);
+string num2st(double Number,int level);
 /**
  * \brief Solve for initial conditions.  
  * 

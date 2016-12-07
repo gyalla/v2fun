@@ -1,5 +1,5 @@
 /**
-\mainpage V2-F Simulation: Fully Developed Channel Flow
+\mainpage Fully Developed Channel Flow using a V2-F Model
 
 <b>Author</b>: Gopal Yalla
 
@@ -87,13 +87,13 @@ PASS: Putting system together
 
 \section coverage Code Coverage
 
-Issuing a "make check" will generate code coverage results of the unit test suite using lcov. The results of the currect unit can be found <a href="http://users.ices.utexas.edu/~gopal/v2f/lcov_html/">here</a>.
+Issuing a "make check" will generate code coverage results of the unit test suite using lcov. The code coverage results of the current tests can be found <a href="http://users.ices.utexas.edu/~gopal/v2f/lcov_html/">here</a>.
 
 \section opt Profiling / Optimizaiton
 
 \section bugs Reporting Comments and Bugs
 
-Bugs in the code and errors or omissions in the documentation can be reported to gopal@ices.utexas.edu. Requests and contributions are welcome at the same e-mail address.
+Bugs in the code and errors or omissions in the documentation can be reported to gopal@ices.utexas.edu. Requests and contributions (and good grades) are welcome at the same e-mail address.
 
 \cond
 

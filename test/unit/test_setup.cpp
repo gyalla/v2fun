@@ -74,7 +74,7 @@ int test_Save_Results()
 	ifstream inFile; 
 	inFile.open("test_output.txt");
 	inFile >> temp >> temp >> temp >> temp >> temp >> temp;  
-	for(int i = 0; i<xi->size;i+=5)
+	for(unsigned int i = 0; i<xi->size;i+=5)
 	{
 		inFile >> temp; 
 		if (fabs(temp - (deltaEta*(i/float(5)+1)))>0.000001)
@@ -82,7 +82,7 @@ int test_Save_Results()
 			cout << "FAIL: Saving results" << endl; 
 			return 1; 
 		}
-		for(int j=0;j<5;j++)
+		for(unsigned int j=0;j<5;j++)
 		{
 			inFile >> temp; 
 			if (fabs(temp != gsl_vector_get(xi,i+j))>0.000001)

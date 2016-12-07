@@ -99,7 +99,7 @@ int SetFTerms(gsl_vector * xi, FParams * params, gsl_vector * sysF)
 		if (!isfinite(val))
 			return 1; 
 		gsl_vector_set(sysF,xiCounter+4,val); 
-		log(verbose,3,"   f term = " + num2st(val) + " at " + num2st(i) + "\n");
+		log(verbose,3,"   f term = " + num2st(val,3) + " at " + num2st(i,3) + "\n");
 	}
 
 	//boundary terms. 
@@ -109,7 +109,7 @@ int SetFTerms(gsl_vector * xi, FParams * params, gsl_vector * sysF)
 	secondTerm = pow(ComputeL(xi,params->modelConst,i),2)*BdryDiff2(xi,params->deltaEta,xiCounter+4); 
 	thirdTerm = -gsl_vector_get(xi,xiCounter+4) -(params->modelConst->C1)/(ComputeT(xi,params->modelConst,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1))-float(2)/3); 
 	val = firstTerm+secondTerm+thirdTerm;
-	log(verbose,3,"   f term = " + num2st(val) + " at " + num2st(i) + "\n");
+	log(verbose,3,"   f term = " + num2st(val,3) + " at " + num2st(i,3) + "\n");
 	if(!isfinite(val))
 		return 1; 
 	gsl_vector_set(sysF,xiCounter+4,val);
@@ -135,7 +135,7 @@ int SetV2Terms(gsl_vector * xi,gsl_vector * vT,FParams * params, gsl_vector * sy
 		thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*Diff2(xi,params->deltaEta,0,xiCounter+3);
 		fourthTerm = Diff1(xi,params->deltaEta,0,xiCounter+3)*Diff1vT(vT,params->deltaEta,i); 
 		val = firstTerm + secondTerm + thirdTerm + fourthTerm;
-		log(verbose,3,"   V2 term = " + num2st(val) + " at " + num2st(i) + "\n");
+		log(verbose,3,"   V2 term = " + num2st(val,3) + " at " + num2st(i,3) + "\n");
 		if (!isfinite(val))
 			return 1; 
 		gsl_vector_set(sysF,xiCounter+3,val); 
@@ -148,7 +148,7 @@ int SetV2Terms(gsl_vector * xi,gsl_vector * vT,FParams * params, gsl_vector * sy
 	secondTerm = gsl_vector_get(xi,xiCounter+1)*gsl_vector_get(xi,xiCounter+4) - gsl_vector_get(xi,xiCounter+2)*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)));
 	thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*BdryDiff2(xi,params->deltaEta,xiCounter+3);
 	val = firstTerm + secondTerm + thirdTerm;
-	log(verbose,3,"   V2 term = " + num2st(val) + " at " + num2st(i) + "\n");
+	log(verbose,3,"   V2 term = " + num2st(val,3) + " at " + num2st(i,3) + "\n");
 	if (!isfinite(val))
 		return 1; 
 	gsl_vector_set(sysF,xiCounter+3,val); 
@@ -175,7 +175,7 @@ int SetEpTerms(gsl_vector * xi, gsl_vector * vT,FParams * params, gsl_vector * s
 		thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i)/params->modelConst->sigmaEp)*Diff2(xi,params->deltaEta,ComputeEp0(xi,params->modelConst,params->deltaEta),xiCounter+2);
 		fourthTerm = (1/params->modelConst->sigmaEp)*Diff1(xi,params->deltaEta,ComputeEp0(xi,params->modelConst,params->deltaEta),xiCounter+2)*Diff1vT(vT,params->deltaEta,i); 
 		val = firstTerm + secondTerm + thirdTerm + fourthTerm;
-		log(verbose,3,"   Ep term = " + num2st(val) + " at " + num2st(i) + "\n");
+		log(verbose,3,"   Ep term = " + num2st(val,3) + " at " + num2st(i,3) + "\n");
 		if (!isfinite(val))
 			return 1; 
 		gsl_vector_set(sysF,xiCounter+2,val); 
@@ -187,7 +187,7 @@ int SetEpTerms(gsl_vector * xi, gsl_vector * vT,FParams * params, gsl_vector * s
 	secondTerm = - (params->modelConst->Cep2*gsl_vector_get(xi,xiCounter+2))/ComputeT(xi,params->modelConst,i); 
 	thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i)/params->modelConst->sigmaEp)*BdryDiff2(xi,params->deltaEta,xiCounter+2);
 	val = firstTerm + secondTerm + thirdTerm;
-	log(verbose,3,"   Ep term = " + num2st(val) + " at " + num2st(i) + "\n");
+	log(verbose,3,"   Ep term = " + num2st(val,3) + " at " + num2st(i,3) + "\n");
 	if (!isfinite(val))
 		return 1; 
 	gsl_vector_set(sysF,xiCounter+2,val);
@@ -212,7 +212,7 @@ int SetKTerms(gsl_vector * xi, gsl_vector* vT,FParams * params,gsl_vector *sysF)
 		thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*Diff2(xi,params->deltaEta,0,xiCounter+1); 
 		fourthTerm = Diff1(xi,params->deltaEta,0,xiCounter+1)*Diff1vT(vT,params->deltaEta,i); 
 		val = firstTerm + secondTerm + thirdTerm + fourthTerm; 
-		log(verbose,3,"   K term = " + num2st(val) + " at " + num2st(i) + "\n");
+		log(verbose,3,"   K term = " + num2st(val,3) + " at " + num2st(i,3) + "\n");
 		if(!isfinite(val))
 			return 1; 
 		gsl_vector_set(sysF,xiCounter+1,val); 
@@ -224,7 +224,7 @@ int SetKTerms(gsl_vector * xi, gsl_vector* vT,FParams * params,gsl_vector *sysF)
 	secondTerm = -gsl_vector_get(xi,xiCounter+2); 
 	thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*BdryDiff2(xi,params->deltaEta,xiCounter+1); 
 	val = firstTerm+secondTerm+thirdTerm; 
-	log(verbose,3,"   K term = " + num2st(val) + " at " + num2st(i) + "\n");
+	log(verbose,3,"   K term = " + num2st(val,3) + " at " + num2st(i,3) + "\n");
 	if(!isfinite(val))
 		return 1; 
 	gsl_vector_set(sysF,xiCounter+1,val); 
@@ -250,7 +250,7 @@ int SetUTerms( gsl_vector * xi, gsl_vector * vT, FParams * params,gsl_vector * s
 		secondTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*Diff2(xi,params->deltaEta,0,xiCounter);
 		thirdTerm = Diff1(xi,params->deltaEta,0,xiCounter)*Diff1vT(vT,params->deltaEta,i);
 		val = firstTerm + secondTerm + thirdTerm+1;  
-		log(verbose,3,"   U term = " + num2st(val) + " at " + num2st(i) + "\n");
+		log(verbose,3,"   U term = " + num2st(val,3) + " at " + num2st(i,3) + "\n");
 		if(!isfinite(val))
 			return 1; 
 		gsl_vector_set(sysF,xiCounter,val);
@@ -261,7 +261,7 @@ int SetUTerms( gsl_vector * xi, gsl_vector * vT, FParams * params,gsl_vector * s
 	firstTerm = -(gsl_vector_get(xi,xiCounter)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	
 	secondTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*BdryDiff2(xi,params->deltaEta,xiCounter);
 	val = firstTerm+secondTerm + 1; 
-	log(verbose,3,"   U term = " + num2st(val) + " at " + num2st(i) + "\n");
+	log(verbose,3,"   U term = " + num2st(val,3) + " at " + num2st(i,3) + "\n");
 	if(!isfinite(val))
 		return 1; 
 	gsl_vector_set(sysF,xiCounter,val); 	

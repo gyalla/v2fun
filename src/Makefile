@@ -8,7 +8,7 @@ CC      := g++
 LDLIBS  := -lgrvy -lgsl -lgslcblas
 INC     := -I$$TACC_GRVY_INC -I$$TACC_GSL_INC
 CFLAGS  :=-O3 -g -p -Wall
-LDFLAGS := -L$$TACC_GSL_LIB -L$$TACC_GRVY_LIB
+LDFLAGS := -p -L$$TACC_GSL_LIB -L$$TACC_GRVY_LIB
 # RULES
 $(EXEC): $(OBJ)
 	$(LINK.o) $(LDLIBS) -o $@ $^

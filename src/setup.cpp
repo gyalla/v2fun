@@ -37,39 +37,39 @@ int Grvy_Input_Parse(constants * modelConst,string & filename,string & outFile,d
 		return 1; 
 	if(!iparse.Read_Var("reyn", &(modelConst->reyn)))
 		return 1; 
-	log(verbose,1," ---> reyn = " + num2st(modelConst->reyn) + "\n");
+	log(verbose,1," ---> reyn = " + num2st(modelConst->reyn,1) + "\n");
 
 	if(!iparse.Read_Var("Cmu", &(modelConst->Cmu)))
 		return 1; 
-	log(verbose,1," ---> Cmu = " + num2st(modelConst->Cmu) + "\n");
+	log(verbose,1," ---> Cmu = " + num2st(modelConst->Cmu,1) + "\n");
 
 	if(!iparse.Read_Var("C1", &(modelConst->C1)))
 		return 1; 
-	log(verbose,1," ---> C1 = " + num2st(modelConst->C1) + "\n");
+	log(verbose,1," ---> C1 = " + num2st(modelConst->C1,1) + "\n");
 
 	if(!iparse.Read_Var("C2", &(modelConst->C2)))
 		return 1; 
-	log(verbose,1," ---> C2 = " + num2st(modelConst->C2) + "\n");
+	log(verbose,1," ---> C2 = " + num2st(modelConst->C2,1) + "\n");
 
 	if(!iparse.Read_Var("sigmaEp", &(modelConst->sigmaEp)))
 		return 1; 
-	log(verbose,1," ---> sigmaEp = " + num2st(modelConst->sigmaEp) + "\n");
+	log(verbose,1," ---> sigmaEp = " + num2st(modelConst->sigmaEp,1) + "\n");
 
 	if(!iparse.Read_Var("CL", &(modelConst->CL)))
 		return 1; 
-	log(verbose,1," ---> CL = " + num2st(modelConst->CL) + "\n");
+	log(verbose,1," ---> CL = " + num2st(modelConst->CL,1) + "\n");
 
 	if(!iparse.Read_Var("Cep1",&(modelConst->Cep1)))
 		return 1; 
-	log(verbose,1," ---> Cep1 = " + num2st(modelConst->Cep1) + "\n");
+	log(verbose,1," ---> Cep1 = " + num2st(modelConst->Cep1,1) + "\n");
 
 	if(!iparse.Read_Var("Cep2", &(modelConst->Cep2)))
 		return 1; 
-	log(verbose,1," ---> Cep2 = " + num2st(modelConst->Cep2) + "\n");
+	log(verbose,1," ---> Cep2 = " + num2st(modelConst->Cep2,1) + "\n");
 
 	if(!iparse.Read_Var("Ceta", &(modelConst->Ceta)))
 		return 1; 
-	log(verbose,1," ---> Ceta = " + num2st(modelConst->Ceta) + "\n");
+	log(verbose,1," ---> Ceta = " + num2st(modelConst->Ceta,1) + "\n");
 	
 	if(!iparse.Read_Var("input_filename",&filename))
 		return 1; 
@@ -81,7 +81,7 @@ int Grvy_Input_Parse(constants * modelConst,string & filename,string & outFile,d
 
 	if(!iparse.Read_Var("deltaEta",&deltaEta))
 		return 1; 
-	log(verbose,1," ---> deltaEta = " + num2st(deltaEta) + "\n");
+	log(verbose,1," ---> deltaEta = " + num2st(deltaEta,1) + "\n");
 
 	iparse.Close();
 	
@@ -95,12 +95,17 @@ void log(int verbose, int level, string message)
 		cout << message; 
 }
 
-string num2st(double number)
+string num2st(double number,int level)
 {
-	string result; 
-	ostringstream convert; 
-	convert << number; 
-	result = convert.str();
+	string result;
+	if (verbose >= level)
+	{
+		ostringstream convert; 
+		convert << number; 
+		result = convert.str();
+	}	
+	else
+		result="";
 	return result; 
 }
 		
@@ -136,7 +141,7 @@ int SolveIC(gsl_vector * xi, double deltaEta, string file)
 	{
 		xiCounter=5*i; //counter relative to xi vector. 
 		gridPt=(i+1)*deltaEta; //which grid point we are working on. 
-		log(verbose,2,"  Working on grid point " + num2st(gridPt) + "\n");
+		log(verbose,2,"  Working on grid point " + num2st(gridPt,2) + "\n");
 		//find two points in Moser data that surrounds our grid points. 
 		while ((! ((pt1 <= gridPt) && (pt2 >= gridPt))) && (!inFile.eof()))
 		{
@@ -151,11 +156,11 @@ int SolveIC(gsl_vector * xi, double deltaEta, string file)
 		}
 
 		//interpolate each term U,k,ep,v2,f.
-		log(verbose,3,"   interpolation points " + num2st(pt1) + "," + num2st(pt2) + "\n");
-		log(verbose,3,"   interpolation values (U): " + num2st(tempU1) + "," + num2st(tempU2) + "\n");
-		log(verbose,3,"   interpolation values (k): " + num2st(tempK1) + "," + num2st(tempK2) + "\n");
-		log(verbose,3,"   interpolation values (ep): " + num2st(tempEp1) + "," + num2st(tempEp1) + "\n");
-		log(verbose,3,"   interpolation values (v2): " + num2st(tempV21) + "," + num2st(tempV21) + "\n");
+		log(verbose,3,"   interpolation points " + num2st(pt1,3) + "," + num2st(pt2,3) + "\n");
+		log(verbose,3,"   interpolation values (U): " + num2st(tempU1,3) + "," + num2st(tempU2,3) + "\n");
+		log(verbose,3,"   interpolation values (k): " + num2st(tempK1,3) + "," + num2st(tempK2,3) + "\n");
+		log(verbose,3,"   interpolation values (ep): " + num2st(tempEp1,3) + "," + num2st(tempEp1,3) + "\n");
+		log(verbose,3,"   interpolation values (v2): " + num2st(tempV21,3) + "," + num2st(tempV21,3) + "\n");
 		if(LinInterp(xi,pt1,pt2,tempU1,tempU2,gridPt,xiCounter))
 			return 1; 
 		if(LinInterp(xi,pt1,pt2,tempK1,tempK2,gridPt,xiCounter+1))
@@ -243,7 +248,7 @@ int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 	log(verbose,1," Setting f_0 values\n");
 	for(unsigned int i =1; i<f->size; i++)
 	{
-		log(verbose,2,"  f = " + num2st(gsl_vector_get(f,i)) + " at " + num2st(i*deltaEta) + "\n");
+		log(verbose,2,"  f = " + num2st(gsl_vector_get(f,i),2) + " at " + num2st(i*deltaEta,2) + "\n");
 		xiCounter=5*(i-1)+4; 
 		gsl_vector_set(xi,xiCounter,gsl_vector_get(f,i));
 	}

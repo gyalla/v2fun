@@ -82,8 +82,9 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 {
 	double deltaT;
 	int status;  // status of solver
-	int power = -2;
-	int iter ; 
+	int power = -30;
+	int iter = 0; 
+	bool converge = false; 
 	//set up solver
 	log(verbose,1," Setting up Solver...\n");
 	const gsl_multiroot_fsolver_type * Type = gsl_multiroot_fsolver_hybrids; //dnewton for newton solver;
@@ -92,7 +93,9 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 	//power here represents powers of 2 for deltaT.  
 	do
 	{
-		deltaT = 1/modelConst->reyn;     //1/modelConst->reyn; 
+		iter++;
+		deltaT = pow(2,power);
+		//deltaT = 1/modelConst->reyn + pow(2,power); // start off 1/modelConst->reyn; 
 		struct FParams p = {xi,deltaT,deltaEta,modelConst}; 
 		FParams * params = &p; 
 		log(verbose,1," Setting up System...\n");
@@ -103,14 +106,21 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 		//We are just trying to get to the fully developed region of flow. 
 		log(verbose,1," Iterating...\n");
 		status = gsl_multiroot_fsolver_iterate(s);
-		print_state(power,s); 
+		print_state(iter,s); 
 		if(status)
 			break;
-		status = gsl_multiroot_test_residual(s->f,0.001);
+		//status = gsl_multiroot_test_residual(s->f,0.001);
 		log(verbose,2," " + string(gsl_strerror(status)) +  "\n");
 		xi = s->x; 
-		power +=2; 
-	}while(power <=4);
+		power +=5; 
+		
+		//check if we are in fully developed region
+		for(unsigned int i=0; i<xi->size;i++)
+		{
+			if(fabs(gsl_vector_get(xi,i)-gsl_vector_get(params->XiN,i))<0.001)
+				converge = true;
+		}
+	}while(!converge);
 
 	gsl_multiroot_fsolver_free(s); 
 	return 0; 
@@ -118,9 +128,7 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 
 int print_state(int i,gsl_multiroot_fsolver * s)
 {
-	double ans = gsl_vector_get(s->x,s->x->size-5); 
-	log(verbose,1," deltaT = 2^" + num2st(i) + ", Uend = " + num2st(gsl_vector_get(s->x,s->x->size-5)) + "\n"); 
-	cout << setprecision(15) << "deltaT = 2^" << i << " Uend = " << ans << endl; 
+	log(verbose,1," iteration = " + num2st(i,1) + ", Uend = " + num2st(gsl_vector_get(s->x,s->x->size-5),1) + "\n"); 
 	return 0; 
 }
 
