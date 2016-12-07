@@ -5,25 +5,69 @@ Built by: gry88 on stampede.tacc.utexas.edu
 Build Date: 12/9/2016 
 
 \hypertarget{index_Overview}{}\section{Overview}\label{index_Overview}
-
-
-This code simulates fully developed channel flow using the v2-\/f RANS model proposed by Durbin. A full description of the problem can be found \href{http://users.ices.utexas.edu/~gopal/public/Problem_Statement.pdf}{\tt here}. This code was written for a final project for CSE380, and makes use of the following design principles:
+This code simulates fully developed channel flow using the v2-\/f RANS model proposed by Durbin, and was written as a final project for CSE380. The project makes use of the following design principles:
 
 
 \begin{DoxyItemize}
-\item Build systems. 
-\item Version Control. 
 \item Documentation. 
-\item Verification (Unit test and regression tests). 
+\item Version Control. 
+\item Build systems. 
+\item Verification. 
 \item Code Coverage. 
 \item Profiling / Optimization. 
 \end{DoxyItemize}
 
-Each of these categories is detailed below.\hypertarget{index_vc}{}\section{Version Control}\label{index_vc}
-\hypertarget{index_make}{}\section{Build Systems}\label{index_make}
-\hypertarget{index_doc}{}\section{Documentation}\label{index_doc}
-\hypertarget{index_test}{}\section{Verification}\label{index_test}
-\hypertarget{index_coverage}{}\section{Code Coverage}\label{index_coverage}
-\hypertarget{index_opt}{}\section{Profiling / Optimizaiton}\label{index_opt}
+Each of these categories is detailed below. The code was written in C++ and make use of several GSL functions and structs. For example, the code uses a second order centered difference scheme in space, and backward Euler in time (for time marching), and the resulting system is solved with GSL's multidimensional root solver.\hypertarget{index_doc}{}\section{Documentation}\label{index_doc}
+The model documentation can be found \href{http://users.ices.utexas.edu/~gopal/v2f/Problem_Statement.pdf}{\tt here}. Several of the variable names in the code follow the naming scheme used in this document. For the code documentation...you're looking at it! This page details each header file and class in the source code, which is included by `main.cpp'\hypertarget{index_vc}{}\section{Version Control}\label{index_vc}
+Git was used for version control.\hypertarget{index_make}{}\section{Build Systems}\label{index_make}
+There are three Makefiles in the project:
+
+
+\begin{DoxyItemize}
+\item Makefile 
+\item src/Makefile 
+\item test/unit/Makefile 
+\end{DoxyItemize}
+
+Only the Makefile in the root directory should be called as it interacts with the other Makefiles. Issuing a 'make' command will display all possible targets as shown:
+
+
+\begin{DoxyPre} > make
+Available make targets:
+  source    : build main program in /src/
+  check     : build and run test unit test suite in /test/unit
+  coverage  : build lcov in include/lcov, build tests with --coverage option, run lcov, and generate html in /test/unit/lcov\_html
+ \end{DoxyPre}
+
+
+There are also 3 PHONY targets in Makefile: clobber, clean, echo.\hypertarget{index_test}{}\section{Verification}\label{index_test}
+\hypertarget{index_unit}{}\subsection{Unit Tests}\label{index_unit}
+The project comes with a host of unit tests to verify the software is working properly. To run, issue a ''make check'' to initiate the tests. If successful, output similar to the following will be generated:
+
+
+\begin{DoxyPre} > make check
+-------------------------------------------------------
+Running Unit Test Suite
+-------------------------------------------------------
+PASS: Interpolation Test
+PASS: Getting inputs
+PASS: Saving Results
+PASS: Compute Turbulent Time Scale, T
+PASS: Compute Tubulent Length Scale, L
+PASS: Compute Eddy Viscosity, vT
+PASS: Compute Production Rate, P
+PASS: Compute Dissipation at Wall
+PASS: Compute redistribution at Wall
+PASS: Setting U terms in system
+PASS: Setting k terms in system
+PASS: Setting ep terms in system
+PASS: Setting v2 terms in system
+PASS: Setting f terms in system
+PASS: Putting system together 
+-------------------------------------------------------
+ \end{DoxyPre}
+\hypertarget{index_regression}{}\subsection{Regression Tests}\label{index_regression}
+{\itshape $\ast$In a future version we hope to implement tests for asymptotic error analysis, covergence of certain statistical quantities, and a method of manufactured solutions\/}$\ast$\hypertarget{index_coverage}{}\section{Code Coverage}\label{index_coverage}
+Issuing a \char`\"{}make check\char`\"{} will generate code coverage results of the unit test suite using lcov. The results of the currect unit can be found \href{http://users.ices.utexas.edu/~gopal/v2f/lcov_html/}{\tt here}.\hypertarget{index_opt}{}\section{Profiling / Optimizaiton}\label{index_opt}
 \hypertarget{index_bugs}{}\section{Reporting Comments and Bugs}\label{index_bugs}
 Bugs in the code and errors or omissions in the documentation can be reported to \href{mailto:gopal@ices.utexas.edu}{\tt gopal@ices.utexas.edu}. Requests and contributions are welcome at the same e-\/mail address. 

@@ -84,50 +84,33 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 	int status;  // status of solver
 	int power = -2;
 	int iter ; 
-	if (verbose >=2)
-	{
-		for (int i=0; i<xi->size;i++)
-			{
-				cout << gsl_vector_get(xi,i) << endl; 
-			}
-	}
 	//set up solver
-	const gsl_multiroot_fsolver_type * T = gsl_multiroot_fsolver_hybrid; //dnewton for newton solver;
-	gsl_multiroot_fsolver * s = gsl_multiroot_fsolver_alloc(T,xi->size);
-
+	log(verbose,1," Setting up Solver...\n");
+	const gsl_multiroot_fsolver_type * Type = gsl_multiroot_fsolver_hybrids; //dnewton for newton solver;
+	gsl_multiroot_fsolver * s = gsl_multiroot_fsolver_alloc(Type,xi->size);
 	//for time marching, starting small and getting bigger works best. 
 	//power here represents powers of 2 for deltaT.  
 	do
 	{
-		iter = 0; 
-		deltaT = pow(2,power); 
+		deltaT = 1/modelConst->reyn;     //1/modelConst->reyn; 
 		struct FParams p = {xi,deltaT,deltaEta,modelConst}; 
 		FParams * params = &p; 
+		log(verbose,1," Setting up System...\n");
 		gsl_multiroot_function F = {&SysF,xi->size,params};
 		gsl_multiroot_fsolver_set(s,&F,xi); 
-		do
-		{
-			iter ++;
+		
 		//only need one interation per deltaT since we don't care about temporal accuracy. 
 		//We are just trying to get to the fully developed region of flow. 
+		log(verbose,1," Iterating...\n");
 		status = gsl_multiroot_fsolver_iterate(s);
 		print_state(power,s); 
 		if(status)
 			break;
 		status = gsl_multiroot_test_residual(s->f,0.001);
-		if (verbose >=2)
-		{
-			for (int i=0; i<s->x->size;i++)
-			{
-				cout << gsl_vector_get(s->x,i) << endl; 
-			}
-		}
-		}while(status == GSL_CONTINUE && iter < 1);
 		log(verbose,2," " + string(gsl_strerror(status)) +  "\n");
 		xi = s->x; 
 		power +=2; 
-	}
-	while(power <=4);
+	}while(power <=4);
 
 	gsl_multiroot_fsolver_free(s); 
 	return 0; 

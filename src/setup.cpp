@@ -126,7 +126,7 @@ int SolveIC(gsl_vector * xi, double deltaEta, string file)
 	double pt2,tempU2,tempK2,tempEp2,tempV22;
 	double gridPt,xiCounter;
 		
-	// read in first two files. 
+	// read in first two line. 
 	if (!(inFile >> pt1 >> tempU1 >> tempK1 >> tempEp1 >> tempV21))
 		return 1; 
 
@@ -247,6 +247,8 @@ int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 		xiCounter=5*(i-1)+4; 
 		gsl_vector_set(xi,xiCounter,gsl_vector_get(f,i));
 	}
+
+
 	return 0; 
 }
 

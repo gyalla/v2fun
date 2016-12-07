@@ -42,32 +42,77 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Build Date: 12/9/2016 <hr/>
 <h2><a class="anchor" id="Overview">
 Overview</a></h2>
- <img src="temp.png" width="700px" height="300px" align="middle"/> <p>This code simulates fully developed channel flow using the v2-f RANS model proposed by Durbin. A full description of the problem can be found <a href="http://users.ices.utexas.edu/~gopal/public/Problem_Statement.pdf">here</a>. This code was written for a final project for CSE380, and makes use of the following design principles:</p>
+<p>This code simulates fully developed channel flow using the v2-f RANS model proposed by Durbin, and was written as a final project for CSE380. The project makes use of the following design principles:</p>
 <ul>
-<li>
-Build systems. </li>
-<li>
-Version Control. </li>
 <li>
 Documentation. </li>
 <li>
-Verification (Unit test and regression tests). </li>
+Version Control. </li>
+<li>
+Build systems. </li>
+<li>
+Verification. </li>
 <li>
 Code Coverage. </li>
 <li>
 Profiling / Optimization. </li>
 </ul>
-<p>Each of these categories is detailed below.</p>
-<h2><a class="anchor" id="vc">
-Version Control</a></h2>
-<h2><a class="anchor" id="make">
-Build Systems</a></h2>
+<p>Each of these categories is detailed below. The code was written in C++ and make use of several GSL functions and structs. For example, the code uses a second order centered difference scheme in space, and backward Euler in time (for time marching), and the resulting system is solved with GSL's multidimensional root solver.</p>
 <h2><a class="anchor" id="doc">
 Documentation</a></h2>
+<p>The model documentation can be found <a href="http://users.ices.utexas.edu/~gopal/v2f/Problem_Statement.pdf">here</a>. Several of the variable names in the code follow the naming scheme used in this document. For the code documentation...you're looking at it! This page details each header file and class in the source code, which is included by `main.cpp'</p>
+<h2><a class="anchor" id="vc">
+Version Control</a></h2>
+<p>Git was used for version control.</p>
+<h2><a class="anchor" id="make">
+Build Systems</a></h2>
+<p>There are three Makefiles in the project:</p>
+<ul>
+<li>
+Makefile </li>
+<li>
+src/Makefile </li>
+<li>
+test/unit/Makefile </li>
+</ul>
+<p>Only the Makefile in the root directory should be called as it interacts with the other Makefiles. Issuing a 'make' command will display all possible targets as shown:</p>
+<div class="fragment"><pre class="fragment"> &gt; make
+Available make targets:
+  source    : build main program in /src/
+  check     : build and run test unit test suite in /test/unit
+  coverage  : build lcov in include/lcov, build tests with --coverage option, run lcov, and generate html in /test/unit/lcov_html
+ </pre></div><p>There are also 3 PHONY targets in Makefile: clobber, clean, echo.</p>
 <h2><a class="anchor" id="test">
 Verification</a></h2>
+<h3><a class="anchor" id="unit">
+Unit Tests</a></h3>
+<p>The project comes with a host of unit tests to verify the software is working properly. To run, issue a ''make check'' to initiate the tests. If successful, output similar to the following will be generated:</p>
+<div class="fragment"><pre class="fragment"> &gt; make check
+-------------------------------------------------------
+Running Unit Test Suite
+-------------------------------------------------------
+PASS: Interpolation Test
+PASS: Getting inputs
+PASS: Saving Results
+PASS: Compute Turbulent Time Scale, T
+PASS: Compute Tubulent Length Scale, L
+PASS: Compute Eddy Viscosity, vT
+PASS: Compute Production Rate, P
+PASS: Compute Dissipation at Wall
+PASS: Compute redistribution at Wall
+PASS: Setting U terms in system
+PASS: Setting k terms in system
+PASS: Setting ep terms in system
+PASS: Setting v2 terms in system
+PASS: Setting f terms in system
+PASS: Putting system together 
+-------------------------------------------------------
+ </pre></div><h3><a class="anchor" id="regression">
+Regression Tests</a></h3>
+<p><em>*In a future version we hope to implement tests for asymptotic error analysis, covergence of certain statistical quantities, and a method of manufactured solutions</em>*</p>
 <h2><a class="anchor" id="coverage">
 Code Coverage</a></h2>
+<p>Issuing a "make check" will generate code coverage results of the unit test suite using lcov. The results of the currect unit can be found <a href="http://users.ices.utexas.edu/~gopal/v2f/lcov_html/">here</a>.</p>
 <h2><a class="anchor" id="opt">
 Profiling / Optimizaiton</a></h2>
 <h2><a class="anchor" id="bugs">
@@ -89,7 +134,7 @@ Reporting Comments and Bugs</a></h2>
 </div>
 
 <hr size="1"/><address style="text-align: right;"><small>
-Generated on Mon Dec 5 10:20:24 2016 for 
+Generated on Wed Dec 7 16:06:33 2016 for 
 by&nbsp;<a href="http://www.doxygen.org/index.html">
 <em>doxygen</em></a>
 1.6.1</small></address>

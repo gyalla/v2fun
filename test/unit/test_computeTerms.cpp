@@ -105,7 +105,7 @@ int ComputeEddyVisc_test()
 			return 1; 
 		}
 	}
-	cout << "PASS: Compute Turbulent Eddy Viscosity, vT" << endl; 
+	cout << "PASS: Compute Eddy Viscosity, vT" << endl; 
 	gsl_vector_free(vT);
 	gsl_vector_free(xi);
 	return 0; 

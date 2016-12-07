@@ -18,9 +18,9 @@ $(EXEC): $(OBJ)
 %.o: %.cpp
 	$(COMPILE.c)  $< -o $@ $(INC) 
 
-test_computeTerms.o test_systemSolve.o test.o: ../../src/finiteDiff.h ../../src/computeTerms.h ../../src/systemSolve.h ../../src/setup.h
+test_computeTerms.o test_systemSolve.o test.o: ../../src/finiteDiff.h ../../src/computeTerms.h ../../src/systemSolve.h ../../src/setup.h ../../src/main.cpp
 
-test.o: test_computeTerms.h test_systemSolve.h
+test.o: test_computeTerms.h test_systemSolve.h 
 
 check: 
 	$(RM) test_output.txt

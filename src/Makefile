@@ -7,7 +7,7 @@ OBJ  := $(patsubst %.cpp,%.o,$(SRC))
 CC      := g++ 
 LDLIBS  := -lgrvy -lgsl -lgslcblas
 INC     := -I$$TACC_GRVY_INC -I$$TACC_GSL_INC
-CFLAGS  :=-O0 -g -p -Wall
+CFLAGS  :=-O3 -g -p -Wall
 LDFLAGS := -L$$TACC_GSL_LIB -L$$TACC_GRVY_LIB
 # RULES
 $(EXEC): $(OBJ)
