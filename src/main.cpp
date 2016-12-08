@@ -83,7 +83,7 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 {
 	double deltaT;
 	int status;  // status of solver
-	int power = -30;
+	int power = -2;
 	int iter = 0; 
 	bool converge = false; 
 	//set up solver
@@ -95,8 +95,8 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 	do
 	{
 		iter++;
-		deltaT = pow(2,power);
-		//deltaT = 1/modelConst->reyn + pow(2,power); // start off 1/modelConst->reyn; 
+		//deltaT = pow(2,power);
+		deltaT = 1/modelConst->reyn + pow(2,power); // start off 1/modelConst->reyn; 
 		struct FParams p = {xi,deltaT,deltaEta,modelConst}; 
 		FParams * params = &p; 
 		Log(logINFO) << "Setting up System...";

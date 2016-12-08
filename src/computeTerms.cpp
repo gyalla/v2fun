@@ -66,13 +66,13 @@ double ComputeL(gsl_vector * xi,constants * modelConst,int i)
 
 }
 
-double ComputeEddyVisc(gsl_vector * xi, constants * modelConst,int i)
+double ComputeEddyVisc(gsl_vector * xi, gsl_vector * T, constants * modelConst,int i)
 {
 	double val; 
 	double xiCounter = 5*(i-1); //counter relative to xi. -1 since U starts a 0. 
 
 	Log(logDEBUG1) << "Computing Eddy Viscosity";
-	val = modelConst->Cmu*gsl_vector_get(xi,xiCounter+3)*ComputeT(xi,modelConst,i);
+	val = modelConst->Cmu*gsl_vector_get(xi,xiCounter+3)*gsl_vector_get(T,i);
 	if (!isfinite(val))
 	{
 		Log(logERROR) << "Error: vT non-finite (" << val << ")";
@@ -81,13 +81,14 @@ double ComputeEddyVisc(gsl_vector * xi, constants * modelConst,int i)
 	return val; 
 }
 
-double ComputeP(gsl_vector * xi,constants * modelConst,double deltaEta,int i)
+double ComputeP(gsl_vector * xi,gsl_vector* vT,double deltaEta,int i)
 {
 	double val; 
 
 	Log(logDEBUG1) << "Computing P";
 
-	val = ComputeEddyVisc(xi,modelConst,i)*pow(Diff1(xi,deltaEta,0,i),2);
+	//note: Diff1 takes xicounter indices
+	val = gsl_vector_get(vT,i)*pow(Diff1(xi,deltaEta,0,5*(i-1)),2);
 	if (!isfinite(val))
 	{
 		Log(logERROR) << "Error: P non-finite (" << val << ")";

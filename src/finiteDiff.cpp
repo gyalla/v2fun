@@ -14,6 +14,7 @@ double Diff2(gsl_vector * x,double deltaEta,double bdry,int i)
 {
 
 	double val;
+	// i = xiCounter indices
 	//if i < 5 use value at boundary. 5 for the index of xi. 
 	if (i<5)
 		val =(gsl_vector_get(x,i+5) - 2*gsl_vector_get(x,i) + bdry)/pow(deltaEta,2);

@@ -30,11 +30,14 @@ int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 	gsl_vector * tempxi = gsl_vector_alloc(xi->size);  
 	gsl_vector_memcpy(tempxi,xi);
 
-	// Enough functions need eddy viscosity so we store results.
+	// Enough functions need eddy viscosity so we store results, same as T.
+	// Note each of the Term vectors are full size (starting at i=0)
 	gsl_vector * vT = gsl_vector_calloc(vecSize);
+	gsl_vector * T  = gsl_vector_calloc(vecSize);
 	for (unsigned int i = 1; i<vT->size;i++)
 	{
-		gsl_vector_set(vT,i,ComputeEddyVisc(tempxi,params->modelConst,i));
+		gsl_vector_set(T,i,ComputeT(tempxi,params->modelConst,i));
+		gsl_vector_set(vT,i,ComputeEddyVisc(tempxi,T,params->modelConst,i));
 	}
 
 	GRVY_Timer_Class gt; 
@@ -51,7 +54,7 @@ int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 		exit(1); 
 	}
 
-	if(SetEpTerms(tempxi,vT,params,sysF))
+	if(SetEpTerms(tempxi,vT,T,params,sysF))
 	{
 		Log(logERROR) << "Error setting ep terms in system";
 		exit(1); 
@@ -63,7 +66,7 @@ int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 		exit(1); 
 	}
 
-	if(SetFTerms(tempxi,params,sysF))
+	if(SetFTerms(tempxi,vT,T,params,sysF))
 	{
 		Log(logERROR) << "Error setting F terms in system";
 		exit(1); 
@@ -79,7 +82,7 @@ int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 	return 0; 
 }
 
-int SetFTerms(gsl_vector * xi, FParams * params, gsl_vector * sysF)
+int SetFTerms(gsl_vector * xi, gsl_vector * vT, gsl_vector * T, FParams * params, gsl_vector * sysF)
 {
 	
 	Log(logDEBUG2) << "Setting f terms\n";
@@ -88,14 +91,15 @@ int SetFTerms(gsl_vector * xi, FParams * params, gsl_vector * sysF)
 	unsigned int i; 
 	unsigned int size = xi->size/float(5) + 1; //size of single vectors. Comes from old structure of code before restructure branch in git.  
 	double xiCounter; 
+	double f0 = Computef0(xi,params->modelConst,params->deltaEta);
 
 	for(i = 1; i<size-1; i++)
 	{
 		xiCounter=5*(i-1); 
 		firstTerm = -(gsl_vector_get(xi,xiCounter+4)-gsl_vector_get(params->XiN,xiCounter+4))/params->deltaT;	
-		secondTerm = pow(ComputeL(xi,params->modelConst,i),2)*Diff2(xi,params->deltaEta,Computef0(xi,params->modelConst,params->deltaEta),xiCounter+4); 
-		thirdTerm = params->modelConst->C2*(ComputeP(xi,params->modelConst,params->deltaEta,i)/gsl_vector_get(xi,xiCounter+1)) - gsl_vector_get(xi,xiCounter+4);     
-		fourthTerm = -(params->modelConst->C1)/(ComputeT(xi,params->modelConst,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1))-float(2)/3); 
+		secondTerm = pow(ComputeL(xi,params->modelConst,i),2)*Diff2(xi,params->deltaEta,f0,xiCounter+4); 
+		thirdTerm = params->modelConst->C2*(ComputeP(xi,vT,params->deltaEta,i)/gsl_vector_get(xi,xiCounter+1)) - gsl_vector_get(xi,xiCounter+4);     
+		fourthTerm = -(params->modelConst->C1/gsl_vector_get(T,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1))-float(2)/3); 
 		val = firstTerm + secondTerm + thirdTerm + fourthTerm;
 		if (!isfinite(val))
 			return 1; 
@@ -108,7 +112,7 @@ int SetFTerms(gsl_vector * xi, FParams * params, gsl_vector * sysF)
 	xiCounter=5*(i-1); 
 	firstTerm = -(gsl_vector_get(xi,xiCounter+4)-gsl_vector_get(params->XiN,xiCounter+4))/params->deltaT;	
 	secondTerm = pow(ComputeL(xi,params->modelConst,i),2)*BdryDiff2(xi,params->deltaEta,xiCounter+4); 
-	thirdTerm = -gsl_vector_get(xi,xiCounter+4) -(params->modelConst->C1)/(ComputeT(xi,params->modelConst,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1))-float(2)/3); 
+	thirdTerm = -gsl_vector_get(xi,xiCounter+4) -(params->modelConst->C1/gsl_vector_get(T,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1))-float(2)/3); 
 	val = firstTerm+secondTerm+thirdTerm;
 	Log(logDEBUG3) << "f term = " << val << " at " << i;
 	if(!isfinite(val))
@@ -158,7 +162,7 @@ int SetV2Terms(gsl_vector * xi,gsl_vector * vT,FParams * params, gsl_vector * sy
 }
 
 
-int SetEpTerms(gsl_vector * xi, gsl_vector * vT,FParams * params, gsl_vector * sysF)
+int SetEpTerms(gsl_vector * xi, gsl_vector * vT,gsl_vector * T,FParams * params, gsl_vector * sysF)
 {
 	Log(logDEBUG2) << "Setting Ep terms";
 	double firstTerm,secondTerm,thirdTerm,fourthTerm;  //as defined in doc. 
@@ -173,7 +177,7 @@ int SetEpTerms(gsl_vector * xi, gsl_vector * vT,FParams * params, gsl_vector * s
 	{
 		xiCounter=5*(i-1); 
 		firstTerm = -(gsl_vector_get(xi,xiCounter+2)-gsl_vector_get(params->XiN,xiCounter+2))/params->deltaT;	
-		secondTerm = (params->modelConst->Cep1*ComputeP(xi,params->modelConst,params->deltaEta,i) - params->modelConst->Cep2*gsl_vector_get(xi,xiCounter+2))/ComputeT(xi,params->modelConst,i); 
+		secondTerm = (params->modelConst->Cep1*ComputeP(xi,vT,params->deltaEta,i) - params->modelConst->Cep2*gsl_vector_get(xi,xiCounter+2))/gsl_vector_get(T,i); 
 		thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i)/params->modelConst->sigmaEp)*Diff2(xi,params->deltaEta,ep0,xiCounter+2);
 		fourthTerm = (1/params->modelConst->sigmaEp)*Diff1(xi,params->deltaEta,ep0,xiCounter+2)*Diff1vT(vT,params->deltaEta,i); 
 		val = firstTerm + secondTerm + thirdTerm + fourthTerm;
@@ -186,7 +190,7 @@ int SetEpTerms(gsl_vector * xi, gsl_vector * vT,FParams * params, gsl_vector * s
 	i=size-1;  
 	xiCounter=5*(i-1); 
 	firstTerm = -(gsl_vector_get(xi,xiCounter+2)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	
-	secondTerm = - (params->modelConst->Cep2*gsl_vector_get(xi,xiCounter+2))/ComputeT(xi,params->modelConst,i); 
+	secondTerm = - (params->modelConst->Cep2*gsl_vector_get(xi,xiCounter+2))/gsl_vector_get(T,i); 
 	thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i)/params->modelConst->sigmaEp)*BdryDiff2(xi,params->deltaEta,xiCounter+2);
 	val = firstTerm + secondTerm + thirdTerm;
 	Log(logDEBUG3) << "Ep term = " << val << " at " << i;
@@ -210,7 +214,7 @@ int SetKTerms(gsl_vector * xi, gsl_vector* vT,FParams * params,gsl_vector *sysF)
 	{
 		xiCounter=5*(i-1);
 		firstTerm = -(gsl_vector_get(xi,xiCounter+1)-gsl_vector_get(params->XiN,xiCounter+1))/params->deltaT;	
-		secondTerm = ComputeP(xi,params->modelConst,params->deltaEta,i)- gsl_vector_get(xi,xiCounter+2); 
+		secondTerm = ComputeP(xi,vT,params->deltaEta,i)-gsl_vector_get(xi,xiCounter+2); 
 		thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*Diff2(xi,params->deltaEta,0,xiCounter+1); 
 		fourthTerm = Diff1(xi,params->deltaEta,0,xiCounter+1)*Diff1vT(vT,params->deltaEta,i); 
 		val = firstTerm + secondTerm + thirdTerm + fourthTerm; 

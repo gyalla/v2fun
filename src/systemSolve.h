@@ -61,11 +61,12 @@ int SetKTerms(gsl_vector * xi,gsl_vector * vT, FParams * params,gsl_vector *sysF
  * \param xi pointer to gsl_vector of unknowns \f$
  * U,k,\epsilon,\overline{v^2},f\f$. 
  * \param vT pointer to vector of eddy viscosity. 
+ * \param T pointer to gsl_vector to time scale 
  * \param params pointer to parameters of system. 
  * \param sysF gsl_vector defining multiroot function. 
  * \return Error code (0 = success). 
  */
-int SetEpTerms(gsl_vector * xi, gsl_vector * vT, FParams * params, gsl_vector * sysF);
+int SetEpTerms(gsl_vector * xi, gsl_vector * vT, gsl_vector * T ,FParams * params, gsl_vector * sysF);
 
 /** 
  * \brief Sets terms in system related to velocity scale, \f$\overline{v^2}\f$. 
@@ -82,10 +83,12 @@ int SetV2Terms(gsl_vector * xi, gsl_vector * vT,  FParams * params, gsl_vector *
  * \brief Sets terms in system related to mean veloctity, U. 
  * \param xi pointer to gsl_vector of unknowns \f$
  * U,k,\epsilon,\overline{v^2},f\f$. 
+ * \param vT gsl_vector for eddy viscosity.
+ * \param T gsl_vector of turbulent time scale, T.
  * \param params pointer to parameters of system. 
  * \param sysF gsl_vector defining multiroot function. 
  * \return Error code (0 = success). 
  */
-int SetFTerms(gsl_vector * xi, FParams * params, gsl_vector * sysF);
+int SetFTerms(gsl_vector * xi, gsl_vector * vT, gsl_vector * T, FParams * params, gsl_vector * sysF);
 
 #endif

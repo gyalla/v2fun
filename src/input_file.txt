@@ -20,7 +20,7 @@ Cep2 = 1.9
 Cep1 = 1.3
 Ceta = 70 
 
-deltaEta = 0.01		#step size in wall normal direction. Should be ~ 1/reyn 
+deltaEta = 0.005		#step size in wall normal direction. Should be ~ 1/reyn 
 
 input_filename = ../data/Reyn_180.dat #filename for interpolation from moser data. 
 output_filename = ../data/v2fResults_180.dat	

@@ -177,12 +177,21 @@ int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 	double LHS1,LHS2; // LHS of f from finite difference. 
 	unsigned int i,xiCounter; 
 
+	gsl_vector * T = gsl_vector_calloc(A->size1);
+	gsl_vector * vT = gsl_vector_calloc(T->size);
+	for (unsigned int i = 1; i<vT->size;i++)
+	{
+		gsl_vector_set(T,i,ComputeT(xi,modelConst,i));
+		gsl_vector_set(vT,i,ComputeEddyVisc(xi,T,modelConst,i));
+	}
+
 	// Set matrix so solve
 	//
 	//      |    1           0           0            |
 	// A = 	| L^2/n^2 -(2*L^2/n^2 + 1) L^2/n^2        |
 	// 	|    0         2*L^2/n^2 -(2*L^2/n^2 + 1) |
 	//
+
 
 	gsl_matrix_set(A,0,0,1); 
 	gsl_vector_set(b,0,Computef0(xi,modelConst,deltaEta)); 
@@ -196,8 +205,8 @@ int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 		gsl_matrix_set(A,i,i,-( 2*LOvrEta + 1)); 
 		gsl_matrix_set(A,i,i+1,LOvrEta); 
 
-		LHS1 = (modelConst->C1/ComputeT(xi,modelConst,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)) - 2/3); 
-		LHS2 = (modelConst->C2*ComputeP(xi,modelConst,deltaEta,i))/gsl_vector_get(xi,xiCounter+1);
+		LHS1 = (modelConst->C1/gsl_vector_get(T,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)) - 2/3); 
+		LHS2 = (modelConst->C2*ComputeP(xi,vT,deltaEta,i))/gsl_vector_get(xi,xiCounter+1);
 
 		if(!isfinite(LHS1-LHS2))
 		{
