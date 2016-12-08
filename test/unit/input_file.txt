@@ -24,6 +24,6 @@ input_filename = ../data/Reyn_2000_data.txt #filename for interpolation from mos
 output_filename = ../data/v2fResults_2000_01.txt
 
 
-verbose = 0		#log level - 1 or 0 recommended. 2/3 for debugging.   
+loglevelint = 0
 
 

@@ -47,6 +47,7 @@ int SetUTerms_test()
 	gsl_vector * trueF = gsl_vector_alloc(3);
 	gsl_vector * xiN = gsl_vector_alloc(15); 
 	gsl_vector * vT  = gsl_vector_calloc(4); 
+	gsl_vector * T   = gsl_vector_calloc(4);
 	struct constants Const = {
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
 	constants * modelConst= &Const;  
@@ -56,9 +57,9 @@ int SetUTerms_test()
 
 	for (unsigned int i=1; i<vT->size;i++)
 	{
-		gsl_vector_set(vT,i,ComputeEddyVisc(xi,params->modelConst,i));
+		gsl_vector_set(T,i,ComputeT(xi,modelConst,i));
+		gsl_vector_set(vT,i,ComputeEddyVisc(xi,T,modelConst,i));
 	}
-
 	
 	SetUTerms(xi,vT,params,sysF); 
 	gsl_vector_set(trueF,0,193);
@@ -74,7 +75,21 @@ int SetUTerms_test()
 		}
 	}
 	cout << "PASS: Setting U terms in system" << endl; 
-	
+
+	gsl_vector * P = gsl_vector_calloc(2);
+	gsl_vector * L = gsl_vector_calloc(4);
+
+	//uncomment to get values for tests
+	//for (unsigned int i=1; i<L->size;i++)
+	//{
+	//	if (i!=3)
+	//	cout << "P at " << i << " = " << ComputeP(xi,vT,0.5,i) << endl; 
+	//	cout << "L at " << i << " = " << ComputeL(xi,modelConst,i) << endl; 
+	//	cout << "T at " << i << " = " << gsl_vector_get(T,i) << endl; 
+	//	cout << "vT at " << i << " = " << gsl_vector_get(vT,i) << endl; 
+	//	 cout << "f0 = " << Computef0(xi,modelConst,0.5)<< endl; 
+	//}
+
 	return 0; 
 }
 
@@ -85,6 +100,7 @@ int SetkTerms_test()
 	gsl_vector * trueF = gsl_vector_alloc(3);
 	gsl_vector * xiN = gsl_vector_alloc(15); 
 	gsl_vector * vT  = gsl_vector_calloc(4); 
+	gsl_vector * T   = gsl_vector_calloc(4);  
 	struct constants Const = {
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
 	constants * modelConst= &Const;  
@@ -94,12 +110,11 @@ int SetkTerms_test()
 
 	for (unsigned int i=1; i<vT->size;i++)
 	{
-		gsl_vector_set(vT,i,ComputeEddyVisc(xi,params->modelConst,i));
+		gsl_vector_set(T,i,ComputeT(xi,params->modelConst,i));
+		gsl_vector_set(vT,i,ComputeEddyVisc(xi,T,params->modelConst,i));
 	}
-
-	
 	SetKTerms(xi,vT,params,sysF); 
-	gsl_vector_set(trueF,0,3030);
+	gsl_vector_set(trueF,0,1140);
 	gsl_vector_set(trueF,1,-1046.23085463); 
 	gsl_vector_set(trueF,2,-433.69219381);
 
@@ -122,6 +137,7 @@ int SetEpTerms_test()
 	gsl_vector * trueF = gsl_vector_alloc(3);
 	gsl_vector * xiN = gsl_vector_alloc(15); 
 	gsl_vector * vT  = gsl_vector_calloc(4); 
+	gsl_vector * T   = gsl_vector_calloc(4);
 	struct constants Const = {
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
 	constants * modelConst= &Const;  
@@ -131,12 +147,12 @@ int SetEpTerms_test()
 
 	for (unsigned int i=1; i<vT->size;i++)
 	{
-		gsl_vector_set(vT,i,ComputeEddyVisc(xi,params->modelConst,i));
+		gsl_vector_set(T,i,ComputeT(xi,params->modelConst,i));
+		gsl_vector_set(vT,i,ComputeEddyVisc(xi,T,params->modelConst,i));
 	}
 
-	
-	SetEpTerms(xi,vT,params,sysF); 
-	gsl_vector_set(trueF,0,5186.83333333);
+	SetEpTerms(xi,vT,T,params,sysF); 
+	gsl_vector_set(trueF,0,146.83333333);
 	gsl_vector_set(trueF,1,875.38461894); 
 	gsl_vector_set(trueF,2,-246.166604983);
 
@@ -159,6 +175,7 @@ int Setv2Terms_test()
 	gsl_vector * trueF = gsl_vector_alloc(3);
 	gsl_vector * xiN = gsl_vector_alloc(15); 
 	gsl_vector * vT  = gsl_vector_calloc(4); 
+	gsl_vector * T  = gsl_vector_calloc(4);
 	struct constants Const = {
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
 	constants * modelConst= &Const;  
@@ -168,7 +185,8 @@ int Setv2Terms_test()
 
 	for (unsigned int i=1; i<vT->size;i++)
 	{
-		gsl_vector_set(vT,i,ComputeEddyVisc(xi,params->modelConst,i));
+		gsl_vector_set(T,i,ComputeT(xi,params->modelConst,i));
+		gsl_vector_set(vT,i,ComputeEddyVisc(xi,T,params->modelConst,i));
 	}
 
 	
@@ -195,15 +213,23 @@ int SetFTerms_test()
 	gsl_vector * sysF = gsl_vector_alloc(15); 
 	gsl_vector * trueF = gsl_vector_alloc(3);
 	gsl_vector * xiN = gsl_vector_alloc(15); 
+	gsl_vector * vT = gsl_vector_calloc(4);
+	gsl_vector * T   = gsl_vector_calloc(4);
 	struct constants Const = {
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
 	constants * modelConst= &Const;  
 	struct FParams p = {xiN,1.0,0.5,modelConst}; 
 	FParams * params = &p; 
 	Setuptest_SS(xi,params); 
-	
-	SetFTerms(xi,params,sysF); 
-	gsl_vector_set(trueF,0,-26310.1111110979);
+
+	for (unsigned int i=1; i<T->size;i++)
+	{
+		gsl_vector_set(T,i,ComputeT(xi,params->modelConst,i));
+		gsl_vector_set(vT,i,ComputeEddyVisc(xi,T,params->modelConst,i));
+	}
+
+	SetFTerms(xi,vT,T,params,sysF); 
+	gsl_vector_set(trueF,0,-27570.111111112);
 	gsl_vector_set(trueF,1,76.916666666666); 
 	gsl_vector_set(trueF,2,-7959.2566001196);
 
@@ -240,12 +266,12 @@ int SysF_test()
 	gsl_vector_set(trueF,10,-420.69219382);
 
 	//K TERMS	
-	gsl_vector_set(trueF,1,3030);
+	gsl_vector_set(trueF,1,1140);
 	gsl_vector_set(trueF,6,-1046.23085463); 
 	gsl_vector_set(trueF,11,-433.69219381);
 
 	//ep 
-	gsl_vector_set(trueF,2,5186.83333333);
+	gsl_vector_set(trueF,2,146.83333333);
 	gsl_vector_set(trueF,7,875.38461894); 
 	gsl_vector_set(trueF,12,-246.166604983);
 
@@ -253,7 +279,7 @@ int SysF_test()
 	gsl_vector_set(trueF,8,518.38457268119); 
 	gsl_vector_set(trueF,13,-756.051054299727);
 
-	gsl_vector_set(trueF,4,-26310.1111110979);
+	gsl_vector_set(trueF,4,-27570.1111111112);
 	gsl_vector_set(trueF,9,76.916666666666); 
 	gsl_vector_set(trueF,14,-7959.2566001196);
 

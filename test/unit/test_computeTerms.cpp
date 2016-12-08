@@ -93,21 +93,22 @@ int ComputeEddyVisc_test()
 	constants * modelConst= & Const;  
 	Setuptest(xi,modelConst);
 
-	gsl_vector * vT = gsl_vector_alloc(2); 
-	gsl_vector_set(vT,0,31.5);
-	gsl_vector_set(vT,1,96);
+	gsl_vector * vT = gsl_vector_calloc(3); 
+	gsl_vector * T  = gsl_vector_calloc(3);
+
+	gsl_vector_set(vT,1,31.5);
+	gsl_vector_set(vT,2,96);
 	
-	for(unsigned int i=0; i<vT->size;i++)
+	for(unsigned int i=1; i<vT->size;i++)
 	{
-		if(ComputeEddyVisc(xi,modelConst,i+1)!=gsl_vector_get(vT,i))
+		gsl_vector_set(T,i,ComputeT(xi,modelConst,i));
+		if(ComputeEddyVisc(xi,T,modelConst,i)!=gsl_vector_get(vT,i))
 		{
 			cout << "FAIL: Compute Eddy Viscosity, vT" << endl; 
 			return 1; 
 		}
 	}
 	cout << "PASS: Compute Eddy Viscosity, vT" << endl; 
-	gsl_vector_free(vT);
-	gsl_vector_free(xi);
 	return 0; 
 }
 
@@ -118,19 +119,22 @@ int ComputeP_test()
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
 	constants * modelConst= & Const;  
 	Setuptest(xi,modelConst);
+	double deltaEta = 0.5; 
 
 	//we don't need P at vall and know = 0 at delta so just test middle point
-	gsl_vector * P = gsl_vector_alloc(1); 
+	gsl_vector * P = gsl_vector_calloc(1); 
+	gsl_vector * vT = gsl_vector_calloc(2);
+	gsl_vector * T  = gsl_vector_calloc(2);
 	gsl_vector_set(P,0,126);
-	double deltaEta = 0.5; 
-	
-	for(unsigned int i=1; i<P->size;i++)
+
+
+	gsl_vector_set(T,1,ComputeT(xi,modelConst,1));
+	gsl_vector_set(vT,1,ComputeEddyVisc(xi,T,modelConst,1));
+
+	if(ComputeP(xi,vT,deltaEta,1)!=gsl_vector_get(P,0))
 	{
-		if(ComputeP(xi,modelConst,deltaEta,i+1)!=gsl_vector_get(P,i))
-		{
-			cout << "FAIL: Compute Production Rate,P" << endl; 
-			return 1; 
-		}
+		cout << "FAIL: Compute Production Rate,P" << endl; 
+		return 1; 
 	}
 	cout << "PASS: Compute Production Rate, P" << endl; 
 	gsl_vector_free(P);

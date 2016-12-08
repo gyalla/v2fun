@@ -42,22 +42,23 @@ double ComputeL(gsl_vector * xi, constants * modelConst,int i);
  *
  * Compute eddy viscosity using \f[ \nu_T = C_\mu \overline{v^2} T \f]
  * \param xi pointer to gsl_vector of unknowns \f$U,k,\epsilon,\overline{v^2},f\f$.
+ * \param T pointer to gsl_vector of turbulent time scale
  * \param modelConst pointer to struct containing model constants. 
  * \param i position at which to compute \f$\nu_T\f$. 
  * \return \f$\nu_T\f$ at i. 
  */
-double ComputeEddyVisc(gsl_vector * xi, constants * modelConst,int i);
+double ComputeEddyVisc(gsl_vector * xi, gsl_vector * T, constants * modelConst,int i);
 
 /**
  * \brief Comute production rate. 
  *
  * Compute production rate using \f[P=\nu_T \left( \frac{\partial U^+}{\partial \eta} \right)^2\f]
  * \param xi pointer to gsl_vector of unknowns \f$U,k,\epsilon,\overline{v^2},f\f$.
- * \param modelConst pointer to struct containing model constants. 
+ * \param vT pointer to gsl_vector of eddy viscosity.
  * \param i position at which to compute P. 
  * \return P at i.  
  */
-double ComputeP(gsl_vector * xi,constants * modelConst,double deltaEta,int i );
+double ComputeP(gsl_vector * xi,gsl_vector * vT,double deltaEta,int i );
 
 /**
  * \brief Compute redistribution term at wall boundary. 

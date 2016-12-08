@@ -5,11 +5,11 @@ all: info
 
 info:
 	@echo "Available make targets:"
-	@echo "  source    : build main program in /src/"
+	@echo "  install   : build main program in /src/"
 	@echo "  check     : build and run test unit test suite in /test/unit"
 	@echo "  coverage  : build tests with coverage option, run lcov, and generate html in /test/unit/lcov_html"
 
-source:
+install:
 	$(MAKE) -C ./src/  
 
 check: 
