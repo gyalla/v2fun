@@ -26,6 +26,6 @@ input_filename = ../data/Reyn_180.dat #filename for interpolation from moser dat
 output_filename = ../data/v2fResults_180.dat	
 
 
-verbose = 1			#log level - 1 or 0 recommended. 2/3 for debugging.   
+loglevelint = 2
 
 

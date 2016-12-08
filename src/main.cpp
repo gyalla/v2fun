@@ -16,6 +16,7 @@
 #include<fstream>
 #include"computeTerms.h"
 #include"systemSolve.h"
+#include"loglevel.h"
 using namespace GRVY;
 using namespace std; 
 
@@ -26,7 +27,7 @@ int print_state(int i,gsl_multiroot_fsolver * s);
 int main(int argc, char ** argv)
 {
 	// Parse inputs 
-	log(verbose,0,"Parsing inputs.\n"); 
+	Log(logINFO) << "Parsing inputs";
 	double deltaEta;
 	struct constants Const = {
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
@@ -36,38 +37,38 @@ int main(int argc, char ** argv)
 	gt.BeginTimer("Getting Inputs");
 	if(Grvy_Input_Parse(modelConst,filename,outFile,deltaEta))
 	{
-		cerr << "Error parsing inputs" << endl; 
+		Log(logERROR) << "Error parsing inputs";
 		return 1; 
 	}
 	gt.EndTimer("Getting Inputs");
 
 	// Solving for initial conditions 
-	log(verbose,0,"Solving initial conditions for U,k,ep,v2\n");
+	Log(logINFO) << "Solving initial conditions for U,k,ep,v2";
 	gt.BeginTimer("Solving Initial Conditions");
 	double I = 1/deltaEta; 
 	gsl_vector * xi = gsl_vector_calloc(5*(I));
 	if(SolveIC(xi,deltaEta,filename))
 	{
-		cerr << "Error interpolating initial conditions."<<endl; 
+		Log(logERROR) << "Error interpolating initial conditions.";
 		return 1; 
 	}
-	log(verbose,0,"Solving initial conditions for f\n");
+	Log(logINFO) << "Solving initial conditions for f";
 
 	if(Solve4f0(xi,modelConst,deltaEta))
 	{
-		cerr << "Error initializing f" << endl; 
+		Log(logERROR) << "Error initializing f";
 		return 1; 
 	}
 	gt.EndTimer("Solving Initial Conditions");
 
 	// Newton Solve. 
-	log(verbose,0,"Solving system\n"); 
+	Log(logINFO) << "Solving system";
 	gt.BeginTimer("Newton Solve + Time Marching");
 	NewtonSolve(xi,modelConst,deltaEta);
 	gt.EndTimer("Newton Solve + Time Marching");
 
 	//writing data to output
-	log(verbose,0,"Writing results to output file");
+	Log(logINFO) << "Writing results to output file";
 	gt.BeginTimer("Writing results to output"); 
 	SaveResults(xi,outFile,deltaEta,modelConst); 
 	gt.EndTimer("Writing results to output"); 
@@ -86,7 +87,7 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 	int iter = 0; 
 	bool converge = false; 
 	//set up solver
-	log(verbose,1," Setting up Solver...\n");
+	Log(logINFO) <<"Setting up Solver...";
 	const gsl_multiroot_fsolver_type * Type = gsl_multiroot_fsolver_hybrids; //dnewton for newton solver;
 	gsl_multiroot_fsolver * s = gsl_multiroot_fsolver_alloc(Type,xi->size);
 	//for time marching, starting small and getting bigger works best. 
@@ -98,19 +99,19 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 		//deltaT = 1/modelConst->reyn + pow(2,power); // start off 1/modelConst->reyn; 
 		struct FParams p = {xi,deltaT,deltaEta,modelConst}; 
 		FParams * params = &p; 
-		log(verbose,1," Setting up System...\n");
+		Log(logINFO) << "Setting up System...";
 		gsl_multiroot_function F = {&SysF,xi->size,params};
 		gsl_multiroot_fsolver_set(s,&F,xi); 
 		
 		//only need one interation per deltaT since we don't care about temporal accuracy. 
 		//We are just trying to get to the fully developed region of flow. 
-		log(verbose,1," Iterating...\n");
+		Log(logINFO) << "Iterating...";
 		status = gsl_multiroot_fsolver_iterate(s);
 		print_state(iter,s); 
 		if(status)
 			break;
 		//status = gsl_multiroot_test_residual(s->f,0.001);
-		log(verbose,2," " + string(gsl_strerror(status)) +  "\n");
+		Log(logINFO) << string(gsl_strerror(status));
 		xi = s->x; 
 		power +=5; 
 		
@@ -128,7 +129,7 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 
 int print_state(int i,gsl_multiroot_fsolver * s)
 {
-	log(verbose,1," iteration = " + num2st(i,1) + ", Uend = " + num2st(gsl_vector_get(s->x,s->x->size-5),1) + "\n"); 
+	Log(logINFO) << "iteration = "<< i << ", Uend = " << gsl_vector_get(s->x,s->x->size-5);
 	return 0; 
 }
 

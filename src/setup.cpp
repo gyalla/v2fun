@@ -17,104 +17,89 @@
 #include<gsl/gsl_linalg.h>
 #include<fstream>
 #include<math.h>
+#include"loglevel.h"
 using namespace std;
 using namespace GRVY;
-
-int verbose; 
+loglevel_e loglevel = logINFO;
 
 int Grvy_Input_Parse(constants * modelConst,string & filename,string & outFile,double & deltaEta)
 {
 	// Use GRVY for inpute parsing as shown in grvy documentation. 
+	int loglevelint;  
 	
 	GRVY_Input_Class iparse; // parsing object
 
 	if(!iparse.Open("./input_file.txt"))
 		exit(1);
-
+	
 	// read in each variable. 
 	
-	if(!iparse.Read_Var("verbose",&verbose))
+	if(!iparse.Read_Var("loglevelint",&loglevelint))
 		return 1; 
+
+	loglevel=(loglevel_e)loglevelint; //tpye case int as loglevel
+
 	if(!iparse.Read_Var("reyn", &(modelConst->reyn)))
 		return 1; 
-	log(verbose,1," ---> reyn = " + num2st(modelConst->reyn,1) + "\n");
+	
+	Log(logINFO) << "---> reyn = " << modelConst->reyn;
+	//log(verbose,1," ---> reyn = " + num2st(modelConst->reyn,1) + "\n");
 
 	if(!iparse.Read_Var("Cmu", &(modelConst->Cmu)))
 		return 1; 
-	log(verbose,1," ---> Cmu = " + num2st(modelConst->Cmu,1) + "\n");
+	Log(logINFO) << "---> Cmu = " << modelConst->Cmu;
 
 	if(!iparse.Read_Var("C1", &(modelConst->C1)))
 		return 1; 
-	log(verbose,1," ---> C1 = " + num2st(modelConst->C1,1) + "\n");
+	Log(logINFO) <<"---> C1 = " << modelConst->C1;
 
 	if(!iparse.Read_Var("C2", &(modelConst->C2)))
 		return 1; 
-	log(verbose,1," ---> C2 = " + num2st(modelConst->C2,1) + "\n");
+	Log(logINFO) << "---> C2 = " << modelConst->C2;
 
 	if(!iparse.Read_Var("sigmaEp", &(modelConst->sigmaEp)))
 		return 1; 
-	log(verbose,1," ---> sigmaEp = " + num2st(modelConst->sigmaEp,1) + "\n");
+	Log(logINFO) << "---> sigmaEp = " << modelConst->sigmaEp;
 
 	if(!iparse.Read_Var("CL", &(modelConst->CL)))
 		return 1; 
-	log(verbose,1," ---> CL = " + num2st(modelConst->CL,1) + "\n");
+	Log(logINFO) << "---> CL = " << modelConst->CL;
 
 	if(!iparse.Read_Var("Cep1",&(modelConst->Cep1)))
 		return 1; 
-	log(verbose,1," ---> Cep1 = " + num2st(modelConst->Cep1,1) + "\n");
+	Log(logINFO) << "---> Cep1 = " << modelConst->CL;
 
 	if(!iparse.Read_Var("Cep2", &(modelConst->Cep2)))
 		return 1; 
-	log(verbose,1," ---> Cep2 = " + num2st(modelConst->Cep2,1) + "\n");
+	Log(logINFO) <<"---> Cep2 = " << modelConst->Cep2;
 
 	if(!iparse.Read_Var("Ceta", &(modelConst->Ceta)))
 		return 1; 
-	log(verbose,1," ---> Ceta = " + num2st(modelConst->Ceta,1) + "\n");
+	Log(logINFO) << "---> Ceta = " << modelConst->Ceta;
 	
 	if(!iparse.Read_Var("input_filename",&filename))
 		return 1; 
-	log(verbose,1," ---> input_filename = " + filename + "\n");
+	Log(logINFO) << "---> input_filename = " << filename;
 
 	if(!iparse.Read_Var("output_filename",&outFile))
 		return 1; 
-	log(verbose,1," ---> output_filename = " + outFile + "\n");
+	Log(logINFO) << "---> output_filename = " << outFile;
 
 	if(!iparse.Read_Var("deltaEta",&deltaEta))
 		return 1; 
-	log(verbose,1," ---> deltaEta = " + num2st(deltaEta,1) + "\n");
+	Log(logINFO) << "---> deltaEta = " << deltaEta;
 
 	iparse.Close();
 	
 	return 0;
 }
 
-void log(int verbose, int level, string message)
-{
-	// log level structure for output. 
-	if (verbose  >= level)
-		cout << message; 
-}
-
-string num2st(double number,int level)
-{
-	string result;
-	if (verbose >= level)
-	{
-		ostringstream convert; 
-		convert << number; 
-		result = convert.str();
-	}	
-	else
-		result="";
-	return result; 
-}
-		
 int LinInterp(gsl_vector * Vec,double pt1,double pt2, double U1,double U2,double gridPt,int i )
 {
 	double val = U1 + (gridPt-pt1)*( (U2-U1)/(pt2-pt1));
 	if (!isfinite(val))
 	{
-		cerr << "Error: non-finite interpolation" << endl; 
+		Log(logERROR) <<  "Error: non-finite interpolation";
 		return 1; 
 	}
 	gsl_vector_set(Vec,i,val); 
@@ -141,7 +126,7 @@ int SolveIC(gsl_vector * xi, double deltaEta, string file)
 	{
 		xiCounter=5*i; //counter relative to xi vector. 
 		gridPt=(i+1)*deltaEta; //which grid point we are working on. 
-		log(verbose,2,"  Working on grid point " + num2st(gridPt,2) + "\n");
+		Log(logDEBUG1) <<"Working on grid point: " << gridPt;
 		//find two points in Moser data that surrounds our grid points. 
 		while ((! ((pt1 <= gridPt) && (pt2 >= gridPt))) && (!inFile.eof()))
 		{
@@ -152,15 +137,17 @@ int SolveIC(gsl_vector * xi, double deltaEta, string file)
 			tempEp1 = tempEp2; 
 			tempV21 = tempV22; 
 			if (! (inFile >> pt2 >> tempU2 >> tempK2 >> tempEp2 >> tempV22))
-				cout << "error" <<endl; 
+			{
+				Log(logERROR) << "Error: Cannot get interpolation data."; 
+			}
 		}
 
 		//interpolate each term U,k,ep,v2,f.
-		log(verbose,3,"   interpolation points " + num2st(pt1,3) + "," + num2st(pt2,3) + "\n");
-		log(verbose,3,"   interpolation values (U): " + num2st(tempU1,3) + "," + num2st(tempU2,3) + "\n");
-		log(verbose,3,"   interpolation values (k): " + num2st(tempK1,3) + "," + num2st(tempK2,3) + "\n");
-		log(verbose,3,"   interpolation values (ep): " + num2st(tempEp1,3) + "," + num2st(tempEp1,3) + "\n");
-		log(verbose,3,"   interpolation values (v2): " + num2st(tempV21,3) + "," + num2st(tempV21,3) + "\n");
+		Log(logDEBUG2) << "interpolation points: " << pt1 << "," <<  pt2;
+		Log(logDEBUG2) << "interpolation values (U): " <<  tempU1 <<  "," << tempU2;
+		Log(logDEBUG2) << "interpolation values (k): " <<tempK1<< "," << tempK2;
+		Log(logDEBUG2) << "interpolation values (ep): " << tempEp1<< "," << tempEp1;
+		Log(logDEBUG2) << "interpolation values (v2): " << tempV21 <<  "," << tempV21;
 		if(LinInterp(xi,pt1,pt2,tempU1,tempU2,gridPt,xiCounter))
 			return 1; 
 		if(LinInterp(xi,pt1,pt2,tempK1,tempK2,gridPt,xiCounter+1))
@@ -214,7 +201,7 @@ int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 
 		if(!isfinite(LHS1-LHS2))
 		{
-			cerr << "Error: non-finite (" << LHS1-LHS2 << ")"<<endl; 
+			Log(logERROR) << "Error: non-finite b (" << LHS1-LHS2 << ")"; 
 			return 1; 
 		}
 
@@ -231,28 +218,27 @@ int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 	LHS1 = (modelConst->C1/ComputeT(xi,modelConst,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)) - 2/3); 
 	if (!isfinite(LHS1))
 	{
-		cerr << "Error: non-finite (" << LHS1 << ")" << endl; 
+		Log(logERROR) << "Error: non-finite b (" << LHS1 << ")"; 
 		return 1; 
 	}
 
 	gsl_vector_set(b,i,LHS1); 
 
 	// LU solve Af = b for initial values f. 
-	log(verbose,1," Performing LU Solve for f_0\n");
+	Log(logDEBUG) << "Performing LU Solve for f_0";
 	int s; 
 	gsl_permutation * p = gsl_permutation_alloc(A->size1);
 	gsl_linalg_LU_decomp(A,p,&s); 
 	gsl_linalg_LU_solve(A,p,b,f); 
 
 	// add f to xi. 
-	log(verbose,1," Setting f_0 values\n");
+	Log(logDEBUG) << "Setting f_0 values";
 	for(unsigned int i =1; i<f->size; i++)
 	{
-		log(verbose,2,"  f = " + num2st(gsl_vector_get(f,i),2) + " at " + num2st(i*deltaEta,2) + "\n");
+		Log(logDEBUG2) <<"f = " << gsl_vector_get(f,i)<< " at " << i*deltaEta;
 		xiCounter=5*(i-1)+4; 
 		gsl_vector_set(xi,xiCounter,gsl_vector_get(f,i));
 	}
-
 
 	return 0; 
 }
