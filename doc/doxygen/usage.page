@@ -44,7 +44,7 @@ Only the Makefile in the root directory should be called as it interacts with th
 <div class="fragment"><pre class="fragment">> make install
 </pre></div><p><a class="anchor" id="Installation"></a> </p>
 
-To verify that the software is working properly, a test option is provided to run a short suite of functionality tests against the local build. To run issue a 'make check' to initiate the tests. If succesful, output similar to the following will be generated: 
+To verify that the software is working properly, a test option is provided to run a short suite of functionality tests against the local build. To run, issue a 'make check' to initiate the tests. If succesful, output similar to the following will be generated: 
 
 <div class="fragment"><pre class="fragment">> make check
 -------------------------------------------------------
