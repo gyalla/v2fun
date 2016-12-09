@@ -3,24 +3,17 @@
 //
 // 12/3/2016 (gry88) - Written for CSE380 Final Project. 
 //--------------------------------------------------
-#include<cstdio>
-#include<cstdlib>
-#include<iostream>
-#include<sstream>
 #include<iomanip>
 #include<grvy.h>
 #include "setup.h"
 #include "computeTerms.h"
-#include<gsl/gsl_vector.h>
-#include<gsl/gsl_matrix.h>
-#include<gsl/gsl_blas.h>
 #include<gsl/gsl_linalg.h>
 #include<fstream>
 #include<math.h>
-#include"loglevel.h"
 using namespace std;
 using namespace GRVY;
 loglevel_e loglevel = logINFO;
+
 
 int Grvy_Input_Parse(constants * modelConst,string & filename,string & outFile,double & deltaEta)
 {

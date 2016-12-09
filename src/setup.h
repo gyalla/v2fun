@@ -13,7 +13,7 @@
 
 #include<gsl/gsl_vector.h>
 #include<iostream>
-#include"loglevel.h"
+#include"../include/loglevel.h"
 using namespace std; 
 /**< log level output variable */
 //extern loglevel_e verbose; 

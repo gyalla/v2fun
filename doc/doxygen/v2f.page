@@ -1,5 +1,5 @@
 /**
-\mainpage Fully Developed Channel Flow using a V2-F Model
+\mainpage The V2-Fun Package:
 
 <b>Author</b>: Gopal Yalla
 
@@ -26,7 +26,7 @@ Each of these categories is detailed below. The code was written in C++ and make
 
 \section doc Documentation
 
-The model documentation can be found <a href="http://users.ices.utexas.edu/~gopal/v2f/Problem_Statement.pdf">here</a>. Several of the variable names in the code follow the naming scheme used in this document. For the code documentation...you're looking at it! This page details each header file and class in the source code, which is included by `main.cpp' 
+The model documentation can be found <a href="http://users.ices.utexas.edu/~gopal/v2fun/Problem_Statement.pdf">here</a>. Several of the variable names in the code follow the naming scheme used in this document. As for the code documentation...you're looking at it! This page details each header file and class in the source code that is included by `main.cpp' 
 
 \section vc Version Control
 
@@ -46,7 +46,7 @@ Only the Makefile in the root directory should be called as it interacts with th
 
 <div class="fragment"><pre class="fragment"> &gt; make
 Available make targets:
-  source    : build main program in /src/
+  install   : build main program in /src/
   check     : build and run test unit test suite in /test/unit
   coverage  : build lcov in include/lcov, build tests with --coverage option, run lcov, and generate html in /test/unit/lcov_html
  </pre></div><p><a class="anchor" id="Installation"></a> </p>
@@ -87,7 +87,7 @@ PASS: Putting system together
 
 \section coverage Code Coverage
 
-Issuing a "make check" will generate code coverage results of the unit test suite using lcov. The code coverage results of the current tests can be found <a href="http://users.ices.utexas.edu/~gopal/v2f/lcov_html/">here</a>.
+Issuing a "make check" will generate code coverage results of the unit test suite using lcov. The code coverage results of the current tests can be found <a href="http://users.ices.utexas.edu/~gopal/v2fun/lcov_html/">here</a>.
 
 \section opt Profiling / Optimizaiton
 

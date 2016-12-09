@@ -1,0 +1,147 @@
+		____   ____________          _______________ __________   
+		\   \ /   /\_____  \         \_   _____/    |   \      \  
+		 \   Y   /  /  ____/   ______ |    __) |    |   /   |   \ 
+		  \     /  /       \  /_____/ |     \  |    |  /    |    \
+		   \___/   \_______ \         \___  /  |______/\____|__  /
+				   \/             \/                   \/
+
+README
+	V2-FUN is a tool for computing fully developed channel flow using a v2-f
+	model...made fun, because it doesn't work just yet, but I had a lot of
+	fun making it. The code is written in C++ and makes use of external
+	libraries including gsl and grvy. For more information about the
+	features in v2fun as well as installation and usage instructions, please
+	visit the website:
+
+			http://users.ices.utexas.edu/~gopal/v2fun/html/
+	
+INSTALLATION
+
+	The latest release of v2fun can be found on the website above. Currently
+	the code only works on Stampede at the Texas Advanced Computing Center.
+	After downloading the tarball to Stampede and untar-ing it, one must
+	load the gsl and grvy modules. A typical way to do this might be:
+
+	> module load gcc/4.7.1
+	> module load gsl
+	> module load grvy 
+
+	After loading the requisite libraries, issue a make command in the root
+	directory to see all available targets, i.e., 
+
+	> make 
+        Available make targets:
+	install   : build main program in /src/
+	check     : build and run test unit test suite in /test/unit
+	coverage  : build tests with coverage option, run lcov, and generate
+		    html in /test/unit/lcov_html 
+
+	To install v2fun in the src/ directory run, 
+
+	> make install 
+
+	To verify that the software is working properly, test option is provided
+	to run a short suite of functionality tests against the local
+	build. To run, issue a 'make check' to initiate the tests.  If
+	succesful, output similar to the following will be generated:
+
+	--------------------------------------------------
+	Running Unit Test Suite
+	--------------------------------------------------
+
+	PASS: Interpolation Test
+	PASS: Saving results
+	PASS: Compute Turbulent Time Scale, T
+	PASS: Compute Turbulent Length Scale, L
+	PASS: Compute Eddy Viscosity, vT
+	PASS: Compute Production Rate, P
+	PASS: Compute Dissipation at Wall
+	PASS: Compute redistribution at Wall
+	PASS: Setting U terms in system
+	PASS: Setting k terms in system
+	PASS: Setting ep terms in system
+	PASS: Setting v2 terms in system
+	PASS: Setting f terms in system
+	PASS: Putting system together
+	--------------------------------------------------
+
+	Finally, to check the code coverage of the unit tests, issuing a 'make
+	coverage' command will run lcov on the test suite and save the converage
+	info and html files in the directory /test/unit/, as follows:
+
+	> make coverage 
+
+	Note: Since lcov is not installed by default on stampede, a copy is
+	provided in the include/ directory.  The current code coverage results
+	may be viewed at: 
+
+			http://users.ices.utexas.edu/~gopal/v2fun/lcov_html/
+
+USAGE: 
+
+	The main way to interact with v2fun, is through the input file
+	''input_file.txt'', which is parsed using the GRVY input parser. The
+	parameters are detail in the input file provided. Specifically, one can
+	adjust model constants, change the step size in the wall normal
+	direction, and indicate which data file from the data/ directory to use
+	for initial conditions. Two data files are provided with v2fun (one for
+	reynolds number 180, and one for reynolds number 2000), and the README
+	file in the data/ directory explains how to easily generate more.
+	Additionally, a paramter for logging is include to suppress or expand
+	program output.  Once the input file is to your liking, simply run v2fun
+	in the source directory as, 
+
+	> ./v2fun 
+
+	The result of the code will written to the specified output file in
+	perfect format for gnuplotting. 
+	
+	Note: The current version of v2fun, doesn't work with time marching
+	enabled, as the energy dissipation at the wall goes negative, which
+	causes an error in computing the turbulent length and time scales.
+	Instead, when you run v2fun as is, deltaT is set to be extremly small to
+	avoid such errors, and no marching is performed. This is just to have
+	working code to submit. To enable time marching, simply uncomment line
+	89 in main.cpp and comment out line 88, as described in the code. 
+
+
+DIRECTORY TREE
+	
+	In case you get lost, a detailed directory tree is below: 
+	.
+	├── data  			Data for initial conditions and results 
+	├── doc   			Documentation 
+	│   ├── doxygen			Doxygen directory for website 
+	│   │   ├── html 		Doxygen generated html page, given above. 
+	│   │   ├── latex 		Latex page for completion...see html page.
+	│   └── writeup  		Detailed model documentation
+	├── include 			External program / files.
+	│   ├── lcov 			Used for code coverage
+	│   │   └── bin 		Holds lcov command
+	│   └── loglevel.h 		log level file for logging
+	├── Makefile 			Primary Makefile 
+	├── README 			This document
+	├── src  			Contains source code for v2fun
+	|── test 			Test suite for v2fun
+	    ├── system 			To hold regression tests in future version
+	    └── unit 			Unit tests
+
+CONTACT
+
+	EMAIL: gopal@ices.utexas.edu
+
+NOTICE
+
+	In a future version we hope to not only correct the code, but also study
+	asymptotic error analysis, the convergence of certain statistical
+	quantities, and implement a method of manufactured solution.  Aside from
+	a bug in the code, the current failures in v2fun may come from: 
+
+	- The initial guess derived by interpolating DNS data may be off for the
+	  v2-f model so gsl's Newton solver diverges. 
+	- The approximation to the Jacobian in gsl's multiroot solver is not
+	  sufficient for this problem. 
+	- The model constants may be off, or perhaps a certain CFL condition is
+	  not satisfied by the step sizes.
+
+12/9/2016

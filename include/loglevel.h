@@ -1,3 +1,8 @@
+// This is a simple implementation for logging, which was modeled after 
+//
+// http://stackoverflow.com/questions/6168107/how-to-implement-a-good-debug-logging-feature-in-a-project
+//
+//
 #ifndef _LOGGER_H_
 #define _LOGGER_H_
 
@@ -11,7 +16,7 @@ class logIt
 {
 	public:
 		logIt(loglevel_e _loglevel = logERROR) {
-			_buffer << _loglevel << " :"
+			_buffer << _loglevel <<" :"
 				<< std::string(
 					_loglevel > logDEBUG 
 					? (_loglevel - logDEBUG) * 4 
@@ -34,8 +39,10 @@ class logIt
 		std::ostringstream _buffer;
 };
 
+// global loglevel as reference
 extern loglevel_e loglevel;
 
+// actual logging function
 #define Log(level) \
 	if(level > loglevel); \
 	else logIt(level)

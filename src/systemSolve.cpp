@@ -3,16 +3,12 @@
 //
 // 12/3/2016 - (gry88) Written for CSE380 final project. 
 //--------------------------------------------------
-#include<iostream>
 #include<math.h>
-#include<gsl/gsl_vector.h>
 #include<gsl/gsl_multiroots.h>
 #include<grvy.h>
 #include"computeTerms.h"
-#include"setup.h"
 #include"systemSolve.h"
 #include"finiteDiff.h"
-#include"loglevel.h"
 using namespace std; 
 using namespace GRVY;
 

@@ -1,5 +1,5 @@
 # FILES
-EXEC := main
+EXEC := v2fun
 SRC  := $(wildcard *.cpp)
 OBJ  := $(patsubst %.cpp,%.o,$(SRC))
 
@@ -15,16 +15,15 @@ $(EXEC): $(OBJ)
 %.o: %.cpp
 	$(COMPILE.c) $< -o $@ $(INC)
 
-main.o systemSolve.o computeTerms.o finiteDiff.o: setup.h
-main.o systemSolve.o: computeTerms.h
-systemSolve.o: finiteDiff.h
+main.o: systemSolve.h
+computeTerms.o setup.o: setup.h 
+setup.o: computeTerms.h
+computeTerms.o: finiteDiff.h
 
-
-.PHONY: check clobber clean echo 
+.PHONY: clobber clean 
 clobber: clean
-	$(RM) $(EXEC)
+	-$(RM) gmon.out
+	-$(RM) $(EXEC)
 clean: 
-	rm $(OBJ)
-echo: 
-	@echo $(OBJ)
+	-rm $(OBJ)
 

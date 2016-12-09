@@ -1,0 +1,14 @@
+#####################################################################
+# A simple gnuploting script for visualizing the mean velocity field
+######################################################################
+set term png
+set output 'Sol.png'
+
+
+set title "Mean Velocity Field in Half Channel Width using a V2-F Model (Re_t = 180)"
+set xlabel "y/delta"
+set ylabel "U"
+unset key
+
+plot '../../data/v2fResults_180.dat' using 1:2 with points  ps 0.5 
+

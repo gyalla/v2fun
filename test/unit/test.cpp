@@ -1,11 +1,11 @@
 #include<iostream>
-#include<gsl/gsl_vector.h>
 #include"../../src/setup.h"
 #include"test_computeTerms.h"
 #include"test_systemSolve.h"
 #include"test_setup.h"
 using namespace std; 
 
+int test_loglevel();
 int main()
 {
 	cout << "--------------------------------------------------" << endl;

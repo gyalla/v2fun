@@ -1,7 +1,5 @@
 #include<iostream>
-#include<gsl/gsl_vector.h>
 #include<grvy.h>
-#include<string>
 #include<fstream> 
 #include<math.h>
 #include"../../src/setup.h"
@@ -50,13 +48,12 @@ int test_Grvy_Input()
 		return 1; 
 	}
 
-	if( (modelConst->reyn != 2000) || (modelConst->Cmu != 0.19) || (modelConst->C1 != 0.4)|| (modelConst->C2 != 0.3) || (modelConst->sigmaEp != 1.3) || (modelConst->CL != 0.3) || (modelConst->Cep2 != 1.9) || (modelConst->Cep1 != 1.55) || (modelConst->Ceta != 70) || (deltaEta !=0.01) || (filename.compare("../data/Reyn_2000_data.txt")!=0) || (outFile.compare("../data/v2fResults_2000_01.txt")!=0))
+	if( (modelConst->reyn != 2000) || (modelConst->Cmu != 0.19) || (modelConst->C1 != 0.4)|| (modelConst->C2 != 0.3) || (modelConst->sigmaEp != 1.3) || (modelConst->CL != 0.3) || (modelConst->Cep2 != 1.9) || (modelConst->Cep1 != 1.55) || (modelConst->Ceta != 70) || (deltaEta !=0.01) || (filename.compare("../data/Reyn_2000.dat")!=0) || (outFile.compare("../data/v2fResults_2000.dat")!=0))
 	{
 		cout << "FAIL: Getting inputs" << endl; 
 		return 1; 
 	}
 
-	cout << "PASS: Getting inputs"<< endl; 
 	return 0; 
 }
 

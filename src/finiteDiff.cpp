@@ -3,11 +3,8 @@
 //
 // 12/3/2016 - (gry88) Written for CSE380 final project. 
 //--------------------------------------------------
-#include<iostream>
 #include<gsl/gsl_vector.h>
 #include<math.h>
-#include"computeTerms.h"
-#include"setup.h"
 using namespace std;
 
 double Diff2(gsl_vector * x,double deltaEta,double bdry,int i)

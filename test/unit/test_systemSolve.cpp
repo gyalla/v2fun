@@ -1,9 +1,7 @@
 #include<iostream>
 #include<iomanip>
 #include<math.h>
-#include"../../src/setup.h"
 #include"../../src/systemSolve.h"
-#include<gsl/gsl_vector.h>
 #include"../../src/computeTerms.h"
 using namespace std; 
 
@@ -76,10 +74,10 @@ int SetUTerms_test()
 	}
 	cout << "PASS: Setting U terms in system" << endl; 
 
-	gsl_vector * P = gsl_vector_calloc(2);
-	gsl_vector * L = gsl_vector_calloc(4);
-
 	//uncomment to get values for tests
+	//gsl_vector * P = gsl_vector_calloc(2);
+	//gsl_vector * L = gsl_vector_calloc(4);
+
 	//for (unsigned int i=1; i<L->size;i++)
 	//{
 	//	if (i!=3)

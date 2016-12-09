@@ -1,9 +1,5 @@
 #include<iostream>
 #include"../../src/computeTerms.h"
-#include"../../src/finiteDiff.h"
-#include"../../src/systemSolve.h"
-#include"../../src/setup.h"
-#include<gsl/gsl_vector.h>
 #include<math.h>
 using namespace std;
 

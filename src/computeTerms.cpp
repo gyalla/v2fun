@@ -7,7 +7,6 @@
 #include<math.h>
 #include"setup.h"
 #include"finiteDiff.h"
-#include"loglevel.h"
 using namespace std;
 
 double ComputeT(gsl_vector * xi, constants * modelConst,int i)
