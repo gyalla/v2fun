@@ -2,7 +2,6 @@
 # The input file for main
 ######################################
 
-
 #------------------------------------------------------------------------------
 # Model Constants: These are in the input file since several 
 #different constants are found in papers, so one may wish to change them easily.
@@ -26,9 +25,8 @@ deltaEta = 0.01 	#step size in wall normal direction. Should be ~ 1/reyn
 #--------------------------------------------------------------------------------
 # Files: files for Reynolds number 180 and 2000 are included in the data directory
 #--------------------------------------------------------------------------------
-input_filename = ../data/Reyn_180.dat 
+data_filename = ../data/Reyn_180.dat 
 output_filename = ../data/v2fResults_180.dat	
-
 
 #---------------------------------------------------
 # Log level for output/debugging. 

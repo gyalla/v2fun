@@ -1,5 +1,5 @@
 /**
-\mainpage The V2-Fun Package:
+\mainpage The V2-Fun Package
 
 <b>Author</b>: Gopal Yalla
 
@@ -10,8 +10,7 @@ Build Date: 12/9/2016
 
 \section Overview
 
-
-This code simulates fully developed channel flow using the v2-f RANS model proposed by Durbin, and was written as a final project for CSE380. The project makes use of the following design principles: 
+The V2-Fun package is a tool for computing fully developed channel flow using a v2-f model. This code was written as a final project for CSE380, and makes use of the following design principles: 
 
 <ul>
 <li> Documentation.
@@ -22,78 +21,32 @@ This code simulates fully developed channel flow using the v2-f RANS model propo
 <li> Profiling / Optimization. 
 </ul>
 
-Each of these categories is detailed below. The code was written in C++ and make use of several GSL functions and structs. For example, the code uses a second order centered difference scheme in space, and backward Euler in time (for time marching), and the resulting system is solved with GSL's multidimensional root solver.
-
-\section doc Documentation
-
-The model documentation can be found <a href="http://users.ices.utexas.edu/~gopal/v2fun/Problem_Statement.pdf">here</a>. Several of the variable names in the code follow the naming scheme used in this document. As for the code documentation...you're looking at it! This page details each header file and class in the source code that is included by `main.cpp' 
-
-\section vc Version Control
-
-Git was used for version control. 
-
-\section make Build Systems
-
-There are three Makefiles in the project: 
+The latest version of v2fun can be download <a href="http://users.ices.utexas.edu/~gopal/v2fun/v2fun_Yalla.tar">here</a>. The current release of v2fun includes the .git directory for completion, which accounts for a majority of the files. The code is written in C++ and makes use of the external libraries <a href="https://www.gnu.org/software/gsl/">GSL</a> and <a href="http://users.ices.utexas.edu/~csim/grvy/html/index.html">GRVY</a>. The code should be run on Stampede at the Texas Advanced Computing Center. To aid in usage and installation, please see the related pages:
 
 <ul>
-<li> Makefile
-<li> src/Makefile
-<li> test/unit/Makefile
+<li> \ref install
 </ul>
 
-Only the Makefile in the root directory should be called as it interacts with the other Makefiles. Issuing a 'make' command will display all possible targets as shown:
 
-<div class="fragment"><pre class="fragment"> &gt; make
-Available make targets:
-  install   : build main program in /src/
-  check     : build and run test unit test suite in /test/unit
-  coverage  : build lcov in include/lcov, build tests with --coverage option, run lcov, and generate html in /test/unit/lcov_html
- </pre></div><p><a class="anchor" id="Installation"></a> </p>
+\section doc Other Documentation
 
-There are also 3 PHONY targets in Makefile: clobber, clean, echo. 
-
-\section test Verification 
-
-\subsection unit Unit Tests
-
-The project comes with a host of unit tests to verify the software is working properly. To run, issue a ''make check'' to initiate the tests. If successful, output similar to the following will be generated:
-
-<div class="fragment"><pre class="fragment"> &gt; make check
--------------------------------------------------------
-Running Unit Test Suite
--------------------------------------------------------
-PASS: Interpolation Test
-PASS: Getting inputs
-PASS: Saving Results
-PASS: Compute Turbulent Time Scale, T
-PASS: Compute Tubulent Length Scale, L
-PASS: Compute Eddy Viscosity, vT
-PASS: Compute Production Rate, P
-PASS: Compute Dissipation at Wall
-PASS: Compute redistribution at Wall
-PASS: Setting U terms in system
-PASS: Setting k terms in system
-PASS: Setting ep terms in system
-PASS: Setting v2 terms in system
-PASS: Setting f terms in system
-PASS: Putting system together 
--------------------------------------------------------
- </pre></div><p><a class="anchor" id="Installation"></a> </p>
-
- \subsection regression Regression Tests
-
- <i>*In a future version we hope to implement tests for asymptotic error analysis, covergence of certain statistical quantities, and a method of manufactured solutions</i>* 
-
-\section coverage Code Coverage
-
-Issuing a "make check" will generate code coverage results of the unit test suite using lcov. The code coverage results of the current tests can be found <a href="http://users.ices.utexas.edu/~gopal/v2fun/lcov_html/">here</a>.
-
-\section opt Profiling / Optimizaiton
+The model documentation can be found <a href="http://users.ices.utexas.edu/~gopal/v2fun/Problem_Statement.pdf">here</a>. Several of the variable names in the code follow the naming scheme used in that document. This doxygen page details each header file and class in the source code that is included by `main.cpp'. Lastely, a beamer presentation thoroughly detailing each design feature can be found <a href="http://users.ices.utexas.edu/~gopal/v2fun/talk.pdf">here</a>.  
 
 \section bugs Reporting Comments and Bugs
 
 Bugs in the code and errors or omissions in the documentation can be reported to gopal@ices.utexas.edu. Requests and contributions (and good grades) are welcome at the same e-mail address.
+
+\section note Notice 
+
+The current version of v2fun doesn't fully work just yet (hence the `fun' part, because I still had a lot of fun making it!) On most runs of the code, the viscous dissipation term goes nagative resulting in NANs when computing the turbulent length and time scale. However, the code will run as is, since time marching is disabled, and instead the temporal step size is made extremely small and only one iteration of the solver is performed to ensure the dissipation terms stays positive. The README file contains instructions on how to enable time marching. I believe the error in v2fun may be related to the following problems:
+
+<ul>
+<li> The initial guess derived by interpolating DNS data may be off for the v2-f model so gsl's Newton solver is diverging. 
+<li> The approximation to the Jacobian in gsl's multiroot solver is not sufficient for this problem. 
+<li> The model constants need to be corrected, or perhaps a CFL condition is not satisfied by the step sizes. 
+</ul>
+
+We hope to fix this bug in a future release, as well as implement regression tests such as asymptotic error analysis, convergence of certain statistical quantities, and a method of manufactured solution. 
 
 \cond
 

@@ -1,14 +1,11 @@
-#export DESTDIR=include/lcov
-#OPTIONS
-
 all: info
 
 info:
 	@echo "Available make targets:"
 	@echo "  install   : build main program in /src/"
 	@echo "  check     : build and run test unit test suite in /test/unit"
-	@echo "  coverage  : build tests with coverage option, run lcov, and generate html in /test/unit/lcov_html"
-	@echo "  doc       : build documentation (doxygen page, writeup, and presentation)" 
+	@echo "  coverage  : build tests w/ coverage option, run lcov, and generate html in /test/unit/lcov_html"
+	@echo "  doc       : build documentation (doxygen page, and writeup)" 
 
 install:
 	$(MAKE) -C ./src/  

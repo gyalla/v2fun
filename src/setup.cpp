@@ -70,9 +70,9 @@ int Grvy_Input_Parse(constants * modelConst,string & filename,string & outFile,d
 		return 1; 
 	Log(logINFO) << "---> Ceta = " << modelConst->Ceta;
 	
-	if(!iparse.Read_Var("input_filename",&filename))
+	if(!iparse.Read_Var("data_filename",&filename))
 		return 1; 
-	Log(logINFO) << "---> input_filename = " << filename;
+	Log(logINFO) << "---> data_filename = " << filename;
 
 	if(!iparse.Read_Var("output_filename",&outFile))
 		return 1; 

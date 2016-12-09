@@ -30,17 +30,18 @@ INSTALLATION
 	directory to see all available targets, i.e., 
 
 	> make 
-        Available make targets:
-	install   : build main program in /src/
-	check     : build and run test unit test suite in /test/unit
-	coverage  : build tests with coverage option, run lcov, and generate
-		    html in /test/unit/lcov_html 
+	Available make targets:
+  	install   : build main program in /src/
+    	check     : build and run test unit test suite in /test/unit
+      	coverage  : build tests w/ coverage option, run lcov, and generate html in 
+			/test/unit/lcov_html
+        doc       : build documentation (doxygen page, and writeup)
 
 	To install v2fun in the src/ directory run, 
 
 	> make install 
 
-	To verify that the software is working properly, test option is provided
+	To verify that the software is working properly, a test option is provided
 	to run a short suite of functionality tests against the local
 	build. To run, issue a 'make check' to initiate the tests.  If
 	succesful, output similar to the following will be generated:
@@ -75,7 +76,7 @@ INSTALLATION
 	provided in the include/ directory.  The current code coverage results
 	may be viewed at: 
 
-			http://users.ices.utexas.edu/~gopal/v2fun/lcov_html/
+		http://users.ices.utexas.edu/~gopal/v2fun/lcov_html/
 
 USAGE: 
 
