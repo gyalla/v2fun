@@ -103,7 +103,7 @@ USAGE:
 	Instead, when you run v2fun as is, deltaT is set to be extremly small to
 	avoid such errors, and no marching is performed. This is just to have
 	working code to submit. To enable time marching, simply uncomment line
-	89 in main.cpp and comment out line 88, as described in the code. 
+	91 in main.cpp and comment out line 90, as described in the code. 
 
 
 DIRECTORY TREE

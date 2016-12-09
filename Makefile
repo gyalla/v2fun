@@ -32,7 +32,6 @@ clobber: clean
 	-$(MAKE) -C ./doc/writeup clean
 	-cd doc/doxygen && rm -rf html && rm -rf latex
 	-cd ./test/system/ && rm -rf Sol.png
-
 clean: 
 	-$(MAKE) -C ./test/unit/ clean
 	-$(MAKE) -C ./src/ clean

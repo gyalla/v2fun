@@ -31,7 +31,7 @@ check:
 	./test
 
 .PHONY: clobber clean
-clobber: clean 
+clobber:
 	-$(RM) $(EXEC)
 	-rm -rf lcov_html
 	-rm -f coverage.info

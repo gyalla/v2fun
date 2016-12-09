@@ -21,7 +21,7 @@ setup.o: computeTerms.h
 computeTerms.o: finiteDiff.h
 
 .PHONY: clobber clean 
-clobber: clean
+clobber:
 	-$(RM) gmon.out
 	-$(RM) $(EXEC)
 clean: 

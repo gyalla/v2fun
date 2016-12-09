@@ -4,9 +4,8 @@
  *
  * \brief Initializes terms for v2-f simulation and provides some basic routines.  
  *
- * This file defines the methods to set up the v2-f simulation, i.e., to get inputs, 
- * solve for the initial conditions, and defines struct of model constants, as well as defines
- * basic functions such as log level outputs and writing results to a file. 
+ * This file defines the methods used by v2fun, i.e., to get inputs, 
+ * solve for the initial conditions, save output, and defines a struct of model constants. 
  */
 #ifndef OPTIONS_H
 #define OPTIONS_H
@@ -15,10 +14,6 @@
 #include<iostream>
 #include"../include/loglevel.h"
 using namespace std; 
-/**< log level output variable */
-//extern loglevel_e verbose; 
-extern int verbose; 
-
 /**
  * \brief Holds all of the model constants. 
  */
@@ -39,32 +34,13 @@ struct constants {
  *
  * Uses the GRVY Library to parse inputs from file.
  * \param modelConst pointer to struct containing model constants. 
- * \param filename Defines file to use for initial conditions. 
+ * \param filename Defines data file to use for initial conditions. 
  * \param outFile Defines file to write results to. 
  * \param deltaEta step size in wall normal direction. 
  * \return Error code (0 = success).
  */
 int Grvy_Input_Parse(constants * modelConst,string &filename,string & outFile,double & deltaEta);
 
-/**
- * \brief Simple implementation for log-levels. 
- *
- * \param verbose level of output. 
- * \param level current level (print out if level>=verbose). 
- * \param msg message to print. 
- */
-void log(int verbose,int level, string msg);
-
-/**
- * \brief Converts double to string. 
- *
- * This function converts a double to a string to make using log function easier. 
- * The C++ 11 function to_string() doesn't seem to be on stampede. 
- * \param Number number to convert to string. 
- * \param level only convert if verbose>=level
- * \return Number as string. 
- */
-string num2st(double Number,int level);
 /**
  * \brief Solve for initial conditions.  
  * 

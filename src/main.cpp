@@ -73,7 +73,7 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 {
 	double deltaT;
 	int status;  // status of solver
-	int power = -4;
+	int power = -8;
 	int iter = 0; 
 	bool converge = false; 
 	//set up solver
@@ -85,6 +85,8 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 	do
 	{
 		//The first deltaT will run. The second is actual time marching. 
+		//Comment out the next line and uncomment the following for time marching. 
+		//This will lead to errors in the dissipation term however. 
 		deltaT = pow(2,-30);
 		//deltaT = 1/modelConst->reyn + iter*pow(2,power); // start off 1/modelConst->reyn; 
 		iter++;

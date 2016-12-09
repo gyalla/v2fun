@@ -78,7 +78,7 @@ double Computef0(gsl_vector * xi,constants * modelConst,double deltaEta);
  * \param xi pointer to gsl_vector of unknowns \f$U,k,\epsilon,\overline{v^2},f\f$. 
  * \param modelConst pointer to struct containing model constants. 
  * \param deltaEta step size in wall normal direction. 
- * \return $\epsilon$ at boundary. 
+ * \return \f$\epsilon\f$ at boundary. 
  */
 double ComputeEp0(gsl_vector * xi,constants * modelConst,double deltaEta) ;
 #endif
