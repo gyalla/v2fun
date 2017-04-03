@@ -1,0 +1,45 @@
+# Latex files #
+###############
+*.aux
+*.log
+*.tex.backup
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+
+# Vim #
+#######
+*.swp
+
+# Generated files #
+###################
+*.pdf
+
+
+# C++ #
+#########
+*.o
+*.gcda
+*.gcno
+*.dat
+
+# executables #
+###############
+src/v2fun
+test/unit/test
+
+# doxygen #
+############
+doc/doxygen/html/
+doc/doxygen/latex/
+doc/writeup/
+
+# lcov #
+#########
+test/unit/lcov_html/
+test/unit/coverage.info
+test/unit/test_output.txt
+
+# gprof  #
+#########
+src/gmon.out

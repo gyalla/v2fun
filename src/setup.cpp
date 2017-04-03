@@ -248,7 +248,7 @@ int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 void SaveResults(gsl_vector * xi, string filename,double deltaEta,constants * modelConst)
 {
 	ofstream outFile; 
-	outFile.open(filename.c_str(),ios::app); 
+	outFile.open(filename.c_str()); 
 	//output format: gridpoint U K EP V2 F 
 	outFile << setprecision(15) << 0 <<" "<<0<<" "<< 0 <<" "<< ComputeEp0(xi,modelConst,deltaEta) <<" " << 0 << " " << Computef0(xi,modelConst,deltaEta) << endl; 
 
