@@ -4,7 +4,6 @@ ifdef TACC_GSL_LIB
     LDFLAGS:=-L${TACC_GSL_LIB}
     INC:=-I${TACC_GSL_INC}
 else
-    LDLIBS+=-lboost_system
     ifdef GSL_DIR
         LDFLAGS:=-L${GSL_DIR}/lib
 	INC:=-I${GSL_DIR}/include
@@ -22,6 +21,7 @@ ifdef TACC_GRVY_LIB
     LDFLAGS+=-L${TACC_GRVY_LIB}
     INC+=-I${TACC_GRVY_INC}
 else
+    LDLIBS+=-lboost_system
     ifndef GRVY_DIR
     	GRVY_DIR=${PWD}
 	LDFLAGS+=-Wl,-rpath=${GRVY_DIR}/lib
