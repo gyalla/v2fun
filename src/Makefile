@@ -5,13 +5,10 @@ OBJ  := $(patsubst %.cpp,%.o,$(SRC))
 
 # OPTIONS
 CC      := g++ 
-LDLIBS  := -lgrvy -lgsl -lgslcblas
-INC     := -I$$TACC_GRVY_INC -I$$TACC_GSL_INC
 CFLAGS  :=-O3 -g -p -Wall
-LDFLAGS := -p -L$$TACC_GSL_LIB -L$$TACC_GRVY_LIB
 # RULES
 $(EXEC): $(OBJ)
-	$(LINK.o) $(LDLIBS) -o $@ $^
+	$(LINK.o) -o $@ $^ ${LDFLAGS} $(LDLIBS)
 %.o: %.cpp
 	$(COMPILE.c) $< -o $@ $(INC)
 

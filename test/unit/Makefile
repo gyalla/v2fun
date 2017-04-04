@@ -7,10 +7,7 @@ OBJ  := $(patsubst %.cpp,%.o,$(SRC))
 
 # OPTIONS
 CC      := g++ 
-LDFLAGS := -L$$TACC_GSL_LIB -L$$TACC_GRVY_LIB
 CFLAGS  := -O0 -g -Wall 
-LDLIBS  :=  -lgsl -lgslcblas -lgrvy
-INC     := -I$$TACC_GSL_INC -I$$TACC_GRVY_INC
 OTHER   := ../../src/finiteDiff.cpp ../../src/setup.cpp ../../src/computeTerms.cpp ../../src/systemSolve.cpp
 # RULES
 

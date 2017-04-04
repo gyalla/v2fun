@@ -1,3 +1,40 @@
+LDLIBS  := -lgrvy -lgsl -lgslcblas
+
+ifdef TACC_GSL_LIB
+    LDFLAGS:=-L${TACC_GSL_LIB}
+    INC:=-I${TACC_GSL_INC}
+else
+    LDLIBS+=-lboost_system
+    ifdef GSL_DIR
+        LDFLAGS:=-L${GSL_DIR}/lib
+	INC:=-I${GSL_DIR}/include
+    else
+        LDFLAGS:=-L/usr/lib
+	INC:=-I/usr/include
+    endif
+    ifdef BOOST_DIR
+    	LDFLAGS+=-L${BOOST_DIR}/lib
+	INC+=-I${BOOST_DIR}/include
+    endif
+endif
+
+ifdef TACC_GRVY_LIB
+    LDFLAGS+=-L${TACC_GRVY_LIB}
+    INC+=-I${TACC_GRVY_INC}
+else
+    ifndef GRVY_DIR
+    	GRVY_DIR=${PWD}
+	LDFLAGS+=-Wl,-rpath=${GRVY_DIR}/lib
+	export GRVY_DIR
+    endif
+    LDFLAGS+=-L${GRVY_DIR}/lib
+    INC+=-I${GRVY_DIR}/include
+endif
+
+export LDFLAGS
+export INC
+export LDLIBS
+
 all: info
 
 info:
@@ -16,7 +53,7 @@ check:
 
 coverage:
 	$(MAKE) -C ./test/unit clobber
-	$(MAKE) -C ./test/unit CFLAGS="-O0 -g -Wall --coverage" LDFLAGS="-L$$TACC_GSL_LIB -L$$TACC_GRVY_LIB --coverage"
+	$(MAKE) -C ./test/unit CFLAGS="-O0 -g -Wall --coverage" LDFLAGS="${LDFLAGS} --coverage"
 	$(MAKE) -C ./test/unit check 
 	./include/lcov/bin/lcov -b ./test/unit --directory ./test/unit --directory ./src/ -no-external -c  -o coverage.info
 	./include/lcov/bin/genhtml coverage.info -o lcov_html/
