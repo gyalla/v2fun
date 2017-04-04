@@ -73,7 +73,7 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 {
 	double deltaT;
 	int status;  // status of solver
-	int power = -8;
+	int power = -20;
 	int iter = 0; 
 	bool converge = false; 
 	//set up solver
@@ -87,8 +87,9 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 		//The first deltaT will run. The second is actual time marching. 
 		//Comment out the next line and uncomment the following for time marching. 
 		//This will lead to errors in the dissipation term however. 
-		deltaT = pow(2,-30);
+		//deltaT = pow(2,-30);
 		//deltaT = 1/modelConst->reyn + iter*pow(2,power); // start off 1/modelConst->reyn; 
+		deltaT = pow(2,power); // start off 1/modelConst->reyn; 
 		iter++;
 		struct FParams p = {xi,deltaT,deltaEta,modelConst}; 
 		FParams * params = &p; 
@@ -111,7 +112,7 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 		//check if we are in fully developed region
 		for(unsigned int i=0; i<xi->size;i++)
 		{
-			if(fabs(gsl_vector_get(xi,i)-gsl_vector_get(params->XiN,i))<0.001)
+			if((fabs(gsl_vector_get(xi,i)-gsl_vector_get(params->XiN,i))<0.000001) && (iter > 10))
 				converge = true;
 		}
 	}while(!converge);
