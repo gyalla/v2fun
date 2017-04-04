@@ -14,7 +14,7 @@ ifneq (,$(findstring ${MAKECMDGOALS},install-check-coverage))
             LDFLAGS:=-L${GSL_DIR}/lib
 	    INC:=-I${GSL_DIR}/include
         else
-        	$(info Assuming GSL is in /usr/lib and usr/include)
+	    $(info Assuming GSL is in /usr/lib and usr/include)
             LDFLAGS:=-L/usr/lib
 	    INC:=-I/usr/include
         endif
@@ -27,9 +27,11 @@ ifneq (,$(findstring ${MAKECMDGOALS},install-check-coverage))
         INC+=-I${TACC_GRVY_INC}
     else
         ifndef GRVY_DIR
-        	$(error GRVY_DIR is not defined. Please specify GRVY_DIR=<path>)
+            $(info GRVY_DIR is not defined. Using precompiled library)
+	    GRVY_DIR=${PWD}
+	else
+            $(info GRVY found at ${GRVY_DIR})
         endif
-        $(info GRVY found at ${GRVY_DIR})
         LDFLAGS+=-L${GRVY_DIR}/lib -Wl,-rpath=${GRVY_DIR}/lib
         INC+=-I${GRVY_DIR}/include
     endif
