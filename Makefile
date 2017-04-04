@@ -1,36 +1,41 @@
+# Required libraries for linker
 LDLIBS  := -lgrvy -lgsl -lgslcblas
 
-ifdef TACC_GSL_LIB
-    LDFLAGS:=-L${TACC_GSL_LIB}
-    INC:=-I${TACC_GSL_INC}
-else
-    ifdef GSL_DIR
-        LDFLAGS:=-L${GSL_DIR}/lib
-	INC:=-I${GSL_DIR}/include
+# Look for libraries if invoking target matches install, check, or coverage
+ifneq (,$(findstring ${MAKECMDGOALS},install-check-coverage))
+    # Find GSL
+    ifdef TACC_GSL_LIB
+        $(info GSL found at ${TACC_GSL_DIR})
+        LDFLAGS:=-L${TACC_GSL_LIB}
+        INC:=-I${TACC_GSL_INC}
     else
-        LDFLAGS:=-L/usr/lib
-	INC:=-I/usr/include
+        ifdef GSL_DIR
+            $(info GSL found at ${GSL_DIR})
+            LDFLAGS:=-L${GSL_DIR}/lib
+	    INC:=-I${GSL_DIR}/include
+        else
+        	$(info Assuming GSL is in /usr/lib and usr/include)
+            LDFLAGS:=-L/usr/lib
+	    INC:=-I/usr/include
+        endif
     endif
-    ifdef BOOST_DIR
-    	LDFLAGS+=-L${BOOST_DIR}/lib
-	INC+=-I${BOOST_DIR}/include
+
+    # Find GRVY
+    ifdef TACC_GRVY_LIB
+        $(info GRVY found at ${GRVY_DIR})
+        LDFLAGS+=-L${TACC_GRVY_LIB}
+        INC+=-I${TACC_GRVY_INC}
+    else
+        ifndef GRVY_DIR
+        	$(error GRVY_DIR is not defined. Please specify GRVY_DIR=<path>)
+        endif
+        $(info GRVY found at ${GRVY_DIR})
+        LDFLAGS+=-L${GRVY_DIR}/lib -Wl,-rpath=${GRVY_DIR}/lib
+        INC+=-I${GRVY_DIR}/include
     endif
 endif
 
-ifdef TACC_GRVY_LIB
-    LDFLAGS+=-L${TACC_GRVY_LIB}
-    INC+=-I${TACC_GRVY_INC}
-else
-    LDLIBS+=-lboost_system
-    ifndef GRVY_DIR
-    	GRVY_DIR=${PWD}
-	LDFLAGS+=-Wl,-rpath=${GRVY_DIR}/lib
-	export GRVY_DIR
-    endif
-    LDFLAGS+=-L${GRVY_DIR}/lib
-    INC+=-I${GRVY_DIR}/include
-endif
-
+# Export variables so check, install, and coverage can all use libraries
 export LDFLAGS
 export INC
 export LDLIBS
