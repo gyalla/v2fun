@@ -3,38 +3,38 @@ LDLIBS  := -lgrvy -lgsl -lgslcblas
 
 # Look for libraries if invoking target matches install, check, or coverage
 ifneq (,$(findstring ${MAKECMDGOALS},install-check-coverage))
-	# Find GSL
-	ifdef TACC_GSL_LIB
-		$(info GSL found at ${TACC_GSL_DIR})
-		LDFLAGS:=-L${TACC_GSL_LIB}
-		INC:=-I${TACC_GSL_INC}
-	else
-		ifdef GSL_DIR
-			$(info GSL found at ${GSL_DIR})
-			LDFLAGS:=-L${GSL_DIR}/lib
-		INC:=-I${GSL_DIR}/include
-		else
-		$(info Assuming GSL is in /usr/lib and usr/include)
-			LDFLAGS:=-L/usr/lib
-		INC:=-I/usr/include
-		endif
-	endif
+    # Find GSL
+    ifdef TACC_GSL_LIB
+        $(info GSL found at ${TACC_GSL_DIR})
+        LDFLAGS:=-L${TACC_GSL_LIB}
+        INC:=-I${TACC_GSL_INC}
+    else
+        ifdef GSL_DIR
+            $(info GSL found at ${GSL_DIR})
+            LDFLAGS:=-L${GSL_DIR}/lib
+        INC:=-I${GSL_DIR}/include
+        else
+        $(info Assuming GSL is in /usr/lib and usr/include)
+            LDFLAGS:=-L/usr/lib
+        INC:=-I/usr/include
+        endif
+    endif
 
-	# Find GRVY
-	ifdef TACC_GRVY_LIB
-		$(info GRVY found at ${GRVY_DIR})
-		LDFLAGS+=-L${TACC_GRVY_LIB}
-		INC+=-I${TACC_GRVY_INC}
-	else
-		ifndef GRVY_DIR
-			$(info GRVY_DIR is not defined. Using precompiled library)
-			GRVY_DIR=${PWD}
-		else
-			$(info GRVY found at ${GRVY_DIR})
-		endif
-		LDFLAGS+=-L${GRVY_DIR}/lib -Wl,-rpath=${GRVY_DIR}/lib
-		INC+=-I${GRVY_DIR}/include
-	endif
+    # Find GRVY
+    ifdef TACC_GRVY_LIB
+        $(info GRVY found at ${GRVY_DIR})
+        LDFLAGS+=-L${TACC_GRVY_LIB}
+        INC+=-I${TACC_GRVY_INC}
+    else
+        ifndef GRVY_DIR
+            $(info GRVY_DIR is not defined. Using precompiled library)
+            GRVY_DIR=${PWD}
+        else
+            $(info GRVY found at ${GRVY_DIR})
+        endif
+        LDFLAGS+=-L${GRVY_DIR}/lib -Wl,-rpath=${GRVY_DIR}/lib
+        INC+=-I${GRVY_DIR}/include
+    endif
 endif
 
 # Export variables so check, install, and coverage can all use libraries
