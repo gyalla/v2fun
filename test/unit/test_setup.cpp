@@ -82,7 +82,7 @@ int test_Save_Results()
 		for(unsigned int j=0;j<5;j++)
 		{
 			inFile >> temp; 
-			if (fabs(temp != gsl_vector_get(xi,i+j))>0.000001)
+			if (fabs(temp - gsl_vector_get(xi,i+j))>0.000001)
 			{
 				cout <<"FAIL: Saving results" << endl; 
 				return 1; 
