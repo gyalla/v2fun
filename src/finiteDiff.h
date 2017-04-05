@@ -13,6 +13,12 @@
 #include<gsl/gsl_vector.h>
 using namespace std;
 
+/**
+ *
+ * @param xi - A coordinate on a uniform grid, with +/-1=wall and 0=center
+ * @return The coordinate on a nonuniform grid
+ */
+double remap(double xi);
 
 /**
  * \brief Approximates first derivative of eddy viscosity vector using center
@@ -49,6 +55,19 @@ double Diff2(gsl_vector * x,double deltaEta,double bdry, int i);
  * \param bdry value at boundary.  
  * \param i point at which to compute first derivative around (relative to ordering of \f$\xi\f$).  
  * \return centered difference approximation. 
+ */
+double Deriv1(gsl_vector *x, double deltaEta,double bdry,int i);
+
+/**
+ * \brief Approximates first derivative of gsl_vector using center
+ * difference.
+ *
+ *
+ * \param x pointer to vector of unknowns \f$ U,k,\epsilon,\overline{v^2},f\f$.
+ * \param deltaEta step size in wall normal direction.
+ * \param bdry value at boundary.
+ * \param i point at which to compute first derivative around (relative to ordering of \f$\xi\f$).
+ * \return centered difference approximation.
  */
 double Diff1(gsl_vector *x, double deltaEta,double bdry,int i);
 

@@ -3,9 +3,23 @@
 //
 // 12/3/2016 - (gry88) Written for CSE380 final project. 
 //--------------------------------------------------
+#include "finiteDiff.h"
 #include<gsl/gsl_vector.h>
+#define _USE_MATH_DEFINES // Needed for M_PI
 #include<math.h>
+#include <iostream>
 using namespace std;
+
+const double remap_param = 0.97;
+const double a = sin(remap_param*M_PI/2);
+
+inline double dXidY(double xi) {
+  return 2.0*a/(remap_param*M_PI*sqrt(1.0 - pow(a*remap(xi),2)));
+}
+
+double remap(double xi) {
+  return sin(remap_param*xi*M_PI/2)/sin(remap_param*M_PI/2);
+}
 
 double Diff2(gsl_vector * x,double deltaEta,double bdry,int i)
 {
@@ -18,6 +32,17 @@ double Diff2(gsl_vector * x,double deltaEta,double bdry,int i)
 	else
 		val = ( gsl_vector_get(x,i+5) - 2*gsl_vector_get(x,i) + gsl_vector_get(x,i-5))/pow(deltaEta,2); //i+5 corresponds to i+1 for single terms. U_2 = xi_1+5 for example. 
 	return val;
+}
+
+double Deriv1(gsl_vector *x, double deltaEta,double bdry, int i)
+{
+  double xi = -1.0+(i/5)*deltaEta;
+  if (i<5) {
+    return (gsl_vector_get(x,i+5)-bdry)/(2*deltaEta) * dXidY(xi);
+  } else {
+    return (gsl_vector_get(x,i+5)-gsl_vector_get(x,i-5))/(2*deltaEta) *
+        dXidY(xi);
+  }
 }
 
 double Diff1(gsl_vector *x, double deltaEta,double bdry, int i) 

@@ -3,6 +3,7 @@
 #include"test_computeTerms.h"
 #include"test_systemSolve.h"
 #include"test_setup.h"
+#include "test_finiteDiff.h"
 using namespace std; 
 
 int test_loglevel();
@@ -15,6 +16,9 @@ int main()
 	test_interp();
 	test_Grvy_Input();
 	test_Save_Results();
+
+	test_remapping();
+	test_first_deriv(21);
 
 	ComputeT_test(); 
 	ComputeL_test();

@@ -133,21 +133,40 @@ The constants are defined as follows:
 \end{itemize}
 \end{multicols}
 
+\section{Non-Uniform Grid}
+In order to reduce the computational requirements, a non-uniform spacing of points was used.  This allows a fine resolution near the wall, where the resolution must be on the order of the wall-units, and a coarse resolution in the center of the channel.  A set of uniform points, $\xi$, was defined such that $\xi=-1$ corresponds to the channel wall and $\xi=0$ corresponds to the centerline.  This set of uniform points was remapped to the nonuniform mesh, $\tilde{y} = y/\delta$, using the mapping function used by Lee and Moser \cite{Lee},
+\begin{equation} \label{eq:mapping}
+ \frac{y}{\delta} = \frac{\sin(\eta \xi \pi/2)}{\sin(\eta \pi/2)}, \quad -1 \le \xi \le 0
+\end{equation}
+where $\eta$ is an adjustable parameter that controls the resolution near the wall. When $\eta$ is equal to 1, the wall-spacing is finest.  When $\eta$ is very small, the mesh is approximately uniform.
+
+The inverse mapping and its derivatives can be written as:
+\begin{align}
+  \xi &= \frac{2 \sin^{-1}(\tilde{y}a)}{\eta \pi} \\
+  \frac{\mathrm{d}\xi}{\mathrm{d}\tilde{y}} &= \frac{2a}{\eta\pi \sqrt{1-a^2\tilde{y}^2}} \label{eq:xi-y-1} \\
+  \frac{\mathrm{d}^2\xi}{\mathrm{d}\tilde{y}^2} &= \frac{2a^3\tilde{y}}{\eta\pi (1-a^2\tilde{y}^2)^{3/2}} \label{eq:xi-y-2}
+\end{align}
+where $a$ is a constant equal to the denominator in Eq. \ref{eq:mapping}.  Using the chain rule, the derivatives of a variable $\phi$ on the nonuniform grid, $\tilde{y}$ can be computed using derivatives on the uniform grid, $\xi$ as follows:
+\begin{align}
+ \pderiv{\phi}{\tilde{y}} &= \frac{\mathrm{d}\xi}{\mathrm{d}\tilde{y}} \pderiv{\phi}{\xi} \label{eq:phi-y-1} \\
+ \pderiv[2]{\phi}{\tilde{y}} &= \frac{\mathrm{d}^2\xi}{\mathrm{d}\tilde{y}^2} \pderiv{\phi}{\xi} + \Big(\frac{\mathrm{d}\xi}{\mathrm{d}\tilde{y}} \Big)^2 \pderiv[2]{\phi}{\xi}  \label{eq:phi-y-2} 
+\end{align}
+Combining Eqs. \ref{eq:xi-y-1} - \ref{eq:xi-y-2} with Eqs. \ref{eq:phi-y-1} - \ref{eq:phi-y-2} gives the following formulas for the derivatives on this nonuniform grid:
+\begin{align}
+ \pderiv{\phi}{\tilde{y}} &= \frac{2a}{\eta\pi \sqrt{1-a^2\tilde{y}^2}} \pderiv{\phi}{\xi} \\
+ \pderiv[2]{\phi}{\tilde{y}} &= \frac{2a^3\tilde{y}}{\eta\pi (1-a^2\tilde{y}^2)^{3/2}} \pderiv{\phi}{\xi} + \frac{4a^2}{\eta^2\pi^2 (1-a^2\tilde{y}^2)} \pderiv[2]{\phi}{\xi}
+\end{align}
+
+
 \clearpage
 \begin{thebibliography}{3}
-%\bibitem{Chien}
-%    Chien, K. Y., "Predictions of Channel and Boundary-Layer Flows with a
-%    Low-Reynolds-Number Turbulence Model," AIAA Journal, Vol. 20, No. 1, 1982,
-%    pp. 33-38.
+\bibitem{Lee}
+Lee, Myoungkyu and R.D. Moser, ``Direct numerical simulation of turbulent channel flow up to $\mathrm{Re}_{\tau}=5200$,'' J. Fluid Mech. 774 (2015) 395–415. doi:10.1017/jfm.2015.268.
 \bibitem{Durbin}
     Durbin, Paul A., and BA Pettersson Reif. \textit{Statistical theory and
 modeling for turbulent flows}. John Wiley \& Sons, 2011.
-%\bibitem{Oliver}
-%    Oliver, T. A., Malaya, N., Ulerich, R., \& Moser, R. D. (2014). Estimating
-%    uncertainties in statistics computed from direct numerical simulation.
-%    Physics of Fluids, 26(3). http://doi.org/10.1063/1.4866813
 \bibitem{pope}
-        Pope, Stephen B. "Turbulent flows." (2001): 2020.
+        Pope, Stephen B. \textit{Turbulent flows}. (2001): 2020.
  
 \newpage
 
