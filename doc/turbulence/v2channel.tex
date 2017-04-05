@@ -1,0 +1,159 @@
+\documentclass[a4paper,11pt]{article}
+ 
+% --- Packages
+\usepackage{booktabs}
+\usepackage[margin=1.5cm]{caption}
+\usepackage{float}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{graphicx}
+\usepackage{amsfonts,amsthm,amsmath,mathtools,graphicx,geometry}
+\usepackage{enumitem} 
+\usepackage{multicol}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% --- Custom commands
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+%% define command for averaging operator
+\newcommand{\chevron}[1]{\left\langle #1 \right\rangle}
+\newcommand{\pderiv}[3][]{% \pderiv[<order>]{<func>}{<var>} 
+  \ensuremath{\frac{\partial^{#1} {#2}}{\partial {#3}^{#1}}}}
+\newcommand{\noi}{\noindent}
+\newcommand{\ep}{\epsilon} 
+\newcommand{\pr}{\partial}
+% --- Formatting 
+\geometry{margin=1in}
+\title{\vspace{-4ex}RANS Modeling in a Channel}
+\author{Gopal Yalla, Clark Pederson, Tim Smith, Sean Carney}
+\date{\today}
+
+\pdfinfo{%
+  /Title    (RANS Modeling in a Channel)
+  /Author   (Gopal Yalla, Clark Pederson, Tim Smith, Sean Carney)
+}
+\graphicspath{ {figs/} }
+\DeclareGraphicsExtensions{.png}
+
+\begin{document}
+\maketitle
+\section{Developing the channel flow equations}
+
+We begin by developing the $k-\epsilon$ model for channel flow with Durbin's
+$\chevron{v^2}-f$ formulation of the eddy viscosity near
+the wall. We chose this wall treatment since it fundamentally
+addresses the fact that near the wall, the eddy viscosity is a function of the
+wall normal velocity. Out of the models which we have been introduced to, this
+formulation seems to be the best tradeoff between complexity and theoretical
+backing for anisotropy near the wall.    
+
+The unsteady incompressible Reynolds averaged Navier-Stokes equations, 
+$k-\epsilon$, and $\chevron{v^2}-f$ model equations are as follows:
+
+\begin{align}
+\pderiv{U_i}{x_i} &= 0 \label{eq:continuity} \\
+\pderiv{U_i}{t} + U_j\pderiv{U_i}{x_j} &= -\pderiv{P}{x_i} +
+\pderiv{}{x_j}\left(\nu\pderiv{U_i}{x_j} - \chevron{u_i u_j}\right) \\
+\pderiv{k}{t} + U_j\pderiv{k}{x_j} &= -r_{ij}\pderiv{U_i}{x_j} - \epsilon +
+\pderiv{}{x_j}\left(\frac{\nu_T}{\sigma_k}\pderiv{k}{x_j}\right) +
+\nu\frac{\partial^2 k}{\partial x_j \partial x_j} \\
+\pderiv{\epsilon}{t} + U_j\pderiv{\epsilon}{x_j} &=
+-\frac{1}{T}\left(C_{\epsilon 1} \mathcal{P} + C_{\epsilon 2} \epsilon\right) +
+\pderiv{}{x_j}\left(\frac{\nu_T}{\sigma_\epsilon}\pderiv{\epsilon}{x_j}\right) +
+\nu\frac{\partial^2 \epsilon}{\partial x_j \partial x_j} \\
+\pderiv{\chevron{v^2}}{t} + U_j\pderiv{\chevron{v^2}}{x_j} &= kf +
+\pderiv{}{x_j}\left((\nu_T+\nu)\pderiv{\chevron{v^2}}{x_j}\right) - \epsilon
+\frac{\chevron{v^2}}{k} \\
+L^2 \nabla^2 f - f &= -C_2 \frac{\mathcal{P}}{k} + \frac{C_1}{T} \left(
+\frac{\chevron{v^2}}{k} - \frac{2}{3} \right) 
+%r_{ij} &= -\nu_T \left(\pderiv{U_i}{x_j} + \pderiv{U_j}{x_i}\right) + \frac{2
+%k}{3}\delta_{ij} \\ 
+%\nu_T &= \frac{3}{2}C_\mu\chevron{v^2}T 
+\label{eq:redistribution}
+\end{align}
+
+\noi where 
+
+\begin{align*}
+\nu_T &= \frac{3}{2}C_\mu \chevron{v^2} T \\
+\mathcal{P} &= \nu_T\left( \pderiv{U_j}{x_i} + \pderiv{U_i}{x_j}\right)\pderiv{U_j}{x_i} \\
+T &= \max \left\{ \frac{k}{\ep} , 6 \left( \frac{v}{\ep} \right)^{\frac{1}{2}}
+\right\} \\
+L &= \max \left\{ C_L \frac{k^{3/2}}{\ep}, C_\eta \left( \frac{v^3}{\ep}
+\right)^{1/4} \right\}
+\end{align*}
+
+We consider channel flow through a rectangular duct of height $h= 2\delta$, with
+the bottom and top walls at $y=0$ and $y=2\delta$, and the midplane at
+$y=\delta$.
+Here we are modeling ``fully developed'' channel flow in the streamwise, $x$,
+direction such that statistics do not change in the spanwise, $z$, or
+streamwise directions. As in Pope \cite{pope} we neglect the mean spanwise
+velocity. 
+We enforce the no slip condition at the boundary, so that
+$U_i=u_i=0 \, \forall i$. Since at the wall
+$\pderiv{U}{x}=\pderiv{W}{z} = 0$, continuity implies that
+$\pderiv{V}{y}=0$ and thus $V=0$ everywhere. Moreover, the flow is statistically
+symmetric about the mid-plane $y = \delta$. These assumptions and conditions
+imply that the original system, Eqns.
+(\ref{eq:continuity})-(\ref{eq:redistribution}), is simplified to: 
+
+\begin{align}
+	\label{eq:ssv2f1}
+        \pderiv{U}{t} &= -\pderiv{P}{x} +
+\pderiv{}{y}\left((\nu+\nu_T)\pderiv{U}{y}\right) \\
+        \pderiv{k}{t} &= \nu_T\left(\pderiv{U}{y}\right)^2 + 
+\pderiv{}{y}\left((\nu+\frac{\nu_T}{\sigma_k})\pderiv{k}{y}\right) \\
+        \pderiv{\ep}{t} &= \frac{1}{T}\left(C_{\ep
+1}\nu_T\left(\pderiv{U}{y}\right)^2 - C_{\ep 2}\ep\right) + 
+\pderiv{}{y}\left((\nu+\frac{\nu_T}{\sigma_\ep})\pderiv{\ep}{y}\right) \\
+        \pderiv{\chevron{v^2}}{t} &= kf - \frac{1}{T}\chevron{v^2} +
+\pderiv{}{y}\left((\nu+\nu_T)\pderiv{\chevron{v}}{y}\right) \\
+        0 &= \left( L^2\nabla^2 - I\right)f +
+C_2\frac{\nu_T}{k}\left(\pderiv{U}{y}\right)^2 -
+\frac{C_1}{T}\left(\frac{\chevron{v^2}}{k}-\frac{2}{3}\right)
+	\label{eq:ssv2f5}
+\end{align}
+
+The constants are defined as follows: 
+\begin{multicols}{2}
+\begin{enumerate}
+	\item $C_\mu = 0.09$
+        \item $C_k = 1.0$
+	\item $\sigma_\ep = 1.3$
+	\item $C_2 = 0.4$	
+\end{enumerate}
+\columnbreak 
+
+\begin{itemize}
+	\item[5.] $C_1 = 0.3$
+	\item[6.] $C_{\ep 1} = 1.4[1 + 0.045 \sqrt{k/\chevron{v^2}}]$
+	\item[7.] $C_{\ep 2} = 1.92$  
+	\item[8.] $C_\eta = 16$
+	\item[9.] $C_L = 0.2$
+\end{itemize}
+\end{multicols}
+
+\clearpage
+\begin{thebibliography}{3}
+%\bibitem{Chien}
+%    Chien, K. Y., "Predictions of Channel and Boundary-Layer Flows with a
+%    Low-Reynolds-Number Turbulence Model," AIAA Journal, Vol. 20, No. 1, 1982,
+%    pp. 33-38.
+\bibitem{Durbin}
+    Durbin, Paul A., and BA Pettersson Reif. \textit{Statistical theory and
+modeling for turbulent flows}. John Wiley \& Sons, 2011.
+%\bibitem{Oliver}
+%    Oliver, T. A., Malaya, N., Ulerich, R., \& Moser, R. D. (2014). Estimating
+%    uncertainties in statistics computed from direct numerical simulation.
+%    Physics of Fluids, 26(3). http://doi.org/10.1063/1.4866813
+\bibitem{pope}
+        Pope, Stephen B. "Turbulent flows." (2001): 2020.
+ 
+\newpage
+
+
+
+\end{thebibliography}
+
+
+\end{document}
