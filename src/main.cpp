@@ -35,7 +35,7 @@ int main(int argc, char ** argv)
 	gt.EndTimer("Getting Inputs");
 
 	// Make a new grid object
-	Grid grid(uniform_grid);
+	const Grid grid(uniform_grid);
 
 	// Solving for initial conditions 
 	Log(logINFO) << "Solving initial conditions for U,k,ep,v2";
