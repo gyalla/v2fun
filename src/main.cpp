@@ -7,6 +7,7 @@
 #include<grvy.h>
 #include<gsl/gsl_multiroots.h>
 #include"systemSolve.h"
+#include "Grid.h"
 using namespace GRVY;
 using namespace std; 
 
@@ -19,18 +20,22 @@ int main(int argc, char ** argv)
 	// Parse inputs 
 	Log(logINFO) << "Parsing inputs";
 	double deltaEta;
+	bool   uniform_grid;
 	struct constants Const = {
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
 	constants * modelConst = &Const; 
 	string filename, outFile;
 	GRVY_Timer_Class gt; 
 	gt.BeginTimer("Getting Inputs");
-	if(Grvy_Input_Parse(modelConst,filename,outFile,deltaEta))
+	if(Grvy_Input_Parse(modelConst,filename,outFile, deltaEta, uniform_grid))
 	{
 		Log(logERROR) << "Error parsing inputs";
 		return 1; 
 	}
 	gt.EndTimer("Getting Inputs");
+
+	// Make a new grid object
+	Grid grid(uniform_grid);
 
 	// Solving for initial conditions 
 	Log(logINFO) << "Solving initial conditions for U,k,ep,v2";

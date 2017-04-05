@@ -42,7 +42,8 @@ int test_Grvy_Input()
 	constants * modelConst= &Const; 
 	string filename,outFile;
 	double deltaEta; 
-	if(Grvy_Input_Parse(modelConst,filename,outFile,deltaEta))
+	bool uniformGrid;
+	if(Grvy_Input_Parse(modelConst,filename,outFile,deltaEta,uniformGrid))
 	{ 
 		cout << "FAIL: Getting inputs" << endl; 
 		return 1; 

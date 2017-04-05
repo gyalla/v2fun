@@ -20,7 +20,8 @@ Ceta = 70
 # Other paramters
 #-------------------------
 reyn = 180		# Reynolds number 
-deltaEta = 0.01 	#step size in wall normal direction. Should be ~ 1/reyn 
+deltaEta = 0.01 	#step size in wall normal direction. Should be ~ 1/reyn
+uniform-grid = true # Use a uniform grid
 
 #--------------------------------------------------------------------------------
 # Files: files for Reynolds number 180 and 2000 are included in the data directory

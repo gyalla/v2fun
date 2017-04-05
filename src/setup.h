@@ -37,9 +37,11 @@ struct constants {
  * \param filename Defines data file to use for initial conditions. 
  * \param outFile Defines file to write results to. 
  * \param deltaEta step size in wall normal direction. 
+ * \param uniformGrid If true, the grid will be uniform.
  * \return Error code (0 = success).
  */
-int Grvy_Input_Parse(constants * modelConst,string &filename,string & outFile,double & deltaEta);
+int Grvy_Input_Parse(constants * modelConst,string &filename,string & outFile,
+                     double & deltaEta, bool &uniformGrid);
 
 /**
  * \brief Solve for initial conditions.  

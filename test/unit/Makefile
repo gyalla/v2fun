@@ -8,7 +8,11 @@ OBJ  := $(patsubst %.cpp,%.o,$(SRC))
 # OPTIONS
 CC      := g++ 
 CFLAGS  := -O0 -g -Wall 
-OTHER   := ../../src/finiteDiff.cpp ../../src/setup.cpp ../../src/computeTerms.cpp ../../src/systemSolve.cpp
+OTHER   := ../../src/finiteDiff.cpp \
+           ../../src/setup.cpp      \
+           ../../src/computeTerms.cpp \
+           ../../src/systemSolve.cpp \
+           ../../src/Grid.cpp
 # RULES
 
 

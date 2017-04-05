@@ -15,7 +15,7 @@ using namespace GRVY;
 loglevel_e loglevel = logINFO;
 
 
-int Grvy_Input_Parse(constants * modelConst,string & filename,string & outFile,double & deltaEta)
+int Grvy_Input_Parse(constants * modelConst,string & filename,string & outFile,double & deltaEta, bool &uniformGrid)
 {
 	// Use GRVY for inpute parsing as shown in grvy documentation. 
 	int loglevelint;  
@@ -81,6 +81,10 @@ int Grvy_Input_Parse(constants * modelConst,string & filename,string & outFile,d
 	if(!iparse.Read_Var("deltaEta",&deltaEta))
 		return 1; 
 	Log(logINFO) << "---> deltaEta = " << deltaEta;
+
+  if(!iparse.Read_Var("uniform-grid",&uniformGrid, true))
+    return 1;
+  Log(logINFO) << "---> deltaEta = " << uniformGrid;
 
 	iparse.Close();
 	

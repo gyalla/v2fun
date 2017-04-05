@@ -7,14 +7,16 @@
 #include <limits>
 #include <cmath>
 
+#include "../../src/Grid.h"
 #include "../../src/finiteDiff.h"
 
 int test_remapping() {
   // ARRANGE
+  Grid grid(false);
   double xi = 0.1;
 
   // ACT
-  double y = remap(xi);
+  double y = grid.remap(xi);
 
   // ASSERT
   double tol = 5*std::numeric_limits<double>::epsilon();
@@ -28,19 +30,20 @@ int test_remapping() {
 
 int test_first_deriv(int n) {
   // SETUP
+  Grid grid(false);
   gsl_vector* phi = gsl_vector_alloc(5*n);
 
   // ARRANGE
   // phi = y
   for (int i=0; i<n; i++) {
     double xi = -1.0+1.0*i/(n-1);
-    gsl_vector_set(phi, i*5,  remap(xi));
+    gsl_vector_set(phi, i*5,  grid.remap(xi));
   }
 
   // ACT
   double deriv[n-1];
   for (int index=0; index<n-1; index++)
-    deriv[index] = Deriv1(phi, 1.0/(n-1), 0, index*5);
+    deriv[index] = Deriv1(phi, 1.0/(n-1), 0, index*5, &grid);
 
   // ASSERT
   double tol = 1e-3;
@@ -48,7 +51,7 @@ int test_first_deriv(int n) {
     if (std::abs(deriv[index] - 1.0) > tol) {
       std::cout << "FAIL: First derivative calculated incorrectly!" << std::endl;
       std::cout << "    Expected: " << 1.0 << "   Found: " << deriv[index] << std::endl;
-      std::cout << "    At y = " << remap(-1.0+index*1.0/(n-1)) << std::endl;
+      std::cout << "    At y = " << grid.remap(-1.0+index*1.0/(n-1)) << std::endl;
       std::cout << "    Tolerance: " << tol << std::endl;
       return 1;
     }
@@ -59,19 +62,20 @@ int test_first_deriv(int n) {
 
 int test_second_deriv(int n) {
   // SETUP
+  Grid grid(false);
   gsl_vector* phi = gsl_vector_alloc(5*n);
 
   // ARRANGE
   // phi = 0.5*y^2
   for (int i=0; i<n; i++) {
     double xi = -1.0+1.0*i/(n-1);
-    gsl_vector_set(phi, i*5,  0.5*remap(xi)*remap(xi));
+    gsl_vector_set(phi, i*5,  0.5*grid.remap(xi)*grid.remap(xi));
   }
 
   // ACT
   double deriv[n-1];
   for (int index=0; index<n-1; index++)
-    deriv[index] = Deriv2(phi, 1.0/(n-1), 0, index*5);
+    deriv[index] = Deriv2(phi, 1.0/(n-1), 0, index*5, &grid);
 
   // ASSERT
   double tol = 1e-2;
@@ -79,7 +83,7 @@ int test_second_deriv(int n) {
     if (std::abs(deriv[index] - 1.0) > tol) {
       std::cout << "FAIL: First derivative calculated incorrectly!" << std::endl;
       std::cout << "    Expected: " << 1.0 << "   Found: " << deriv[index] << std::endl;
-      std::cout << "    At y = " << remap(-1.0+index*1.0/(n-1)) << std::endl;
+      std::cout << "    At y = " << grid.remap(-1.0+index*1.0/(n-1)) << std::endl;
       std::cout << "    Tolerance: " << tol << std::endl;
       return 1;
     }
