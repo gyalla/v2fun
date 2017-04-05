@@ -8,5 +8,6 @@
 
 int test_remapping();
 int test_first_deriv(int n);
+int test_second_deriv(int n);
 
 #endif /* TEST_UNIT_TEST_FINITEDIFF_H_ */

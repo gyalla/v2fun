@@ -17,8 +17,39 @@ inline double dXidY(double xi) {
   return 2.0*a/(remap_param*M_PI*sqrt(1.0 - pow(a*remap(xi),2)));
 }
 
-double remap(double xi) {
+inline double d2XidY2(double xi) {
+  return (2.0*a*a*a*remap(xi))/
+      (remap_param*M_PI*pow(1.0-pow(a*remap(xi),2),1.5));
+}
+
+inline double remap(double xi) {
   return sin(remap_param*xi*M_PI/2)/sin(remap_param*M_PI/2);
+}
+
+inline double CentralDiff2(gsl_vector * x,double deltaEta,double bdry,int i)
+{
+  // i = xiCounter indices
+  //if i < 5 use value at boundary. 5 for the index of xi.
+  if (i<5)
+    return (gsl_vector_get(x,i+5) - 2*gsl_vector_get(x,i) + bdry)/pow(deltaEta,2);
+  else
+    return ( gsl_vector_get(x,i+5) - 2*gsl_vector_get(x,i) + gsl_vector_get(x,i-5))/pow(deltaEta,2); //i+5 corresponds to i+1 for single terms. U_2 = xi_1+5 for example.
+}
+
+inline double CentralDiff1(gsl_vector *x, double deltaEta,double bdry, int i)
+{
+  //same structure as above but for first derivative.
+  if (i<5)
+    return (gsl_vector_get(x,i+5)-bdry)/(2*deltaEta);
+  else
+    return (gsl_vector_get(x,i+5)-gsl_vector_get(x,i-5))/(2*deltaEta);
+}
+
+double Deriv2(gsl_vector * x,double deltaEta,double bdry,int i)
+{
+  double xi = -1.0+(i/5)*deltaEta;
+  return d2XidY2(xi)*CentralDiff1(x, deltaEta, bdry, i) +
+      pow(dXidY(xi),2)*CentralDiff2(x, deltaEta, bdry, i);
 }
 
 double Diff2(gsl_vector * x,double deltaEta,double bdry,int i)
@@ -37,15 +68,12 @@ double Diff2(gsl_vector * x,double deltaEta,double bdry,int i)
 double Deriv1(gsl_vector *x, double deltaEta,double bdry, int i)
 {
   double xi = -1.0+(i/5)*deltaEta;
-  if (i<5) {
-    return (gsl_vector_get(x,i+5)-bdry)/(2*deltaEta) * dXidY(xi);
-  } else {
-    return (gsl_vector_get(x,i+5)-gsl_vector_get(x,i-5))/(2*deltaEta) *
-        dXidY(xi);
-  }
+  return CentralDiff1(x, deltaEta, bdry, i)*dXidY(xi);
 }
 
-double Diff1(gsl_vector *x, double deltaEta,double bdry, int i) 
+
+
+double Diff1(gsl_vector *x, double deltaEta,double bdry, int i)
 {
 	//same structure as above but for first derivative. 
 	double val; 

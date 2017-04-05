@@ -11,17 +11,11 @@ CFLAGS  := -O0 -g -Wall
 OTHER   := ../../src/finiteDiff.cpp ../../src/setup.cpp ../../src/computeTerms.cpp ../../src/systemSolve.cpp
 # RULES
 
+
 $(EXEC): $(OBJ)
 	$(LINK.o) $(LDLIBS) $(OTHER) $(INC) $(LDFLAGS) -o $@ $^
 %.o: %.cpp
-	$(COMPILE.c)  $< -o $@ $(INC) 
-
-test.o test_setup.o: ../../src/setup.h 
-test.o test_setup.o: test_computeTerms.h
-test.o: test_systemSolve.h
-test.o: test_setup.h
-test_computeTerms.o test_systemSolve.o: ../../src/computeTerms.h
-test_systemSolve.o: ../../src/systemSolve.h
+	$(COMPILE.c)  $< -o $@ $(INC) $(CFLAGS)
 
 check: 
 	$(RM) test_output.txt

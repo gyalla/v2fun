@@ -19,6 +19,7 @@ int main()
 
 	test_remapping();
 	test_first_deriv(21);
+	test_second_deriv(201);
 
 	ComputeT_test(); 
 	ComputeL_test();

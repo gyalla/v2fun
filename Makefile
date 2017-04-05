@@ -12,11 +12,11 @@ ifneq (,$(findstring ${MAKECMDGOALS},install-check-coverage))
         ifdef GSL_DIR
             $(info GSL found at ${GSL_DIR})
             LDFLAGS:=-L${GSL_DIR}/lib
-        INC:=-I${GSL_DIR}/include
+            INC:=-I${GSL_DIR}/include
         else
-        $(info Assuming GSL is in /usr/lib and usr/include)
+            $(info Assuming GSL is in /usr/lib and usr/include)
             LDFLAGS:=-L/usr/lib
-        INC:=-I/usr/include
+            INC:=-I/usr/include
         endif
     endif
 

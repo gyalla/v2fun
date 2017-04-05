@@ -40,6 +40,11 @@ test/unit/lcov_html/
 test/unit/coverage.info
 test/unit/test_output.txt
 
+# test output #
+###############
+src/test_output.txt
+test/unit/.nfs*
+
 # gprof  #
 #########
 src/gmon.out

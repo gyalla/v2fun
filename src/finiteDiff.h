@@ -34,29 +34,16 @@ double Diff1vT(gsl_vector * x,double deltaEta,int i);
 
 /**
  * \brief Approximates second derivative of gsl_vector using center
- * difference. 
+ * difference.
  *
  *
  * \param x pointer to vector of unknowns \f$ U,k,\epsilon,\overline{v^2},f\f$.
- * \param deltaEta step size in wall normal direction. 
- * \param bdry value at boundary.  
- * \param i point at which to compute second derivative around (relative to ordering of \f$\xi\f$).  
- * \return centered difference approximation. 
+ * \param deltaEta step size in wall normal direction.
+ * \param bdry value at boundary.
+ * \param i point at which to compute second derivative around (relative to ordering of \f$\xi\f$).
+ * \return centered difference approximation.
  */
 double Diff2(gsl_vector * x,double deltaEta,double bdry, int i);
-
-/**
- * \brief Approximates first derivative of gsl_vector using center
- * difference. 
- *
- *
- * \param x pointer to vector of unknowns \f$ U,k,\epsilon,\overline{v^2},f\f$.
- * \param deltaEta step size in wall normal direction. 
- * \param bdry value at boundary.  
- * \param i point at which to compute first derivative around (relative to ordering of \f$\xi\f$).  
- * \return centered difference approximation. 
- */
-double Deriv1(gsl_vector *x, double deltaEta,double bdry,int i);
 
 /**
  * \brief Approximates first derivative of gsl_vector using center
@@ -70,6 +57,32 @@ double Deriv1(gsl_vector *x, double deltaEta,double bdry,int i);
  * \return centered difference approximation.
  */
 double Diff1(gsl_vector *x, double deltaEta,double bdry,int i);
+
+/**
+ * \brief Approximates second derivative of gsl_vector using center
+ * difference.
+ *
+ *
+ * \param x pointer to vector of unknowns \f$ U,k,\epsilon,\overline{v^2},f\f$.
+ * \param deltaEta step size in wall normal direction.
+ * \param bdry value at boundary.
+ * \param i point at which to compute second derivative around (relative to ordering of \f$\xi\f$).
+ * \return centered difference approximation.
+ */
+double Deriv2(gsl_vector * x,double deltaEta,double bdry, int i);
+
+/**
+ * \brief Approximates first derivative of gsl_vector using center
+ * difference.
+ *
+ *
+ * \param x pointer to vector of unknowns \f$ U,k,\epsilon,\overline{v^2},f\f$.
+ * \param deltaEta step size in wall normal direction.
+ * \param bdry value at boundary.
+ * \param i point at which to compute first derivative around (relative to ordering of \f$\xi\f$).
+ * \return centered difference approximation.
+ */
+double Deriv1(gsl_vector *x, double deltaEta,double bdry,int i);
 
 /**
  * \brief Approximates second derivative of gsl_vector at boundary using centered difference making use of ghost points and zero Nuemann boundary conditions.
