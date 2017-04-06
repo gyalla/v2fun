@@ -59,7 +59,7 @@ int test_Grvy_Input()
 
 int test_Save_Results()
 {
-	gsl_vector * xi = gsl_vector_alloc(15); 
+	gsl_vector * xi = gsl_vector_alloc(10); 
 	struct constants Const = {
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
 	constants * modelConst= &Const; 
