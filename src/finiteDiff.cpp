@@ -29,23 +29,27 @@ double Diff1(gsl_vector *x, double deltaEta,double bdry, int i)
     return (gsl_vector_get(x,i+5)-gsl_vector_get(x,i-5))/(2*deltaEta);
 }
 
-double Deriv2(gsl_vector * x,double deltaEta,double bdry,int i, Grid* grid)
+double Deriv2(gsl_vector * x, double bdry, int i, Grid* grid)
 {
-  double xi = -1.0+(i/5)*deltaEta;
-  return grid->d2XidY2(xi)*Diff1(x, deltaEta, bdry, i) +
-      pow(grid->dXidY(xi),2)*Diff2(x, deltaEta, bdry, i);
+  // Since xi is uniformly spaced, \xi(0) = \Delta \xi
+  double delta = gsl_vector_get(grid->xi, 0);
+  double xi = gsl_vector_get(grid->xi, (i/5));
+  return grid->d2XidY2(xi)*Diff1(x, delta, bdry, i) +
+      pow(grid->dXidY(xi),2)*Diff2(x, delta, bdry, i);
 }
 
-double Deriv1(gsl_vector *x, double deltaEta,double bdry, int i, Grid* grid)
+double Deriv1(gsl_vector *x, double bdry, int i, Grid* grid)
 {
-  double xi = -1.0+(i/5)*deltaEta;
-  return Diff1(x, deltaEta, bdry, i)*grid->dXidY(xi);
+  // Since xi is uniformly spaced, \xi(0) = \Delta \xi
+  double delta = gsl_vector_get(grid->xi, 0);
+  double xi = gsl_vector_get(grid->xi, (i/5));
+  return Diff1(x, delta, bdry, i)*grid->dXidY(xi);
 }
 
 double BdryDeriv2(gsl_vector *x, double deltaEta, int i, Grid* grid)
 {
   //Using zero Neumann boundary condition we use ghost points for second derivative.
-  double xi = -1.0+(i/5)*deltaEta;
+  double xi = gsl_vector_get(grid->xi, (i/5));
   return (2*gsl_vector_get(x,i-5) - 2*gsl_vector_get(x,i)) *
       pow(grid->dXidY(xi)/deltaEta,2);
 }
@@ -60,7 +64,7 @@ double BdryDiff2(gsl_vector * x ,double deltaEta,int i)
 double Deriv1vT(gsl_vector * x,double deltaEta,int i, Grid* grid)
 {
   // for vT we use normal finite difference approximation.
-  double xi = -1.0+(i/5)*deltaEta;
+  double xi = gsl_vector_get(grid->xi, (i/5));
   return (gsl_vector_get(x,i+1) - gsl_vector_get(x,i-1))/(2*deltaEta)*grid->dXidY(xi);
 }
 

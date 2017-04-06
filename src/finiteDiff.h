@@ -60,12 +60,11 @@ double Diff1(gsl_vector *x, double deltaEta,double bdry,int i);
  *
  *
  * \param x pointer to vector of unknowns \f$ U,k,\epsilon,\overline{v^2},f\f$.
- * \param deltaEta step size in wall normal direction.
  * \param bdry value at boundary.
  * \param i point at which to compute second derivative around (relative to ordering of \f$\xi\f$).
  * \return centered difference approximation.
  */
-double Deriv2(gsl_vector * x,double deltaEta,double bdry, int i, Grid* grid);
+double Deriv2(gsl_vector * x, double bdry, int i, Grid* grid);
 
 /**
  * \brief Approximates first derivative of gsl_vector using center
@@ -73,12 +72,11 @@ double Deriv2(gsl_vector * x,double deltaEta,double bdry, int i, Grid* grid);
  *
  *
  * \param x pointer to vector of unknowns \f$ U,k,\epsilon,\overline{v^2},f\f$.
- * \param deltaEta step size in wall normal direction.
  * \param bdry value at boundary.
  * \param i point at which to compute first derivative around (relative to ordering of \f$\xi\f$).
  * \return centered difference approximation.
  */
-double Deriv1(gsl_vector *x, double deltaEta,double bdry,int i, Grid* grid);
+double Deriv1(gsl_vector *x, double bdry, int i, Grid* grid);
 
 /**
  * \brief Approximates second derivative of gsl_vector at boundary using centered difference making use of ghost points and zero Nuemann boundary conditions.
@@ -88,7 +86,7 @@ double Deriv1(gsl_vector *x, double deltaEta,double bdry,int i, Grid* grid);
  * \param i point at which to compute second derivative around (relative to ordering of \f$\xi\f$).  
  * \return centered difference approximation. 
  */
-double BdryDeriv2(gsl_vector * x ,double deltaEta,int i);
+double BdryDeriv2(gsl_vector * x ,double deltaEta, int i);
 
 /**
  * \brief Approximates second derivative of gsl_vector at boundary using centered difference making use of ghost points and zero Nuemann boundary conditions.

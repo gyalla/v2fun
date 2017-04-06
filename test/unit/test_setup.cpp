@@ -41,15 +41,14 @@ int test_Grvy_Input()
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
 	constants * modelConst= &Const; 
 	string filename,outFile;
-	double deltaEta; 
 	bool uniformGrid;
-	if(Grvy_Input_Parse(modelConst,filename,outFile,deltaEta,uniformGrid))
+	if(Grvy_Input_Parse(modelConst,filename,outFile,uniformGrid))
 	{ 
 		cout << "FAIL: Getting inputs" << endl; 
 		return 1; 
 	}
 
-	if( (modelConst->reyn != 2000) || (modelConst->Cmu != 0.19) || (modelConst->C1 != 0.4)|| (modelConst->C2 != 0.3) || (modelConst->sigmaEp != 1.3) || (modelConst->CL != 0.3) || (modelConst->Cep2 != 1.9) || (modelConst->Cep1 != 1.55) || (modelConst->Ceta != 70) || (deltaEta !=0.01) || (filename.compare("../data/Reyn_2000.dat")!=0) || (outFile.compare("../data/v2fResults_2000.dat")!=0))
+	if( (modelConst->reyn != 2000) || (modelConst->Cmu != 0.19) || (modelConst->C1 != 0.4)|| (modelConst->C2 != 0.3) || (modelConst->sigmaEp != 1.3) || (modelConst->CL != 0.3) || (modelConst->Cep2 != 1.9) || (modelConst->Cep1 != 1.55) || (modelConst->Ceta != 70) || (filename.compare("../data/Reyn_2000.dat")!=0) || (outFile.compare("../data/v2fResults_2000.dat")!=0))
 	{
 		cout << "FAIL: Getting inputs" << endl; 
 		return 1; 

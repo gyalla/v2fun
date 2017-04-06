@@ -19,8 +19,7 @@ Ceta = 70
 #-------------------------
 # Other paramters
 #-------------------------
-reyn = 180		# Reynolds number 
-deltaEta = 0.01 	#step size in wall normal direction. Should be ~ 1/reyn
+reyn = 180		# Friction Reynolds number
 uniform-grid = true # Use a uniform grid
 
 #--------------------------------------------------------------------------------

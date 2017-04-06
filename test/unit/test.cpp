@@ -18,8 +18,8 @@ int main()
 	test_Save_Results();
 
 	test_remapping();
-	test_first_deriv(21);
-	test_second_deriv(201);
+	test_first_deriv(150);
+	test_second_deriv(1200);
 
 	ComputeT_test(); 
 	ComputeL_test();

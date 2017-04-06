@@ -19,7 +19,6 @@ int main(int argc, char ** argv)
 {
 	// Parse inputs 
 	Log(logINFO) << "Parsing inputs";
-	double deltaEta;
 	bool   uniform_grid;
 	struct constants Const = {
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
@@ -27,7 +26,7 @@ int main(int argc, char ** argv)
 	string filename, outFile;
 	GRVY_Timer_Class gt; 
 	gt.BeginTimer("Getting Inputs");
-	if(Grvy_Input_Parse(modelConst,filename,outFile, deltaEta, uniform_grid))
+	if(Grvy_Input_Parse(modelConst,filename,outFile, uniform_grid))
 	{
 		Log(logERROR) << "Error parsing inputs";
 		return 1; 
@@ -35,12 +34,13 @@ int main(int argc, char ** argv)
 	gt.EndTimer("Getting Inputs");
 
 	// Make a new grid object
-	const Grid grid(uniform_grid);
+	const Grid grid(uniform_grid, 1.0, 1.0/Const.reyn);
+  double deltaEta = 1.0/Const.reyn; // XXX: Fix this for nonuniform flow.
 
 	// Solving for initial conditions 
 	Log(logINFO) << "Solving initial conditions for U,k,ep,v2";
 	gt.BeginTimer("Solving Initial Conditions");
-	double I = 1/deltaEta; 
+	double I = grid.getSize();
 	gsl_vector * xi = gsl_vector_calloc(5*(I));
 	if(SolveIC(xi,deltaEta,filename))
 	{

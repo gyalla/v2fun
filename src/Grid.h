@@ -8,14 +8,35 @@
 #ifndef SRC_GRID_H_
 #define SRC_GRID_H_
 
+#include<gsl/gsl_vector.h>
+
+/**
+ * \brief Used to define either a uniform or a non-uniform grid.
+ */
 class Grid {
  private:
    const double remap_param;  /// A parameter used to scale the mapping func.
-   const double a;            /// Equal to the denominator in the mapping func.
+   const double a;            /// Equal to remap_param * pi/2
+   const double b;            /// Equal to the denominator in the mapping func.
+   unsigned int size;
  public:
   const bool isUniform; /// True if the grid is uniform
+  gsl_vector* xi;
+  gsl_vector* y;
 
-  Grid(bool isUniform);
+  /**
+   * \brief Constructor
+   * @param isUniform - True if the grid is to be uniform
+   * @param delta - The channel half-width.
+   * @param delta_v - The viscous length-scale.
+   */
+  Grid(bool isUniform, double delta, double delta_v);\
+
+  /**
+   * \brief Destructor
+   */
+  ~Grid();
+
   /**
    * \brief
   * @param xi - A coordinate on a uniform grid, with +/-1=wall and 0=center
@@ -37,7 +58,7 @@ class Grid {
    */
   double d2XidY2(double xi) const;
 
-  int getNumPoints(int Re_tau) const;
+  unsigned int getSize() const { return size;};
 };
 
 #endif /* SRC_GRID_H_ */
