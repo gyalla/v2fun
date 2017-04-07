@@ -48,3 +48,9 @@ test/unit/.nfs*
 # gprof  #
 #########
 src/gmon.out
+
+# Eclipse files #
+#################
+.settings/
+.cproject
+.project
