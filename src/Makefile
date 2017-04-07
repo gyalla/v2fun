@@ -9,7 +9,7 @@ CFLAGS  :=-O3 -g -p -Wall
 
 # RULES
 $(EXEC): $(OBJ)
-	$(LINK.o) -o $@ $^ ${LDFLAGS} $(LDLIBS)
+	$(LINK.o) -p -o $@ $^ ${LDFLAGS} $(LDLIBS)
 %.o: %.cpp
 	$(COMPILE.c) $< -o $@ $(INC)
 

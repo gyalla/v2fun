@@ -9,13 +9,22 @@
 #include"finiteDiff.h"
 using namespace std;
 
+#define EP_MIN 1.0e-7
+#define K_MIN  1.0e-7
+#define V2_MIN 1.0e-12
+#define T_MIN  1.0e-7
+
 double ComputeT(gsl_vector * xi, constants * modelConst,int i)
 {
 	double firstTerm,secondTerm; //1st and 2nd term as in documentation. 
 	double xiCounter = 5*(i-1);  //counter relative to xi. 	
 	
 	Log(logDEBUG1) << "Computing T";	
-	firstTerm = (gsl_vector_get(xi,xiCounter+1)/gsl_vector_get(xi,xiCounter+2));
+
+	double k = fmax(gsl_vector_get(xi,xiCounter+1),K_MIN);
+	double ep = fmax(gsl_vector_get(xi,xiCounter+2),EP_MIN);
+
+	firstTerm = k/ep;
 	if (!isfinite(firstTerm))
 	{
 		Log(logERROR) << "Error: T non-finite (" << firstTerm << ")";
@@ -23,27 +32,27 @@ double ComputeT(gsl_vector * xi, constants * modelConst,int i)
 		exit(1);
 	}
 
-	secondTerm = 6*sqrt(1/(modelConst->reyn*gsl_vector_get(xi,xiCounter+2)));
+	secondTerm = 6*sqrt(1/(modelConst->reyn*ep));
 	if(!isfinite(secondTerm))
 	{
 		Log(logERROR) << "Error: T non-finite (" << secondTerm << ")";
 		Log(logERROR) << "Note ep = " << gsl_vector_get(xi,xiCounter+2) << " at " << i;
 		exit(1);
 	}
-	if (firstTerm >= secondTerm)
-			return firstTerm;
-	else
-			return secondTerm;
-}
 
+	return fmax(fmax(firstTerm,secondTerm),T_MIN);
+}
 
 double ComputeL(gsl_vector * xi,constants * modelConst,int i)
 {
 	double firstTerm,secondTerm; //see doc.  
 	double xiCounter = 5*(i-1); //counter relative to xi.  
 
+	double k = fmax(gsl_vector_get(xi,xiCounter+1),K_MIN);
+	double ep = fmax(gsl_vector_get(xi,xiCounter+2),EP_MIN);
+
 	Log(logDEBUG1) << "Computing L";
-	firstTerm = pow(gsl_vector_get(xi,xiCounter+1),1.5)/gsl_vector_get(xi,xiCounter+2);
+	firstTerm = pow(k,1.5)/ep;
 	if (!isfinite(firstTerm))
 	{
 		Log(logERROR) << "Error: L non-finite (" << firstTerm << ")";
@@ -51,18 +60,14 @@ double ComputeL(gsl_vector * xi,constants * modelConst,int i)
 	}
 		
 		
-	secondTerm = modelConst->Ceta*pow(1/(pow(modelConst->reyn,3)*gsl_vector_get(xi,xiCounter+2)),0.25);
+	secondTerm = modelConst->Ceta*pow(1/(pow(modelConst->reyn,3)*ep),0.25);
 	if (!isfinite(secondTerm))
 	{
 		Log(logERROR) << "Error: L non-finite (" << secondTerm << ")";
 		exit(1);
 	}
 
-	if (firstTerm >= secondTerm)
-		return modelConst->CL*firstTerm;
-	else
-		return modelConst->CL*secondTerm;
-
+	return fmax(firstTerm,secondTerm);
 }
 
 double ComputeEddyVisc(gsl_vector * xi, gsl_vector * T, constants * modelConst,int i)
@@ -70,8 +75,10 @@ double ComputeEddyVisc(gsl_vector * xi, gsl_vector * T, constants * modelConst,i
 	double val; 
 	double xiCounter = 5*(i-1); //counter relative to xi. -1 since U starts a 0. 
 
+	double v2 = fmax(gsl_vector_get(xi,xiCounter+3),V2_MIN);
+
 	Log(logDEBUG1) << "Computing Eddy Viscosity";
-	val = modelConst->Cmu*gsl_vector_get(xi,xiCounter+3)*gsl_vector_get(T,i);
+	val = modelConst->Cmu*v2*gsl_vector_get(T,i);
 	if (!isfinite(val))
 	{
 		Log(logERROR) << "Error: vT non-finite (" << val << ")";
@@ -101,6 +108,7 @@ double ComputeEp0(gsl_vector * xi,constants * modelConst, Grid* grid)
 	Log(logDEBUG1) << "Compute dissipation at wall boundary";
 	double delta_y_0 = gsl_vector_get(grid->y, 0);
 	double ep0 = ((2*gsl_vector_get(xi,1))/(modelConst->reyn*pow(delta_y_0,2)));
+	ep0 = fmax(EP_MIN,ep0);
 	if (!isfinite(ep0) || ep0 < 0)
 	{
 		Log(logERROR) << "Error: unacceptable ep0 (" << ep0 << ")";

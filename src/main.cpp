@@ -6,6 +6,7 @@
 #include<iostream>
 #include<grvy.h>
 #include<gsl/gsl_multiroots.h>
+#include<math.h>
 #include"systemSolve.h"
 #include "Grid.h"
 using namespace GRVY;
@@ -48,6 +49,8 @@ int main(int argc, char ** argv)
 	}
 	Log(logINFO) << "Solving initial conditions for f";
 
+	SaveResults(xi,"../data/init.dat",&grid,modelConst);
+
 	if(Solve4f0(xi,modelConst,&grid))
 	{
 		Log(logERROR) << "Error initializing f";
@@ -88,12 +91,9 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid)
 	//power here represents powers of 2 for deltaT.
 	do
 	{
-		//The first deltaT will run. The second is actual time marching. 
-		//Comment out the next line and uncomment the following for time marching. 
-		//This will lead to errors in the dissipation term however. 
 		//deltaT = pow(2,-30);
 		//deltaT = 1/modelConst->reyn + iter*pow(2,power); // start off 1/modelConst->reyn; 
-		deltaT = pow(2,power); // start off 1/modelConst->reyn; 
+		deltaT = fmin(1,pow(2,power)); // start off 1/modelConst->reyn; 
 		iter++;
 		struct FParams p = {xi,deltaT,grid,modelConst};
 		FParams * params = &p; 
@@ -103,6 +103,8 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid)
 		
 		//only need one interation per deltaT since we don't care about temporal accuracy. 
 		//We are just trying to get to the fully developed region of flow. 
+		for (int j = 0; j < 2; j++)
+		{
 		Log(logINFO) << "Iterating (deltaT = " << deltaT << ")";
 		status = gsl_multiroot_fsolver_iterate(s);
 		print_state(iter,s); 
@@ -110,13 +112,14 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid)
 			break;
 		//status = gsl_multiroot_test_residual(s->f,0.001);
 		Log(logINFO) << string(gsl_strerror(status));
+		}
 		xi = s->x; 
 		power +=2; 
 		
 		//check if we are in fully developed region
 		for(unsigned int i=0; i<xi->size;i++)
 		{
-			if((fabs(gsl_vector_get(xi,i)-gsl_vector_get(params->XiN,i))<0.000001) && (iter > 10))
+			if((fabs(gsl_vector_get(xi,i)-gsl_vector_get(params->XiN,i))<0.000001) && iter > 20)
 				converge = true;
 		}
 	}while(!converge);
@@ -127,7 +130,7 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid)
 
 int print_state(int i,gsl_multiroot_fsolver * s)
 {
-	Log(logINFO) << "iteration = "<< i << ", Uend = " << gsl_vector_get(s->x,s->x->size-5);
+	Log(logINFO) << "iteration = "<< i << ", U2 = " << gsl_vector_get(s->x,5);
 	return 0; 
 }
 
