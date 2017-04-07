@@ -55,21 +55,22 @@ double ComputeEddyVisc(gsl_vector * xi, gsl_vector * T, constants * modelConst,i
  * Compute production rate using \f[P=\nu_T \left( \frac{\partial U^+}{\partial \eta} \right)^2\f]
  * \param xi pointer to gsl_vector of unknowns \f$U,k,\epsilon,\overline{v^2},f\f$.
  * \param vT pointer to gsl_vector of eddy viscosity.
+ * \param grid - A pointer to the grid of points
  * \param i position at which to compute P. 
  * \return P at i.  
  */
-double ComputeP(gsl_vector * xi,gsl_vector * vT,double deltaEta,int i );
+double ComputeP(gsl_vector * xi,gsl_vector * vT, Grid* grid, int i );
 
 /**
  * \brief Compute redistribution term at wall boundary. 
  *
  * Compute f at boundary using \f[ f(0)= -\frac{20\overline{v^2}_1}{Re_\tau^2 \epsilon(0) \Delta \eta^4} \f]
  * \param xi pointer to gsl_vector of unknowns \f$U,k,\epsilon,\overline{v^2},f\f$. 
- * \param modelConst pointer to struct containing model constatns. 
- * \param deltaEta step size in wall normal direction. 
+ * \param modelConst pointer to struct containing model constatns.
+ * \param grid - A pointer to the grid of points
  * \return f at boundary. 
  */
-double Computef0(gsl_vector * xi,constants * modelConst,double deltaEta);
+double Computef0(gsl_vector * xi,constants * modelConst, Grid* grid);
 
 /**
  * \brief Compute dissipation term at wall boundary. 
@@ -77,8 +78,8 @@ double Computef0(gsl_vector * xi,constants * modelConst,double deltaEta);
  * Compute \f$\epsilon\f$ at boundary using \f[ \epsilon(0) = 2 \frac{k_1}{Re_\tau \Delta \eta^2}\f]
  * \param xi pointer to gsl_vector of unknowns \f$U,k,\epsilon,\overline{v^2},f\f$. 
  * \param modelConst pointer to struct containing model constants. 
- * \param deltaEta step size in wall normal direction. 
+ * \param grid - A pointer to the grid of points
  * \return \f$\epsilon\f$ at boundary. 
  */
-double ComputeEp0(gsl_vector * xi,constants * modelConst,double deltaEta) ;
+double ComputeEp0(gsl_vector * xi,constants * modelConst, Grid* grid);
 #endif

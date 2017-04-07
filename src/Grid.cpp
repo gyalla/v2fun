@@ -38,14 +38,23 @@ Grid::~Grid() {
 }
 
 double Grid::remap(double xi) const {
-  return std::sin((xi-1)*a)/b+1;
+  if (isUniform)
+    return xi;
+  else
+    return std::sin((xi-1)*a)/b+1;
 }
 
 double Grid::dXidY(double xi) const {
- return b/(a*std::sqrt(1.0 - b*b*std::pow(remap(xi)-1,2)));
+ if (isUniform)
+   return 1.0;
+ else
+   return b/(a*std::sqrt(1.0 - b*b*std::pow(remap(xi)-1,2)));
 }
 
 double Grid::d2XidY2(double xi) const {
- return (b*b*(b*remap(xi)-b))/
-     (a*pow(1.0-pow(b-b*remap(xi),2),1.5));
+ if (isUniform)
+   return 0.0;
+ else
+   return (b*b*(b*remap(xi)-b))/
+       (a*pow(1.0-pow(b-b*remap(xi),2),1.5));
 }

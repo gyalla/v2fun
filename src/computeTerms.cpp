@@ -80,14 +80,14 @@ double ComputeEddyVisc(gsl_vector * xi, gsl_vector * T, constants * modelConst,i
 	return val; 
 }
 
-double ComputeP(gsl_vector * xi,gsl_vector* vT,double deltaEta,int i)
+double ComputeP(gsl_vector * xi, gsl_vector* vT, Grid* grid, int i)
 {
 	double val; 
 
 	Log(logDEBUG1) << "Computing P";
 
-	//note: Diff1 takes xicounter indices
-	val = gsl_vector_get(vT,i)*pow(Diff1(xi,deltaEta,0,5*(i-1)),2);
+	//note: Diff1 takes xi-counter indices
+	val = gsl_vector_get(vT,i)*pow(Deriv1(xi,0.0,5*(i-1),grid),2);
 	if (!isfinite(val))
 	{
 		Log(logERROR) << "Error: P non-finite (" << val << ")";
@@ -96,10 +96,11 @@ double ComputeP(gsl_vector * xi,gsl_vector* vT,double deltaEta,int i)
 	return val; 
 }
 
-double ComputeEp0(gsl_vector * xi,constants * modelConst,double deltaEta) 
+double ComputeEp0(gsl_vector * xi,constants * modelConst, Grid* grid)
 {
 	Log(logDEBUG1) << "Compute dissipation at wall boundary";
-	double ep0 = ((2*gsl_vector_get(xi,1))/(modelConst->reyn*pow(deltaEta,2)));
+	double delta_y_0 = gsl_vector_get(grid->y, 0);
+	double ep0 = ((2*gsl_vector_get(xi,1))/(modelConst->reyn*pow(delta_y_0,2)));
 	if (!isfinite(ep0) || ep0 < 0)
 	{
 		Log(logERROR) << "Error: unacceptable ep0 (" << ep0 << ")";
@@ -108,10 +109,12 @@ double ComputeEp0(gsl_vector * xi,constants * modelConst,double deltaEta)
 	return ep0; 
 }
 
-double Computef0(gsl_vector * xi,constants * modelConst,double deltaEta)
+double Computef0(gsl_vector * xi,constants * modelConst, Grid* grid)
 {
 	Log(logDEBUG1)<<"Compute f at wall boundary";
-	double f0  = -(( (20*gsl_vector_get(xi,3))/( pow(modelConst->reyn,3)*ComputeEp0(xi,modelConst,deltaEta)*pow(deltaEta,4))));
+  double delta_y_0 = gsl_vector_get(grid->y, 0);
+	double f0  = -(( (20*gsl_vector_get(xi,3))/( pow(modelConst->reyn,3) *
+	    ComputeEp0(xi, modelConst, grid) * pow(delta_y_0, 4))));
 	if(!isfinite(f0))
 	{
 		Log(logERROR) << "Error: f0 non-finite (" << f0 << ")";

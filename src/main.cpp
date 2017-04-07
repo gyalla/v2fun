@@ -12,7 +12,7 @@ using namespace GRVY;
 using namespace std; 
 
 //function declarations. 
-int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaX);
+int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid);
 int print_state(int i,gsl_multiroot_fsolver * s);
 
 int main(int argc, char ** argv)
@@ -34,7 +34,7 @@ int main(int argc, char ** argv)
 	gt.EndTimer("Getting Inputs");
 
 	// Make a new grid object
-	const Grid grid(uniform_grid, 1.0, 1.0/Const.reyn);
+	Grid grid(uniform_grid, 1.0, 1.0/Const.reyn);
   double deltaEta = 1.0/Const.reyn; // XXX: Fix this for nonuniform flow.
 
 	// Solving for initial conditions 
@@ -42,14 +42,14 @@ int main(int argc, char ** argv)
 	gt.BeginTimer("Solving Initial Conditions");
 	double I = grid.getSize();
 	gsl_vector * xi = gsl_vector_calloc(5*(I));
-	if(SolveIC(xi,deltaEta,filename))
+	if(SolveIC(xi,&grid,filename))
 	{
 		Log(logERROR) << "Error interpolating initial conditions.";
 		return 1; 
 	}
 	Log(logINFO) << "Solving initial conditions for f";
 
-	if(Solve4f0(xi,modelConst,deltaEta))
+	if(Solve4f0(xi,modelConst,&grid))
 	{
 		Log(logERROR) << "Error initializing f";
 		return 1; 
@@ -59,13 +59,13 @@ int main(int argc, char ** argv)
 	// Newton Solve. 
 	Log(logINFO) << "Solving system...";
 	gt.BeginTimer("Newton Solve + Time Marching");
-	NewtonSolve(xi,modelConst,deltaEta);
+	NewtonSolve(xi,modelConst,&grid);
 	gt.EndTimer("Newton Solve + Time Marching");
 
 	//writing data to output
 	Log(logINFO) << "Writing results to " << outFile;
 	gt.BeginTimer("Writing results to output"); 
-	SaveResults(xi,outFile,deltaEta,modelConst); 
+	SaveResults(xi,outFile,&grid,modelConst);
 	gt.EndTimer("Writing results to output"); 
 
 	// summarize timiing.
@@ -74,7 +74,7 @@ int main(int argc, char ** argv)
 	return 0; 
 }
 
-int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
+int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid)
 {
 	double deltaT;
 	int status;  // status of solver
@@ -87,6 +87,7 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 	gsl_multiroot_fsolver * s = gsl_multiroot_fsolver_alloc(Type,xi->size);
 	//for time marching, starting small and getting bigger works best. 
 	//power here represents powers of 2 for deltaT.  
+	double deltaEta = gsl_vector_get(grid->y, 0);
 	do
 	{
 		//The first deltaT will run. The second is actual time marching. 
@@ -96,7 +97,7 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, double deltaEta)
 		//deltaT = 1/modelConst->reyn + iter*pow(2,power); // start off 1/modelConst->reyn; 
 		deltaT = pow(2,power); // start off 1/modelConst->reyn; 
 		iter++;
-		struct FParams p = {xi,deltaT,deltaEta,modelConst}; 
+		struct FParams p = {xi,deltaT,grid,modelConst};
 		FParams * params = &p; 
 		Log(logINFO) << "Setting up System";
 		gsl_multiroot_function F = {&SysF,xi->size,params};

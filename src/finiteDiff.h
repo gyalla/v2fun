@@ -86,7 +86,7 @@ double Deriv1(gsl_vector *x, double bdry, int i, Grid* grid);
  * \param i point at which to compute second derivative around (relative to ordering of \f$\xi\f$).  
  * \return centered difference approximation. 
  */
-double BdryDeriv2(gsl_vector * x ,double deltaEta, int i);
+double BdryDeriv2(gsl_vector * x , int i, Grid* grid);
 
 /**
  * \brief Approximates second derivative of gsl_vector at boundary using centered difference making use of ghost points and zero Nuemann boundary conditions.
@@ -97,5 +97,17 @@ double BdryDeriv2(gsl_vector * x ,double deltaEta, int i);
  * \return centered difference approximation.
  */
 double BdryDiff2(gsl_vector * x ,double deltaEta,int i);
+
+/**
+ * \brief Approximates first derivative of eddy viscosity vector using center
+ * difference.
+ *
+ *
+ * \param x pointer to vector to compute finite difference approximation.
+ * \param deltaEta step size in wall normal direction.
+ * \param i point at which to compute first derivative around (not relative to \f$\xi\f$ in this case).
+ * \return centered difference approximation.
+ */
+double Deriv1vT(gsl_vector * x, int i, Grid* grid);
 
 #endif

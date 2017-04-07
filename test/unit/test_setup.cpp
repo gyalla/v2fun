@@ -7,7 +7,8 @@
 
 int test_interp()
 {
-	double deltaX = 0.25; 
+	double deltaX = 0.25;
+	Grid grid(true, 1.0, deltaX);
 	gsl_vector * xi = gsl_vector_alloc(5*(1/deltaX));
 
 	gsl_vector *truexi = gsl_vector_calloc(5*(1/deltaX)); 
@@ -24,7 +25,7 @@ int test_interp()
 	gsl_vector_set(truexi,16,1);
 	gsl_vector_set(truexi,18,-2);
 
-	SolveIC(xi,deltaX,"./test_interp.data");
+	SolveIC(xi,&grid,"./test_interp.data");
 
 	if (gsl_vector_equal(xi,truexi)==0)
 	{
@@ -64,10 +65,11 @@ int test_Save_Results()
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
 	constants * modelConst= &Const; 
 	Setuptest(xi,modelConst);
-	double deltaEta = 0.0625; 
+	double deltaEta = 0.0625;
+	Grid grid(true, 1, deltaEta);
 	double temp; 
 
-	SaveResults(xi,"test_output.txt",deltaEta,modelConst);
+	SaveResults(xi,"test_output.txt",&grid,modelConst);
 	ifstream inFile; 
 	inFile.open("test_output.txt");
 	inFile >> temp >> temp >> temp >> temp >> temp >> temp;  

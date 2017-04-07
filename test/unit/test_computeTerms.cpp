@@ -115,7 +115,8 @@ int ComputeP_test()
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
 	constants * modelConst= & Const;  
 	Setuptest(xi,modelConst);
-	double deltaEta = 0.5; 
+	double deltaEta = 0.5;
+	Grid grid(true, 1.0, deltaEta);
 
 	//we don't need P at vall and know = 0 at delta so just test middle point
 	gsl_vector * P = gsl_vector_calloc(1); 
@@ -127,7 +128,7 @@ int ComputeP_test()
 	gsl_vector_set(T,1,ComputeT(xi,modelConst,1));
 	gsl_vector_set(vT,1,ComputeEddyVisc(xi,T,modelConst,1));
 
-	if(ComputeP(xi,vT,deltaEta,1)!=gsl_vector_get(P,0))
+	if(ComputeP(xi,vT,&grid,1)!=gsl_vector_get(P,0))
 	{
 		cout << "FAIL: Compute Production Rate,P" << endl; 
 		return 1; 
@@ -146,8 +147,9 @@ int ComputeEp0_test()
 	constants * modelConst= & Const;  
 	Setuptest(xi,modelConst);
 	double deltaEta = 0.5; 
+  Grid grid(true, 1.0, deltaEta);
 
-	if(ComputeEp0(xi,modelConst,deltaEta)!=12)
+	if(ComputeEp0(xi,modelConst,&grid)!=12)
 	{
 		cout << "FAIL: Compute Dissipation at Wall" << endl; 
 		return 1; 
@@ -163,9 +165,10 @@ int Computef0_test()
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
 	constants * modelConst= & Const;  
 	Setuptest(xi,modelConst);
-	double deltaEta = 0.5; 
+	double deltaEta = 0.5;
+  Grid grid(true, 1.0, deltaEta);
 
-	if(fabs(Computef0(xi,modelConst,deltaEta)+23.333333333)>0.0000001)
+	if(fabs(Computef0(xi,modelConst,&grid)+23.333333333)>0.0000001)
 	{
 		cout << "FAIL: Compute redistribution at Wall" << endl; 
 		return 1; 

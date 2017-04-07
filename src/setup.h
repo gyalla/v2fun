@@ -13,6 +13,8 @@
 #include<gsl/gsl_vector.h>
 #include<iostream>
 #include"../include/loglevel.h"
+#include "Grid.h"
+
 using namespace std; 
 /**
  * \brief Holds all of the model constants. 
@@ -47,14 +49,14 @@ int Grvy_Input_Parse(constants * modelConst,string &filename,string & outFile,
  * 
  * Solves for initial conditions of \f$ U,k,\epsilon,\overline{v^2}\f$ using linear 
  * interpolation from Moser channel flow code. 
- * \param xi pointer to vector of \f$ U,k,\epsilon,\overline{v^2},f\f$. 
- * \param deltaEta step size in the wall normal direction. 
+ * \param xi pointer to vector of \f$ U,k,\epsilon,\overline{v^2},f\f$.
+ * \param grid - A point to the grid of points
  * \param file filename to get data from. 
  * \return Error code (0 = success). 
  */
 
 
-int SolveIC(gsl_vector* xi,double deltaEta, string file); 
+int SolveIC(gsl_vector* xi, Grid* grid, string file);
 
 /**
  * \brief Linear interpolates inputs and places result in vector. 
@@ -78,20 +80,20 @@ int LinInterp(gsl_vector * Vec,double pt1,double pt2, double U1,double U2,double
  * we solve for it using a finite difference formula. 
  * \param xi pointer to gsl_vector of unknowns \f$ U,k,\epsilon,\overline{v^2},f\f$. 
  * \param modelConst pointer to struct containing model constants.
- * \param deltaEta step size in wall normal direction. 
+ * \param grid - A point to the grid of points
  * \return Error code (0 = success). 
  */
-int Solve4f0(gsl_vector * xi,constants * modelConst, double deltaEta);
+int Solve4f0(gsl_vector * xi,constants * modelConst, Grid* grid);
 
 /**
  * \brief Writes result to file
  *
  * \param xi pointer to gsl_vector of unknowns. 
  * \param filename name of output file.
- * \param deltaEta step size in wall normal direction.
+ * \param grid - A point to the grid of points
  * \param modelConst pointer to struct of model constants. 
  */
-void SaveResults(gsl_vector *xi,string filename,double deltaEta, constants * modelConst);
+void SaveResults(gsl_vector *xi,string filename, Grid* grid, constants * modelConst);
 
 #endif
 

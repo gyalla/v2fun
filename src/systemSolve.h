@@ -20,7 +20,7 @@ using namespace std;
 struct FParams{
 	gsl_vector * XiN; /**< vector of unknowns xi at previous time step. */
 	double deltaT; /**< step size in time. */
-	double deltaEta; /**< step size in wall normal direction. */
+	Grid* grid; /**< Pointer to grid definition */
 	constants * modelConst; /**< pointer to all of the model constants. */
 }; 
 

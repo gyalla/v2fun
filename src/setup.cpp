@@ -99,7 +99,7 @@ int LinInterp(gsl_vector * Vec,double pt1,double pt2, double U1,double U2,double
 	return 0;
 }
 
-int SolveIC(gsl_vector * xi, double deltaEta, string file)
+int SolveIC(gsl_vector * xi, Grid* grid, string file)
 {	
 	ifstream inFile; 
 	inFile.open(file.c_str()); 
@@ -118,7 +118,7 @@ int SolveIC(gsl_vector * xi, double deltaEta, string file)
 	for(unsigned int i=0; i<(xi->size/float(5));i++)
 	{
 		xiCounter=5*i; //counter relative to xi vector. 
-		gridPt=(i+1)*deltaEta; //which grid point we are working on. 
+		gridPt=gsl_vector_get(grid->y, i); //which grid point we are working on.
 		Log(logDEBUG1) <<"Working on grid point: " << gridPt;
 		//find two points in Moser data that surrounds our grid points. 
 		while ((! ((pt1 <= gridPt) && (pt2 >= gridPt))) && (!inFile.eof()))
@@ -156,7 +156,7 @@ int SolveIC(gsl_vector * xi, double deltaEta, string file)
 	return 0; 
 }
 
-int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
+int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 {
 	//Solve for f_0 based on data from others terms. This function needs to be tested still
 	//but I am not sure what correct values of f_0 should be!  
@@ -169,6 +169,7 @@ int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 	double LOvrEta; //main terms in matrix. 
 	double LHS1,LHS2; // LHS of f from finite difference. 
 	unsigned int i,xiCounter; 
+  double deltaEta; // Local grid spacing
 
 	gsl_vector * T = gsl_vector_calloc(A->size1);
 	gsl_vector * vT = gsl_vector_calloc(T->size);
@@ -187,19 +188,22 @@ int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 
 
 	gsl_matrix_set(A,0,0,1); 
-	gsl_vector_set(b,0,Computef0(xi,modelConst,deltaEta)); 
+	gsl_vector_set(b,0,Computef0(xi,modelConst,grid));
 
 	for(i =1; i<A->size1-1;i++)
 	{
-		xiCounter = 5*(i-1);
-		
+		xiCounter = 5*(i-1); // XXX: Why is the (i-1) here?
+		if (i==0)
+		  deltaEta = gsl_vector_get(grid->y,i);
+		else
+		  deltaEta = gsl_vector_get(grid->y,i) - gsl_vector_get(grid->y,i-1);
 		LOvrEta = pow(ComputeL(xi,modelConst,i),2)/pow(deltaEta,2);
 		gsl_matrix_set(A,i,i-1,LOvrEta); 
 		gsl_matrix_set(A,i,i,-( 2*LOvrEta + 1)); 
 		gsl_matrix_set(A,i,i+1,LOvrEta); 
 
 		LHS1 = (modelConst->C1/gsl_vector_get(T,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)) - 2/3); 
-		LHS2 = (modelConst->C2*ComputeP(xi,vT,deltaEta,i))/gsl_vector_get(xi,xiCounter+1);
+		LHS2 = (modelConst->C2*ComputeP(xi,vT,grid,i))/gsl_vector_get(xi,xiCounter+1);
 
 		if(!isfinite(LHS1-LHS2))
 		{
@@ -213,6 +217,7 @@ int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 	// set boundary term of matrix. 
 	i = size-1;	
 	xiCounter = 5*(i-1);
+	deltaEta = gsl_vector_get(grid->y,i) - gsl_vector_get(grid->y,i-1);
 	LOvrEta = pow(ComputeL(xi,modelConst,i),2)/pow(deltaEta,2);
 	gsl_matrix_set(A,i,i-1,2*LOvrEta);
 	gsl_matrix_set(A,i,i,-( 2*LOvrEta + 1)); 
@@ -237,7 +242,8 @@ int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 	Log(logDEBUG) << "Setting f_0 values";
 	for(unsigned int i =1; i<f->size; i++)
 	{
-		Log(logDEBUG2) <<"f = " << gsl_vector_get(f,i)<< " at " << i*deltaEta;
+		Log(logDEBUG2) <<"f = " << gsl_vector_get(f,i)
+		    << " at " << gsl_vector_get(grid->y, i);
 		xiCounter=5*(i-1)+4; 
 		gsl_vector_set(xi,xiCounter,gsl_vector_get(f,i));
 	}
@@ -245,16 +251,18 @@ int Solve4f0(gsl_vector * xi, constants * modelConst,double deltaEta)
 	return 0; 
 }
 
-void SaveResults(gsl_vector * xi, string filename,double deltaEta,constants * modelConst)
+void SaveResults(gsl_vector * xi, string filename, Grid* grid,constants * modelConst)
 {
 	ofstream outFile; 
 	outFile.open(filename.c_str()); 
 	//output format: gridpoint U K EP V2 F 
-	outFile << setprecision(15) << 0 <<" "<<0<<" "<< 0 <<" "<< ComputeEp0(xi,modelConst,deltaEta) <<" " << 0 << " " << Computef0(xi,modelConst,deltaEta) << endl; 
+	outFile << setprecision(15) << 0 <<" "<<0<<" "<< 0 <<" "
+	    << ComputeEp0(xi,modelConst,grid) <<" " << 0 << " "
+	    << Computef0(xi,modelConst,grid) << endl;
 
 	for(unsigned int i = 0; i<xi->size;i+=5)
 	{
-		outFile << (i/float(5)+1)*deltaEta << " "; 	
+		outFile << gsl_vector_get(grid->xi, i/5) << " ";
 		outFile << gsl_vector_get(xi,i) << " "; 
 		outFile << gsl_vector_get(xi,i+1) << " "; 
 		outFile << gsl_vector_get(xi,i+2) << " "; 

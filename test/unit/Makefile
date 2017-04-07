@@ -17,7 +17,7 @@ OTHER   := ../../src/finiteDiff.cpp \
 
 
 $(EXEC): $(OBJ)
-	$(LINK.o) $(OTHER) -o $@ $^ $(INC) $(LDFLAGS) $(LDLIBS)
+	$(LINK.o) $(OTHER) -o $@ $^ $(INC) $(CFLAGS) $(LDFLAGS) $(LDLIBS)
 %.o: %.cpp
 	$(COMPILE.c)  $< -o $@ $(INC) $(CFLAGS)
 

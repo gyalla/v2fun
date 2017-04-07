@@ -40,6 +40,7 @@ int Setuptest_SS(gsl_vector * xi, struct FParams * params)
 
 int SetUTerms_test()
 {
+  Grid grid(true, 1.5, 0.5);
 	gsl_vector * xi = gsl_vector_alloc(15); 
 	gsl_vector * sysF = gsl_vector_alloc(15); 
 	gsl_vector * trueF = gsl_vector_alloc(3);
@@ -49,7 +50,7 @@ int SetUTerms_test()
 	struct constants Const = {
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
 	constants * modelConst= &Const;  
-	struct FParams p = {xiN,1.0,0.5,modelConst}; 
+	struct FParams p = {xiN,1.0,&grid,modelConst};
 	FParams * params = &p; 
 	Setuptest_SS(xi,params); 
 
@@ -93,16 +94,17 @@ int SetUTerms_test()
 
 int SetkTerms_test()
 {
-	gsl_vector * xi = gsl_vector_alloc(15); 
-	gsl_vector * sysF = gsl_vector_alloc(15); 
-	gsl_vector * trueF = gsl_vector_alloc(3);
-	gsl_vector * xiN = gsl_vector_alloc(15); 
-	gsl_vector * vT  = gsl_vector_calloc(4); 
-	gsl_vector * T   = gsl_vector_calloc(4);  
-	struct constants Const = {
-		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
-	constants * modelConst= &Const;  
-	struct FParams p = {xiN,1.0,0.5,modelConst}; 
+  Grid grid(true, 1.5, 0.5);
+  gsl_vector * xi = gsl_vector_alloc(15);
+  gsl_vector * sysF = gsl_vector_alloc(15);
+  gsl_vector * trueF = gsl_vector_alloc(3);
+  gsl_vector * xiN = gsl_vector_alloc(15);
+  gsl_vector * vT  = gsl_vector_calloc(4);
+  gsl_vector * T   = gsl_vector_calloc(4);
+  struct constants Const = {
+    .reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
+  constants * modelConst= &Const;
+  struct FParams p = {xiN,1.0,&grid,modelConst};
 	FParams * params = &p; 
 	Setuptest_SS(xi,params); 
 
@@ -130,16 +132,17 @@ int SetkTerms_test()
 
 int SetEpTerms_test()
 {
-	gsl_vector * xi = gsl_vector_alloc(15); 
-	gsl_vector * sysF = gsl_vector_alloc(15); 
-	gsl_vector * trueF = gsl_vector_alloc(3);
-	gsl_vector * xiN = gsl_vector_alloc(15); 
-	gsl_vector * vT  = gsl_vector_calloc(4); 
-	gsl_vector * T   = gsl_vector_calloc(4);
-	struct constants Const = {
-		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
-	constants * modelConst= &Const;  
-	struct FParams p = {xiN,1.0,0.5,modelConst}; 
+  Grid grid(true, 1.5, 0.5);
+  gsl_vector * xi = gsl_vector_alloc(15);
+  gsl_vector * sysF = gsl_vector_alloc(15);
+  gsl_vector * trueF = gsl_vector_alloc(3);
+  gsl_vector * xiN = gsl_vector_alloc(15);
+  gsl_vector * vT  = gsl_vector_calloc(4);
+  gsl_vector * T   = gsl_vector_calloc(4);
+  struct constants Const = {
+    .reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
+  constants * modelConst= &Const;
+  struct FParams p = {xiN,1.0,&grid,modelConst};
 	FParams * params = &p; 
 	Setuptest_SS(xi,params); 
 
@@ -168,16 +171,17 @@ int SetEpTerms_test()
 
 int Setv2Terms_test()
 {
-	gsl_vector * xi = gsl_vector_alloc(15); 
-	gsl_vector * sysF = gsl_vector_alloc(15); 
-	gsl_vector * trueF = gsl_vector_alloc(3);
-	gsl_vector * xiN = gsl_vector_alloc(15); 
-	gsl_vector * vT  = gsl_vector_calloc(4); 
-	gsl_vector * T  = gsl_vector_calloc(4);
-	struct constants Const = {
-		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
-	constants * modelConst= &Const;  
-	struct FParams p = {xiN,1.0,0.5,modelConst}; 
+  Grid grid(true, 1.5, 0.5);
+  gsl_vector * xi = gsl_vector_alloc(15);
+  gsl_vector * sysF = gsl_vector_alloc(15);
+  gsl_vector * trueF = gsl_vector_alloc(3);
+  gsl_vector * xiN = gsl_vector_alloc(15);
+  gsl_vector * vT  = gsl_vector_calloc(4);
+  gsl_vector * T   = gsl_vector_calloc(4);
+  struct constants Const = {
+    .reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
+  constants * modelConst= &Const;
+  struct FParams p = {xiN,1.0,&grid,modelConst};
 	FParams * params = &p; 
 	Setuptest_SS(xi,params); 
 
@@ -207,16 +211,17 @@ int Setv2Terms_test()
 
 int SetFTerms_test()
 {
-	gsl_vector * xi = gsl_vector_alloc(15); 
-	gsl_vector * sysF = gsl_vector_alloc(15); 
-	gsl_vector * trueF = gsl_vector_alloc(3);
-	gsl_vector * xiN = gsl_vector_alloc(15); 
-	gsl_vector * vT = gsl_vector_calloc(4);
-	gsl_vector * T   = gsl_vector_calloc(4);
-	struct constants Const = {
-		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
-	constants * modelConst= &Const;  
-	struct FParams p = {xiN,1.0,0.5,modelConst}; 
+  Grid grid(true, 1.5, 0.5);
+  gsl_vector * xi = gsl_vector_alloc(15);
+  gsl_vector * sysF = gsl_vector_alloc(15);
+  gsl_vector * trueF = gsl_vector_alloc(3);
+  gsl_vector * xiN = gsl_vector_alloc(15);
+  gsl_vector * vT  = gsl_vector_calloc(4);
+  gsl_vector * T   = gsl_vector_calloc(4);
+  struct constants Const = {
+    .reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
+  constants * modelConst= &Const;
+  struct FParams p = {xiN,1.0,&grid,modelConst};
 	FParams * params = &p; 
 	Setuptest_SS(xi,params); 
 
@@ -245,6 +250,7 @@ int SetFTerms_test()
 
 int SysF_test()
 {
+  Grid grid(true, 1.5, 0.5);
 	gsl_vector * xi = gsl_vector_alloc(15); 
 	gsl_vector * F = gsl_vector_alloc(15); 
 	gsl_vector * trueF = gsl_vector_alloc(15);
@@ -252,7 +258,7 @@ int SysF_test()
 	struct constants Const = {
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
 	constants * modelConst= &Const;  
-	struct FParams p = {xiN,1.0,0.5,modelConst}; 
+	struct FParams p = {xiN,1.0,&grid,modelConst};
 	FParams * params = &p; 
 	Setuptest_SS(xi,params); 
 
