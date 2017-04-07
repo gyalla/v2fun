@@ -35,7 +35,6 @@ int main(int argc, char ** argv)
 
 	// Make a new grid object
 	Grid grid(uniform_grid, 1.0, 1.0/Const.reyn);
-  double deltaEta = 1.0/Const.reyn; // XXX: Fix this for nonuniform flow.
 
 	// Solving for initial conditions 
 	Log(logINFO) << "Solving initial conditions for U,k,ep,v2";
@@ -86,8 +85,7 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid)
 	const gsl_multiroot_fsolver_type * Type = gsl_multiroot_fsolver_hybrids; //dnewton for newton solver;
 	gsl_multiroot_fsolver * s = gsl_multiroot_fsolver_alloc(Type,xi->size);
 	//for time marching, starting small and getting bigger works best. 
-	//power here represents powers of 2 for deltaT.  
-	double deltaEta = gsl_vector_get(grid->y, 0);
+	//power here represents powers of 2 for deltaT.
 	do
 	{
 		//The first deltaT will run. The second is actual time marching. 

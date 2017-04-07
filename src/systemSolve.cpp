@@ -175,7 +175,7 @@ int SetEpTerms(gsl_vector * xi, gsl_vector * vT,gsl_vector * T,FParams * params,
 		firstTerm = -(gsl_vector_get(xi,xiCounter+2)-gsl_vector_get(params->XiN,xiCounter+2))/params->deltaT;	
 		secondTerm = (params->modelConst->Cep1*ComputeP(xi,vT,params->grid,i) - params->modelConst->Cep2*gsl_vector_get(xi,xiCounter+2))/gsl_vector_get(T,i);
 		thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i)/params->modelConst->sigmaEp)*Deriv2(xi,ep0,xiCounter+2,params->grid);
-		fourthTerm = (1/params->modelConst->sigmaEp)*Deriv1(xi,0,xiCounter+2,params->grid)*Deriv1vT(vT,i,params->grid);
+		fourthTerm = (1/params->modelConst->sigmaEp)*Deriv1(xi,ep0,xiCounter+2,params->grid)*Deriv1vT(vT,i,params->grid);
 		val = firstTerm + secondTerm + thirdTerm + fourthTerm;
 		Log(logDEBUG3) << "Ep term = " << val << " at " << i;
 		if (!isfinite(val))

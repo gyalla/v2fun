@@ -65,11 +65,16 @@ int SetUTerms_test()
 	gsl_vector_set(trueF,1,40.92304854); 
 	gsl_vector_set(trueF,2,-420.69219382);
 
+	double tol = 0.0000001;
 	for(unsigned int i =0; i<trueF->size;i++)
 	{
-		if(fabs(gsl_vector_get(sysF,5*i)-gsl_vector_get(trueF,i))>0.0000001)
+		if(fabs(gsl_vector_get(sysF,5*i)-gsl_vector_get(trueF,i))>tol)
 		{
-			cout <<"FAIL: Setting U terms in system" << endl; 
+			cout << "FAIL: Setting U terms in system" << endl;
+      cout << "    At Index: " << i << std::endl;
+			cout << "    Expected: " << gsl_vector_get(trueF,i);
+			cout << "    Found: " << gsl_vector_get(sysF,5*i) << std::endl;
+			cout << "    Tolerance: " << tol << std::endl;
 			return 1; 
 		}
 	}
@@ -118,11 +123,16 @@ int SetkTerms_test()
 	gsl_vector_set(trueF,1,-1046.23085463); 
 	gsl_vector_set(trueF,2,-433.69219381);
 
+	double tol = 0.0000001;
 	for(unsigned int i =0; i<trueF->size;i++)
 	{
-		if(fabs(gsl_vector_get(sysF,5*i+1)-gsl_vector_get(trueF,i))>0.0000001)
+		if(fabs(gsl_vector_get(sysF,5*i+1)-gsl_vector_get(trueF,i))>tol)
 		{
-			cout <<"FAIL: Setting k terms in system" << endl; 
+			cout <<"FAIL: Setting k terms in system" << endl;
+      cout << "    At Index: " << i << std::endl;
+			cout << "    Expected: " << gsl_vector_get(trueF,i);
+      cout << "    Found: " << gsl_vector_get(sysF,5*i+1) << std::endl;
+      cout << "    Tolerance: " << tol << std::endl;
 			return 1; 
 		}
 	}
@@ -157,11 +167,16 @@ int SetEpTerms_test()
 	gsl_vector_set(trueF,1,875.38461894); 
 	gsl_vector_set(trueF,2,-246.166604983);
 
+	double tol = 0.0000001;
 	for(unsigned int i =0; i<trueF->size;i++)
 	{
-		if(fabs(gsl_vector_get(sysF,5*i+2)-gsl_vector_get(trueF,i))>0.0000001)
+		if(fabs(gsl_vector_get(sysF,5*i+2)-gsl_vector_get(trueF,i))>tol)
 		{
-			cout <<"FAIL: Setting ep terms in system" << endl; 
+			cout <<"FAIL: Setting ep terms in system" << endl;
+      cout << "    At Index: " << i << std::endl;
+      cout << "    Expected: " << gsl_vector_get(trueF,i);
+      cout << "    Found: " << gsl_vector_get(sysF,5*i+2) << std::endl;
+      cout << "    Tolerance: " << tol << std::endl;
 			return 1; 
 		}
 	}
@@ -197,11 +212,16 @@ int Setv2Terms_test()
 	gsl_vector_set(trueF,1,518.38457268119); 
 	gsl_vector_set(trueF,2,-756.051054299727);
 
+	double tol = 0.0000001;
 	for(unsigned int i =0; i<trueF->size;i++)
 	{
-		if(fabs(gsl_vector_get(sysF,5*i+3)-gsl_vector_get(trueF,i))>0.0000001)
+		if(fabs(gsl_vector_get(sysF,5*i+3)-gsl_vector_get(trueF,i))>tol)
 		{
-			cout <<"FAIL: Setting v2 terms in system" << endl; 
+			cout <<"FAIL: Setting v2 terms in system" << endl;
+      cout << "    At Index: " << i << std::endl;
+      cout << "    Expected: " << gsl_vector_get(trueF,i);
+      cout << "    Found: " << gsl_vector_get(sysF,5*i+3) << std::endl;
+      cout << "    Tolerance: " << tol << std::endl;
 			return 1; 
 		}
 	}
@@ -236,11 +256,16 @@ int SetFTerms_test()
 	gsl_vector_set(trueF,1,76.916666666666); 
 	gsl_vector_set(trueF,2,-7959.2566001196);
 
+	double tol = 0.0000001;
 	for(unsigned int i =0; i<trueF->size;i++)
 	{
 		if(fabs(gsl_vector_get(sysF,5*i+4)-gsl_vector_get(trueF,i))>0.0000001)
 		{
-			cout <<"FAIL: Setting f terms in system" << endl; 
+			cout <<"FAIL: Setting f terms in system" << endl;
+      cout << "    At Index: " << i << std::endl;
+      cout << "    Expected: " << gsl_vector_get(trueF,i);
+      cout << "    Found: " << gsl_vector_get(sysF,5*i+4) << std::endl;
+      cout << "    Tolerance: " << tol << std::endl;
 			return 1; 
 		}
 	}
@@ -288,11 +313,16 @@ int SysF_test()
 	gsl_vector_set(trueF,14,-7959.2566001196);
 
 
+	double tol = 0.0000001;
 	for(unsigned int i=0; i < trueF->size;i++)
 	{
 		if(fabs(gsl_vector_get(F,i)-gsl_vector_get(trueF,i))>0.0000001)
 		{
-			cout << "FAIL: Putting system together" << endl; 
+			cout << "FAIL: Putting system together" << endl;
+			cout << "    At Index: " << i << std::endl;
+      cout << "    Expected: " << gsl_vector_get(trueF,i);
+      cout << "    Found: " << gsl_vector_get(F,i) << std::endl;
+      cout << "    Tolerance: " << tol << std::endl;
 			return 1; 
 		}
 	}

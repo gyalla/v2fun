@@ -192,11 +192,11 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 
 	for(i =1; i<A->size1-1;i++)
 	{
-		xiCounter = 5*(i-1); // XXX: Why is the (i-1) here?
-		if (i==0)
-		  deltaEta = gsl_vector_get(grid->y,i);
+		xiCounter = 5*(i-1);
+		if (i == 1)
+		  deltaEta = gsl_vector_get(grid->y,i-1);
 		else
-		  deltaEta = gsl_vector_get(grid->y,i) - gsl_vector_get(grid->y,i-1);
+		  deltaEta = gsl_vector_get(grid->y,i-1) - gsl_vector_get(grid->y,i-2);
 		LOvrEta = pow(ComputeL(xi,modelConst,i),2)/pow(deltaEta,2);
 		gsl_matrix_set(A,i,i-1,LOvrEta); 
 		gsl_matrix_set(A,i,i,-( 2*LOvrEta + 1)); 
@@ -217,7 +217,7 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 	// set boundary term of matrix. 
 	i = size-1;	
 	xiCounter = 5*(i-1);
-	deltaEta = gsl_vector_get(grid->y,i) - gsl_vector_get(grid->y,i-1);
+	deltaEta = gsl_vector_get(grid->y,i-1) - gsl_vector_get(grid->y,i-2);
 	LOvrEta = pow(ComputeL(xi,modelConst,i),2)/pow(deltaEta,2);
 	gsl_matrix_set(A,i,i-1,2*LOvrEta);
 	gsl_matrix_set(A,i,i,-( 2*LOvrEta + 1)); 
@@ -243,7 +243,7 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 	for(unsigned int i =1; i<f->size; i++)
 	{
 		Log(logDEBUG2) <<"f = " << gsl_vector_get(f,i)
-		    << " at " << gsl_vector_get(grid->y, i);
+		    << " at " << gsl_vector_get(grid->y, i-1);
 		xiCounter=5*(i-1)+4; 
 		gsl_vector_set(xi,xiCounter,gsl_vector_get(f,i));
 	}

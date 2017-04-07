@@ -23,7 +23,7 @@ Grid::Grid(bool isUniform, double delta, double delta_v)
   y = gsl_vector_alloc(size);
 
   for (unsigned int i = 0; i<size; i++) {
-    gsl_vector_set(xi, i, double(i+1)/size);
+    gsl_vector_set(xi, i, delta*(i+1)/size);
     if (isUniform) {
       gsl_vector_set(y, i, gsl_vector_get(xi, i));
     } else {

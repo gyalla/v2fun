@@ -49,9 +49,8 @@ double Deriv1(gsl_vector *x, double bdry, int i, Grid* grid)
 double BdryDeriv2(gsl_vector *x, int i, Grid* grid)
 {
   //Using zero Neumann boundary condition we use ghost points for second derivative.
-  double xi = gsl_vector_get(grid->xi, (i/5));
-  return (2*gsl_vector_get(x,i-5) - 2*gsl_vector_get(x,i)) *
-      pow(grid->dXidY(xi),2);
+  double delta = gsl_vector_get(grid->xi, 0);
+  return BdryDiff2(x,delta,i);
 }
 
 double BdryDiff2(gsl_vector * x ,double deltaEta,int i)
