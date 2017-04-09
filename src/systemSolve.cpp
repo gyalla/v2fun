@@ -32,6 +32,7 @@ int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 	for (unsigned int i = 1; i<vT->size;i++)
 	{
 		gsl_vector_set(T,i,ComputeT(tempxi,params->modelConst,i));
+                // Set to 0 for laminar case
 		gsl_vector_set(vT,i,ComputeEddyVisc(tempxi,T,params->modelConst,i));
 	}
 

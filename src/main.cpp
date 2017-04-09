@@ -14,7 +14,7 @@
 using namespace GRVY;
 using namespace std; 
 //function declarations. 
-int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid);
+int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts);
 int print_state(int i,gsl_multiroot_fsolver * s);
 
 std::string NumberToString ( int Number);
@@ -23,13 +23,14 @@ int main(int argc, char ** argv)
 	// Parse inputs 
 	Log(logINFO) << "Parsing inputs";
 	bool   uniform_grid;
+        int max_ts;
 	struct constants Const = {
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
 	constants * modelConst = &Const; 
 	string filename, outFile;
 	GRVY_Timer_Class gt; 
 	gt.BeginTimer("Getting Inputs");
-	if(Grvy_Input_Parse(modelConst,filename,outFile, uniform_grid))
+	if(Grvy_Input_Parse(modelConst,filename,outFile, uniform_grid, max_ts))
 	{
 		Log(logERROR) << "Error parsing inputs";
 		return 1; 
@@ -63,7 +64,7 @@ int main(int argc, char ** argv)
 	// Newton Solve. 
 	Log(logINFO) << "Solving system...";
 	gt.BeginTimer("Newton Solve + Time Marching");
-	NewtonSolve(xi,modelConst,&grid);
+	NewtonSolve(xi,modelConst,&grid,max_ts);
 	gt.EndTimer("Newton Solve + Time Marching");
 
 	//writing data to output
@@ -78,7 +79,7 @@ int main(int argc, char ** argv)
 	return 0; 
 }
 
-int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid)
+int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 {
 	double deltaT;
 	int status;  // status of solver
@@ -95,11 +96,11 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid)
 	do
 	{
 		//deltaT = fmin(0.0001,pow(10,power));
-		deltaT = 0.0001;
+		deltaT = 0.01; //0.0001;
 		if (iter > 100)
-			deltaT = 0.001;
+			deltaT = 0.1;
 		if (iter > 300)
-			deltaT = 0.001;
+			deltaT = 0.1;
 
 		//deltaT = 1/modelConst->reyn + iter*pow(2,power); // start off 1/modelConst->reyn; 
 		iter++;
@@ -137,7 +138,7 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid)
 		}
 		for(unsigned int i=0; i<xi->size;i++)
 		{
-			if((fabs(gsl_vector_get(xi,i)-gsl_vector_get(params->XiN,i))<0.000001) && iter > 10000)
+			if((fabs(gsl_vector_get(xi,i)-gsl_vector_get(params->XiN,i))<0.000001) && iter > max_ts)
 				converge = true;
 		}
 	}while(!converge);

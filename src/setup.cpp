@@ -15,7 +15,7 @@ using namespace GRVY;
 loglevel_e loglevel = logINFO;
 
 
-int Grvy_Input_Parse(constants * modelConst,string & filename,string & outFile, bool &uniformGrid)
+int Grvy_Input_Parse(constants * modelConst,string & filename,string & outFile, bool &uniformGrid, int &max_ts)
 {
 	// Use GRVY for inpute parsing as shown in grvy documentation. 
 	int loglevelint;  
@@ -78,9 +78,13 @@ int Grvy_Input_Parse(constants * modelConst,string & filename,string & outFile, 
 		return 1; 
 	Log(logINFO) << "---> output_filename = " << outFile;
 
-  if(!iparse.Read_Var("uniform-grid",&uniformGrid, true))
-    return 1;
-  Log(logINFO) << "---> Uniform grid?  " << uniformGrid;
+        if(!iparse.Read_Var("uniform-grid",&uniformGrid, true))
+          return 1;
+        Log(logINFO) << "---> Uniform grid?  " << uniformGrid;
+
+        if(!iparse.Read_Var("max_ts",&max_ts))
+          return 1;
+        Log(logINFO) << "---> max time step = " << max_ts;
 
 	iparse.Close();
 	

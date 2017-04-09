@@ -39,10 +39,11 @@ struct constants {
  * \param filename Defines data file to use for initial conditions. 
  * \param outFile Defines file to write results to.
  * \param uniformGrid If true, the grid will be uniform.
+ * \param max_ts Defines maximum time step for Newton solve.
  * \return Error code (0 = success).
  */
 int Grvy_Input_Parse(constants * modelConst,string &filename,string & outFile,
-                     bool &uniformGrid);
+                     bool &uniformGrid, int &max_ts);
 
 /**
  * \brief Solve for initial conditions.  
