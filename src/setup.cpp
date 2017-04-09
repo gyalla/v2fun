@@ -258,16 +258,25 @@ void SaveResults(gsl_vector * xi, string filename, Grid* grid,constants * modelC
 	//output format: gridpoint U K EP V2 F 
 	outFile << setprecision(15) << 0 <<" "<<0<<" "<< 0 <<" "
 	    << ComputeEp0(xi,modelConst,grid) <<" " << 0 << " "
-	    << Computef0(xi,modelConst,grid) << endl;
+	    << Computef0(xi,modelConst,grid) << 0 <<endl;
 
+	double val;  //used for test
+	//calculate y+ coordinates
+	//gsl_vector * y_p = gsl_vector_alloc(grid->getSize());
+	//for (unsigned int i = 0; i < y_p->size; i++)
+	//	gsl_vector_set(y_p,i,gsl_vector_get(grid->xi,i)*modelConst->reyn);
 	for(unsigned int i = 0; i<xi->size;i+=5)
 	{
-		outFile << gsl_vector_get(grid->xi, i/5) << " ";
+		//outFile << gsl_vector_get(y_p,i/5.0) << " ";
+		outFile << gsl_vector_get(grid->xi, i/5.0) << " ";
 		outFile << gsl_vector_get(xi,i) << " "; 
 		outFile << gsl_vector_get(xi,i+1) << " "; 
 		outFile << gsl_vector_get(xi,i+2) << " "; 
 		outFile << gsl_vector_get(xi,i+3) << " "; 
-		outFile << gsl_vector_get(xi,i+4) << " " << endl; 
+		outFile << gsl_vector_get(xi,i+4) << " "; 
+		val = -90*(pow(gsl_vector_get(grid->xi,i/5),2)-2*gsl_vector_get(grid->xi,i/5));
+		outFile << val << endl;
+		
 	}
 
 	outFile.close();

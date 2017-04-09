@@ -13,6 +13,7 @@ using namespace std;
 #define K_MIN  1.0e-7
 #define V2_MIN 1.0e-12
 #define T_MIN  1.0e-7
+#define L_MIN  1.0e-5
 
 double ComputeT(gsl_vector * xi, constants * modelConst,int i)
 {
@@ -67,7 +68,7 @@ double ComputeL(gsl_vector * xi,constants * modelConst,int i)
 		exit(1);
 	}
 
-	return fmax(firstTerm,secondTerm);
+	return fmax(fmax(firstTerm,secondTerm),L_MIN);
 }
 
 double ComputeEddyVisc(gsl_vector * xi, gsl_vector * T, constants * modelConst,int i)
@@ -108,8 +109,7 @@ double ComputeEp0(gsl_vector * xi,constants * modelConst, Grid* grid)
 	Log(logDEBUG1) << "Compute dissipation at wall boundary";
 	double delta_y_0 = gsl_vector_get(grid->y, 0);
 	double ep0 = ((2*gsl_vector_get(xi,1))/(modelConst->reyn*pow(delta_y_0,2)));
-	ep0 = fmax(EP_MIN,ep0);
-	if (!isfinite(ep0) || ep0 < 0)
+	if (!isfinite(ep0)) //|| ep0 < 0)
 	{
 		Log(logERROR) << "Error: unacceptable ep0 (" << ep0 << ")";
 		exit(1); 

@@ -15,7 +15,6 @@ using namespace GRVY;
 // The structure of this function is fixed by the definition of gsl_multiroot solvers. 
 int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 {
-	
 	Log(logDEBUG2) << "Setting up system F(xi)";
 	struct FParams * params = (struct FParams *)p; //reference void pointer to parameter struct; 
 
@@ -115,8 +114,7 @@ int SetFTerms(gsl_vector * xi, gsl_vector * vT, gsl_vector * T, FParams * params
 		return 1; 
 	gsl_vector_set(sysF,xiCounter+4,val);
 	return 0; 
-}
-
+} 
 int SetV2Terms(gsl_vector * xi,gsl_vector * vT,FParams * params, gsl_vector * sysF)
 {
 	

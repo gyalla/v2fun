@@ -9,13 +9,15 @@
 #include<math.h>
 #include"systemSolve.h"
 #include "Grid.h"
+#include<string>
+#include <sstream>
 using namespace GRVY;
 using namespace std; 
-
 //function declarations. 
 int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid);
 int print_state(int i,gsl_multiroot_fsolver * s);
 
+std::string NumberToString ( int Number);
 int main(int argc, char ** argv)
 {
 	// Parse inputs 
@@ -49,7 +51,6 @@ int main(int argc, char ** argv)
 	}
 	Log(logINFO) << "Solving initial conditions for f";
 
-	SaveResults(xi,"../data/init.dat",&grid,modelConst);
 
 	if(Solve4f0(xi,modelConst,&grid))
 	{
@@ -58,6 +59,7 @@ int main(int argc, char ** argv)
 	}
 	gt.EndTimer("Solving Initial Conditions");
 
+	SaveResults(xi,"../data/init.dat",&grid,modelConst);
 	// Newton Solve. 
 	Log(logINFO) << "Solving system...";
 	gt.BeginTimer("Newton Solve + Time Marching");
@@ -80,57 +82,78 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid)
 {
 	double deltaT;
 	int status;  // status of solver
-	int power = -20;
+	int power = -10;
 	int iter = 0; 
+	int inner_iter = 0; 
 	bool converge = false; 
 	//set up solver
 	Log(logINFO) <<"Setting up Solver";
-	const gsl_multiroot_fsolver_type * Type = gsl_multiroot_fsolver_hybrids; //dnewton for newton solver;
+	const gsl_multiroot_fsolver_type * Type = gsl_multiroot_fsolver_dnewton; //dnewton for newton solver;
 	gsl_multiroot_fsolver * s = gsl_multiroot_fsolver_alloc(Type,xi->size);
 	//for time marching, starting small and getting bigger works best. 
 	//power here represents powers of 2 for deltaT.
 	do
 	{
-		//deltaT = pow(2,-30);
+		//deltaT = fmin(0.0001,pow(10,power));
+		deltaT = 0.0001;
+		if (iter > 100)
+			deltaT = 0.001;
+		if (iter > 300)
+			deltaT = 0.001;
+
 		//deltaT = 1/modelConst->reyn + iter*pow(2,power); // start off 1/modelConst->reyn; 
-		deltaT = fmin(1,pow(2,power)); // start off 1/modelConst->reyn; 
 		iter++;
+		//deltaT = fmin(pow(10,3),pow(2,power)); // start off 1/modelConst->reyn; 
 		struct FParams p = {xi,deltaT,grid,modelConst};
 		FParams * params = &p; 
-		Log(logINFO) << "Setting up System";
 		gsl_multiroot_function F = {&SysF,xi->size,params};
+		Log(logINFO) << "Setting up System";
 		gsl_multiroot_fsolver_set(s,&F,xi); 
-		
-		//only need one interation per deltaT since we don't care about temporal accuracy. 
+		//only need one iteration per deltaT since we don't care about temporal accuracy. 
 		//We are just trying to get to the fully developed region of flow. 
-		for (int j = 0; j < 2; j++)
+		do
 		{
-		Log(logINFO) << "Iterating (deltaT = " << deltaT << ")";
-		status = gsl_multiroot_fsolver_iterate(s);
-		print_state(iter,s); 
-		if(status)
-			break;
-		//status = gsl_multiroot_test_residual(s->f,0.001);
-		Log(logINFO) << string(gsl_strerror(status));
-		}
-		xi = s->x; 
-		power +=2; 
-		
+			inner_iter++; 
+			Log(logINFO) << "Iterating (deltaT = " << deltaT << ")";
+			status = gsl_multiroot_fsolver_iterate(s);
+			print_state(iter,s); 
+			if(status)
+				break;
+			//status = gsl_multiroot_test_residual(s->f,0.001);
+			Log(logINFO) << string(gsl_strerror(status));
+		} while(inner_iter < 1);
+		inner_iter =0;
+		//xi = gsl_multiroot_fsolver_root(s); 
+		power +=1; 
+		SaveResults(s->x,"../data/solve.dat",grid,modelConst);
+
+		if (iter%200 == 0)
+			SaveResults(s->x,"../data/test/solve" + NumberToString(iter)  + "_step001.dat",grid,modelConst);
+
 		//check if we are in fully developed region
+		for (unsigned int i = 0; i < xi->size; i++)
+		{
+			gsl_vector_set(xi,i,gsl_vector_get(s->x,i));
+		}
 		for(unsigned int i=0; i<xi->size;i++)
 		{
-			if((fabs(gsl_vector_get(xi,i)-gsl_vector_get(params->XiN,i))<0.000001) && iter > 20)
+			if((fabs(gsl_vector_get(xi,i)-gsl_vector_get(params->XiN,i))<0.000001) && iter > 10000)
 				converge = true;
 		}
 	}while(!converge);
-
-	gsl_multiroot_fsolver_free(s); 
+	//gsl_multiroot_fsolver_free(s); 
 	return 0; 
 }
 
 int print_state(int i,gsl_multiroot_fsolver * s)
 {
-	Log(logINFO) << "iteration = "<< i << ", U2 = " << gsl_vector_get(s->x,5);
+	Log(logINFO) << "iteration = "<< i << ", U6 = " << gsl_vector_get(s->x,25);
 	return 0; 
 }
 
+std::string NumberToString ( int Number)
+{
+	std::ostringstream ss;
+        ss << Number;
+        return ss.str();
+}
