@@ -19,42 +19,42 @@ Grid::Grid(bool isUniform, double delta, double delta_v)
     size = std::ceil(a/(std::asin(b*delta_v/delta-b)+a));
   }
 
-  xi = gsl_vector_alloc(size);
+  chi = gsl_vector_alloc(size);
   y = gsl_vector_alloc(size);
 
   for (unsigned int i = 0; i<size; i++) {
-    gsl_vector_set(xi, i, delta*(i+1)/size);
+    gsl_vector_set(chi, i, delta*(i+1)/size);
     if (isUniform) {
-      gsl_vector_set(y, i, gsl_vector_get(xi, i));
+      gsl_vector_set(y, i, gsl_vector_get(chi, i));
     } else {
-      gsl_vector_set(y, i, remap(gsl_vector_get(xi, i)));
+      gsl_vector_set(y, i, remap(gsl_vector_get(chi, i)));
     }
   }
 }
 
 Grid::~Grid() {
-  gsl_vector_free(xi);
+  gsl_vector_free(chi);
   gsl_vector_free(y);
 }
 
-double Grid::remap(double xi) const {
+double Grid::remap(double chi) const {
   if (isUniform)
-    return xi;
+    return chi;
   else
-    return std::sin((xi-1)*a)/b+1;
+    return std::sin((chi-1)*a)/b+1;
 }
 
-double Grid::dXidY(double xi) const {
+double Grid::dChidY(double chi) const {
  if (isUniform)
    return 1.0;
  else
-   return b/(a*std::sqrt(1.0 - b*b*std::pow(remap(xi)-1,2)));
+   return b/(a*std::sqrt(1.0 - b*b*std::pow(remap(chi)-1,2)));
 }
 
-double Grid::d2XidY2(double xi) const {
+double Grid::d2ChidY2(double chi) const {
  if (isUniform)
    return 0.0;
  else
-   return (b*b*(b*remap(xi)-b))/
-       (a*pow(1.0-pow(b-b*remap(xi),2),1.5));
+   return (b*b*(b*remap(chi)-b))/
+       (a*pow(1.0-pow(b-b*remap(chi),2),1.5));
 }

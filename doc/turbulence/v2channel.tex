@@ -134,32 +134,32 @@ The constants are defined as follows:
 \end{multicols}
 
 \section{Non-Uniform Grid}
-In order to reduce the computational requirements, a non-uniform spacing of points was used.  This allows a fine resolution near the wall, where the resolution must be on the order of the wall-units, and a coarse resolution in the center of the channel.  A set of uniform points, $\xi$, was defined such that $\xi=0$ corresponds to the channel wall and $\xi=1$ corresponds to the centerline.  This set of uniform points was remapped to the nonuniform mesh, $\tilde{y} = y/\delta$, using the mapping function used by Lee and Moser \cite{Lee},
+In order to reduce the computational requirements, a non-uniform spacing of points was used.  This allows a fine resolution near the wall, where the resolution must be on the order of the wall-units, and a coarse resolution in the center of the channel.  A set of uniform points, $\chi$, was defined such that $\chi=0$ corresponds to the channel wall and $\chi=1$ corresponds to the centerline.  This set of uniform points was remapped to the nonuniform mesh, $\tilde{y} = y/\delta$, using the mapping function used by Lee and Moser \cite{Lee},
 \begin{equation} \label{eq:mapping}
- \frac{y}{\delta} = \frac{\sin(\eta (\xi-1) \pi/2)}{\sin(\eta \pi/2)}+1, \quad 0 \le \xi \le 1
+ \frac{y}{\delta} = \frac{\sin(\eta (\chi-1) \pi/2)}{\sin(\eta \pi/2)}+1, \quad 0 \le \chi \le 1
 \end{equation}
-where $\eta$ is an adjustable parameter that controls the resolution near the wall. When $\eta$ is equal to 1, the wall-spacing is finest.  When $\eta$ is very small, the mesh is approximately uniform.  For our simulation, we use $\eta = 0.97$.  Using a value other than $\eta = \pm 1$ prevents the derivative of $y$ with respect to $\xi$ from going to zero at the walls.
+where $\eta$ is an adjustable parameter that controls the resolution near the wall. When $\eta$ is equal to 1, the wall-spacing is finest.  When $\eta$ is very small, the mesh is approximately uniform.  For our simulation, we use $\eta = 0.97$.  Using a value other than $\eta = \pm 1$ prevents the derivative of $y$ with respect to $\chi$ from going to zero at the walls.
 
 The formula in Eq. \ref{eq:mapping} can be simplified by defining a few constants based on $\eta$:
 \begin{equation}
- \frac{y}{\delta} = \frac{\sin\big((\xi-1)a\big)}{b}+1, \quad 0 \le \xi \le 1
+ \frac{y}{\delta} = \frac{\sin\big((\chi-1)a\big)}{b}+1, \quad 0 \le \chi \le 1
 \end{equation}
 where $a = \eta \pi/2$ and $b = \sin (\eta \pi/2)$.
 
 The inverse mapping and its derivatives can be written as:
 \begin{align}
-  \xi &= \frac{\sin^{-1}(by-b)}{a} + 1 \\
-  \frac{\mathrm{d}\xi}{\mathrm{d}\tilde{y}} &= \frac{b}{a \sqrt{1-b^2(y-1)^2}} \label{eq:xi-y-1} \\
-  \frac{\mathrm{d}^2\xi}{\mathrm{d}\tilde{y}^2} &= \frac{b^2(by-b)}{a\big(1-(b-by)^2\big)^{3/2}} \label{eq:xi-y-2}
+  \chi &= \frac{\sin^{-1}(by-b)}{a} + 1 \\
+  \frac{\mathrm{d}\chi}{\mathrm{d}\tilde{y}} &= \frac{b}{a \sqrt{1-b^2(y-1)^2}} \label{eq:chi-y-1} \\
+  \frac{\mathrm{d}^2\chi}{\mathrm{d}\tilde{y}^2} &= \frac{b^2(by-b)}{a\big(1-(b-by)^2\big)^{3/2}} \label{eq:chi-y-2}
 \end{align}
-where $a$ is a constant equal to the denominator in Eq. \ref{eq:mapping}.  Using the chain rule, the derivatives of a variable $\phi$ on the nonuniform grid, $\tilde{y}$ can be computed using derivatives on the uniform grid, $\xi$ as follows:
+where $a$ is a constant equal to the denominator in Eq. \ref{eq:mapping}.  Using the chain rule, the derivatives of a variable $\phi$ on the nonuniform grid, $\tilde{y}$ can be computed using derivatives on the uniform grid, $\chi$ as follows:
 \begin{align}
- \pderiv{\phi}{\tilde{y}} &= \frac{\mathrm{d}\xi}{\mathrm{d}\tilde{y}} \pderiv{\phi}{\xi} \label{eq:phi-y-1} \\
- \pderiv[2]{\phi}{\tilde{y}} &= \frac{\mathrm{d}^2\xi}{\mathrm{d}\tilde{y}^2} \pderiv{\phi}{\xi} + \Big(\frac{\mathrm{d}\xi}{\mathrm{d}\tilde{y}} \Big)^2 \pderiv[2]{\phi}{\xi}  \label{eq:phi-y-2} 
+ \pderiv{\phi}{\tilde{y}} &= \frac{\mathrm{d}\chi}{\mathrm{d}\tilde{y}} \pderiv{\phi}{\chi} \label{eq:phi-y-1} \\
+ \pderiv[2]{\phi}{\tilde{y}} &= \frac{\mathrm{d}^2\chi}{\mathrm{d}\tilde{y}^2} \pderiv{\phi}{\chi} + \Big(\frac{\mathrm{d}\chi}{\mathrm{d}\tilde{y}} \Big)^2 \pderiv[2]{\phi}{\chi}  \label{eq:phi-y-2} 
 \end{align}
 In order to acheive a near-wall resolution on the order of $\Delta y ~ \delta_v$, the distance between the first two grid points must be $\delta_v$.  This leads to the equation:
 \begin{equation}
- \Delta \xi = \frac{\sin^{-1}(b\delta_v -b)}{a}+1
+ \Delta \chi = \frac{\sin^{-1}(b\delta_v -b)}{a}+1
 \end{equation}
 
 If we use $\delta = 1$ as our channel width, then $y = \tilde{y}$ and $\delta_v = 1/\mathrm{Re}_{\tau}$.  This leads to an equation for the required number of grid points, $n$, as:

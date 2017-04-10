@@ -21,7 +21,7 @@ class Grid {
    unsigned int size;
  public:
   const bool isUniform; /// True if the grid is uniform
-  gsl_vector* xi;
+  gsl_vector* chi;
   gsl_vector* y;
 
   /**
@@ -39,24 +39,24 @@ class Grid {
 
   /**
    * \brief
-  * @param xi - A coordinate on a uniform grid, with +/-1=wall and 0=center
+  * @param chi - A coordinate on a uniform grid, with +/-1=wall and 0=center
   * @return The coordinate on a nonuniform grid
   */
-  double remap(double xi) const;
+  double remap(double chi) const;
 
   /**
    * \brief Gives the 1st derivative of a uniform grid w.r.t a nonuniform grid
-   * @param xi - A point on the uniformly spaced grid.
+   * @param \chi - A point on the uniformly spaced grid.
    * @return The first order derivative of xi w.r.t. y
    */
-  double dXidY(double xi) const;
+  double dChidY(double chi) const;
 
   /**
    * \brief Gives the 2nd derivative of a uniform grid w.r.t a nonuniform grid
-   * @param xi - A point on the uniformly spaced grid.
+   * @param chi - A point on the uniformly spaced grid.
    * @return The second order derivative of xi w.r.t. y
    */
-  double d2XidY2(double xi) const;
+  double d2ChidY2(double chi) const;
 
   unsigned int getSize() const { return size;};
 };
