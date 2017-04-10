@@ -141,7 +141,7 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 			if(i%5==1)
 				gsl_vector_set(xi,i,fmax(gsl_vector_get(xi,i),K_MIN));
 			if(i%5==2)
-				gsl_vector_set(xi,i,fmax(gsl_vector_get(xi,i),EP_MIN);
+				gsl_vector_set(xi,i,fmax(gsl_vector_get(xi,i),EP_MIN));
 			if(i%5==3)
 				gsl_vector_set(xi,i,fmax(gsl_vector_get(xi,i),V2_MIN));
 		}

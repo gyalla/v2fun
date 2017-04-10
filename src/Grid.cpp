@@ -43,18 +43,3 @@ double Grid::remap(double chi) const {
   else
     return std::sin((chi-1)*a)/b+1;
 }
-
-double Grid::dChidY(double chi) const {
- if (isUniform)
-   return 1.0;
- else
-   return b/(a*std::sqrt(1.0 - b*b*std::pow(remap(chi)-1,2)));
-}
-
-double Grid::d2ChidY2(double chi) const {
- if (isUniform)
-   return 0.0;
- else
-   return (b*b*(b*remap(chi)-b))/
-       (a*pow(1.0-pow(b-b*remap(chi),2),1.5));
-}
