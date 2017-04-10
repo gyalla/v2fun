@@ -260,9 +260,9 @@ void SaveResults(gsl_vector * xi, string filename, Grid* grid,constants * modelC
 	ofstream outFile; 
 	outFile.open(filename.c_str()); 
 	//output format: gridpoint U K EP V2 F 
-	outFile << std::fixed << setprecision(15) << 0 <<" "<<0<<" "<< 0 <<" "
-	    << ComputeEp0(xi,modelConst,grid) <<" " << 0 << " "
-	    << Computef0(xi,modelConst,grid) << 0 <<endl;
+	outFile << std::fixed << setprecision(15) << 0.0 <<"\t"<<0.0<<"\t"<< 0.0 <<"\t"
+	    << ComputeEp0(xi,modelConst,grid) <<"\t" << 0.0 << "\t"
+	    << Computef0(xi,modelConst,grid) << 0.0 <<endl;
 
 	double val;  //used for test
 	//calculate y+ coordinates
@@ -272,13 +272,13 @@ void SaveResults(gsl_vector * xi, string filename, Grid* grid,constants * modelC
 	for(unsigned int i = 0; i<xi->size;i+=5)
 	{
 		//outFile << gsl_vector_get(y_p,i/5.0) << " ";
-		outFile << gsl_vector_get(grid->y, i/5.0) << " ";
-		outFile << gsl_vector_get(xi,i) << " "; 
-		outFile << gsl_vector_get(xi,i+1) << " "; 
-		outFile << gsl_vector_get(xi,i+2) << " "; 
-		outFile << gsl_vector_get(xi,i+3) << " "; 
-		outFile << gsl_vector_get(xi,i+4) << " "; 
-		val = -90*(pow(gsl_vector_get(grid->xi,i/5),2)-2*gsl_vector_get(grid->xi,i/5));
+		outFile << gsl_vector_get(grid->y, i/5.0) << "\t";
+		outFile << gsl_vector_get(xi,i) << "\t";
+		outFile << gsl_vector_get(xi,i+1) << "\t";
+		outFile << gsl_vector_get(xi,i+2) << "\t";
+		outFile << gsl_vector_get(xi,i+3) << "\t";
+		outFile << gsl_vector_get(xi,i+4) << "\t";
+		val = -90*(pow(gsl_vector_get(grid->y,i/5),2)-2*gsl_vector_get(grid->y,i/5));
 		outFile << val << endl;
 		
 	}
