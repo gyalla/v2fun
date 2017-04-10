@@ -206,7 +206,7 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 		gsl_matrix_set(A,i,i,-( 2*LOvrEta + 1)); 
 		gsl_matrix_set(A,i,i+1,LOvrEta); 
 
-		LHS1 = (modelConst->C1/gsl_vector_get(T,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)) - 2/3); 
+		LHS1 = (modelConst->C1/gsl_vector_get(T,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)) - 2.0/3.0); 
 		LHS2 = (modelConst->C2*ComputeP(xi,vT,grid,i))/gsl_vector_get(xi,xiCounter+1);
 
 		if(!isfinite(LHS1-LHS2))
@@ -226,7 +226,7 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 	gsl_matrix_set(A,i,i-1,2*LOvrEta);
 	gsl_matrix_set(A,i,i,-( 2*LOvrEta + 1)); 
 
-	LHS1 = (modelConst->C1/ComputeT(xi,modelConst,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)) - 2/3); 
+	LHS1 = (modelConst->C1/ComputeT(xi,modelConst,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)) - 2.0/3.0); 
 	if (!isfinite(LHS1))
 	{
 		Log(logERROR) << "Error: non-finite b (" << LHS1 << ")"; 
@@ -272,7 +272,7 @@ void SaveResults(gsl_vector * xi, string filename, Grid* grid,constants * modelC
 	for(unsigned int i = 0; i<xi->size;i+=5)
 	{
 		//outFile << gsl_vector_get(y_p,i/5.0) << " ";
-		outFile << gsl_vector_get(grid->y, i/5.0) << "\t";
+		outFile << gsl_vector_get(grid->y, i/5) << "\t";
 		outFile << gsl_vector_get(xi,i) << "\t";
 		outFile << gsl_vector_get(xi,i+1) << "\t";
 		outFile << gsl_vector_get(xi,i+2) << "\t";
