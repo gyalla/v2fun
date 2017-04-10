@@ -39,7 +39,7 @@ double Diff1vT(gsl_vector * x,double deltaEta,int i);
  * \param i point at which to compute second derivative around (relative to ordering of \f$\xi\f$).
  * \return centered difference approximation.
  */
-inline double Diff2(gsl_vector * x,double deltaEta,double bdry, int i);
+double Diff2(gsl_vector * x,double deltaEta,double bdry, int i);
 
 /**
  * \brief Approximates first derivative of gsl_vector using center
@@ -52,7 +52,7 @@ inline double Diff2(gsl_vector * x,double deltaEta,double bdry, int i);
  * \param i point at which to compute first derivative around (relative to ordering of \f$\xi\f$).
  * \return centered difference approximation.
  */
-inline double Diff1(gsl_vector *x, double deltaEta,double bdry,int i);
+double Diff1(gsl_vector *x, double deltaEta,double bdry,int i);
 
 /**
  * \brief Approximates second derivative of gsl_vector using center

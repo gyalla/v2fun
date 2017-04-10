@@ -10,7 +10,7 @@
 #include <iostream>
 using namespace std;
 
-inline double Diff2(gsl_vector * x,double deltaEta,double bdry,int i)
+double Diff2(gsl_vector * x,double deltaEta,double bdry,int i)
 {
   // i = xiCounter indices
   //if i < 5 use value at boundary. 5 for the index of xi.
@@ -20,7 +20,7 @@ inline double Diff2(gsl_vector * x,double deltaEta,double bdry,int i)
     return ( gsl_vector_get(x,i+5) - 2*gsl_vector_get(x,i) + gsl_vector_get(x,i-5))/pow(deltaEta,2); //i+5 corresponds to i+1 for single terms. U_2 = xi_1+5 for example.
 }
 
-inline double Diff1(gsl_vector *x, double deltaEta,double bdry, int i)
+double Diff1(gsl_vector *x, double deltaEta,double bdry, int i)
 {
   //same structure as above but for first derivative.
   if (i<5)
