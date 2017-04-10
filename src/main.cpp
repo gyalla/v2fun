@@ -39,6 +39,7 @@ int main(int argc, char ** argv)
 
 	// Make a new grid object
 	Grid grid(uniform_grid, 1.0, 1.0/Const.reyn);
+	Log(logINFO) << "---> Number of grid points = " << grid.getSize();
 
 	// Solving for initial conditions 
 	Log(logINFO) << "Solving initial conditions for U,k,ep,v2";

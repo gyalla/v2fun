@@ -260,7 +260,7 @@ void SaveResults(gsl_vector * xi, string filename, Grid* grid,constants * modelC
 	ofstream outFile; 
 	outFile.open(filename.c_str()); 
 	//output format: gridpoint U K EP V2 F 
-	outFile << setprecision(15) << 0 <<" "<<0<<" "<< 0 <<" "
+	outFile << std::fixed << setprecision(15) << 0 <<" "<<0<<" "<< 0 <<" "
 	    << ComputeEp0(xi,modelConst,grid) <<" " << 0 << " "
 	    << Computef0(xi,modelConst,grid) << 0 <<endl;
 
@@ -272,7 +272,7 @@ void SaveResults(gsl_vector * xi, string filename, Grid* grid,constants * modelC
 	for(unsigned int i = 0; i<xi->size;i+=5)
 	{
 		//outFile << gsl_vector_get(y_p,i/5.0) << " ";
-		outFile << gsl_vector_get(grid->xi, i/5.0) << " ";
+		outFile << gsl_vector_get(grid->y, i/5.0) << " ";
 		outFile << gsl_vector_get(xi,i) << " "; 
 		outFile << gsl_vector_get(xi,i+1) << " "; 
 		outFile << gsl_vector_get(xi,i+2) << " "; 
