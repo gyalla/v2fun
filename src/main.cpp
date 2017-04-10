@@ -11,6 +11,13 @@
 #include "Grid.h"
 #include<string>
 #include <sstream>
+
+#define EP_MIN 1.0e-7
+#define K_MIN  1.0e-7
+#define V2_MIN 1.0e-12
+#define T_MIN  1.0e-7
+#define L_MIN  1.0e-5
+
 using namespace GRVY;
 using namespace std; 
 //function declarations. 
@@ -97,11 +104,11 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 	do
 	{
 		//deltaT = fmin(0.0001,pow(10,power));
-		deltaT = 0.0001;
+		deltaT = 0.00001;
 		if (iter > 100)
-			deltaT = 0.1;
+			deltaT = 0.0001;
 		if (iter > 300)
-			deltaT = 0.1;
+			deltaT = 0.001;
 
 		//deltaT = 1/modelConst->reyn + iter*pow(2,power); // start off 1/modelConst->reyn; 
 		iter++;
@@ -126,17 +133,22 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 		} while(inner_iter < 1);
 		inner_iter =0;
 		//xi = gsl_multiroot_fsolver_root(s); 
-		power +=1; 
-		SaveResults(s->x,"../data/solve.dat",grid,modelConst);
+		//power +=1; 
 
-		if (iter%200 == 0)
-			SaveResults(s->x,"../data/test/solve" + NumberToString(iter)  + "_step001.dat",grid,modelConst);
-
-		//check if we are in fully developed region
 		for (unsigned int i = 0; i < xi->size; i++)
 		{
 			gsl_vector_set(xi,i,gsl_vector_get(s->x,i));
+			if(i%5==1)
+				gsl_vector_set(xi,i,fmax(gsl_vector_get(xi,i),K_MIN));
+			if(i%5==3)
+				gsl_vector_set(xi,i,fmax(gsl_vector_get(xi,i),V2_MIN));
 		}
+
+		SaveResults(xi,"../data/solve.dat",grid,modelConst);
+
+		if (iter%200 == 0)
+			SaveResults(xi,"../data/test/solve" + NumberToString(iter)  + "_step001.dat",grid,modelConst);
+
 		for(unsigned int i=0; i<xi->size;i++)
 		{
 			if((fabs(gsl_vector_get(xi,i)-gsl_vector_get(params->XiN,i))<0.000001) && iter > max_ts)

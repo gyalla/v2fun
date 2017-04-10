@@ -262,7 +262,7 @@ void SaveResults(gsl_vector * xi, string filename, Grid* grid,constants * modelC
 	//output format: gridpoint U K EP V2 F 
 	outFile << std::fixed << setprecision(15) << 0.0 <<"\t"<<0.0<<"\t"<< 0.0 <<"\t"
 	    << ComputeEp0(xi,modelConst,grid) <<"\t" << 0.0 << "\t"
-	    << Computef0(xi,modelConst,grid) << 0.0 <<endl;
+	    << Computef0(xi,modelConst,grid) << "\t" << 0.0 <<endl;
 
 	double val;  //used for test
 	//calculate y+ coordinates
