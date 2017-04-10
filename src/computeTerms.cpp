@@ -68,7 +68,7 @@ double ComputeL(gsl_vector * xi,constants * modelConst,int i)
 		exit(1);
 	}
 
-	return fmax(fmax(firstTerm,secondTerm),L_MIN);
+	return fmax(modelConst->CL*fmax(firstTerm,secondTerm),L_MIN);
 }
 
 double ComputeEddyVisc(gsl_vector * xi, gsl_vector * T, constants * modelConst,int i)
