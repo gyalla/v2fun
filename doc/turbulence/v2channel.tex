@@ -133,6 +133,45 @@ The constants are defined as follows:
 \end{itemize}
 \end{multicols}
 
+\subsection{Nondimensionalization of the governing equations}
+Here we nondimensionalize \eqref{eq:ssv2f1}-\eqref{eq:ssv2f5} using the characteristic velocity scale $u_{\tau}$ (the friction velocity) and length scale $\delta$. We then make the following nondimensionalizations:
+
+\begin{multicols}{2}
+\begin{enumerate}
+\item $U^+ = U\big/u_{\tau}$
+\item $\eta  = y\Big/\delta$
+\item $t^+ = t\Big/(\delta/u_{\tau}), \,\,\,\, T^+ = T\Big/(\delta/u_{\tau})$
+\item $\epsilon^+ = \epsilon\Big/(u_{\tau}^3/\delta$)
+\end{enumerate}
+\columnbreak 
+
+\begin{itemize}
+\item[5.] $\chevron{v^2}^+ = \chevron{v^2}\Big/u_{\tau}^2$
+\item[6.] $f^+ = f\Big/(u_{\tau}/\delta)$
+\item[7.] $\nu_T^+ = \nu_T\Big/(u_{\tau} \delta)$.
+
+\end{itemize}
+\end{multicols}
+For ease of exposition, we abuse notation and drop the $+$ superscript everywhere (we do, however, keep $\eta = y/\delta$). With the above choice of units, a tedious but straightforward calculation gives the following set of equations for the $\chevron{v^2}-f$ model as applied to channel flow: 
+\begin{align}
+	\label{eq:ssv2f1_nondim}
+        \pderiv{U}{t} &= -1 +
+\pderiv{}{\eta}\left(\left(\frac{1}{Re_{\tau}}+\nu_T\right)\pderiv{U}{\eta}\right) \\
+        \pderiv{k}{t} &= \nu_T\left(\pderiv{U}{\eta}\right)^2 + 
+\pderiv{}{\eta}\left(\left(\frac{1}{Re_{\tau}}+\frac{\nu_T}{\sigma_k}\right)\pderiv{k}{\eta}\right) \\
+        \pderiv{\ep}{t} &= \frac{1}{T}\left(C_{\ep
+1}\nu_T\left(\pderiv{U}{\eta}\right)^2 - C_{\ep 2}\ep\right) + 
+\pderiv{}{\eta}\left(\left(\frac{1}{Re_{\tau}}+\frac{\nu_T}{\sigma_\ep}\right)\pderiv{\ep}{\eta}\right) \\
+        \pderiv{\chevron{v^2}}{t} &= kf - \frac{1}{T}\chevron{v^2} +
+\pderiv{}{\eta}\left(\left(\frac{1}{Re_{\tau}}+\nu_T\right)\pderiv{\chevron{v}}{\eta}\right) \\
+        0 &= \left( \frac{L^2}{\delta^2} \frac{\partial^2}{\partial \eta^2} - I\right)f +
+C_2\frac{\nu_T}{k}\left(\pderiv{U}{\eta}\right)^2 -
+\frac{C_1}{T}\left(\frac{\chevron{v^2}}{k}-\frac{2}{3}\right)
+	\label{eq:ssv2f5_nondim}
+\end{align}
+
+
+
 \section{Non-Uniform Grid}
 In order to reduce the computational requirements, a non-uniform spacing of points was used.  This allows a fine resolution near the wall, where the resolution must be on the order of the wall-units, and a coarse resolution in the center of the channel.  A set of uniform points, $\chi$, was defined such that $\chi=0$ corresponds to the channel wall and $\chi=1$ corresponds to the centerline.  This set of uniform points was remapped to the nonuniform mesh, $\tilde{y} = y/\delta$, using the mapping function used by Lee and Moser \cite{Lee},
 \begin{equation} \label{eq:mapping}
