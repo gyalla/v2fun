@@ -8,7 +8,7 @@ u_tau = 6.37309e-02
 Re_tau = 182.088
 
 # Extract the data
-y, U, k, eps, v2, f = np.genfromtxt("../data/test/solve2400_step001.dat",
+y, U, k, eps, v2, f = np.genfromtxt("../data/v2fResults_180.dat",
                                     usecols=[0,1,2,3,4,5], unpack=True)
 yp = np.multiply(y,Re_tau)
 
