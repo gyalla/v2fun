@@ -104,11 +104,11 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 	do
 	{
 		//deltaT = fmin(0.0001,pow(10,power));
-		deltaT = 0.00001;
+		deltaT = 0.0001;
 		if (iter > 100)
-			deltaT = 0.0001;
-		if (iter > 300)
 			deltaT = 0.001;
+		if (iter > 300)
+			deltaT = 0.01;
 
 		//deltaT = 1/modelConst->reyn + iter*pow(2,power); // start off 1/modelConst->reyn; 
 		iter++;
@@ -140,23 +140,15 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 			gsl_vector_set(xi,i,gsl_vector_get(s->x,i));
 			if(i%5==1)
 				gsl_vector_set(xi,i,fmax(gsl_vector_get(xi,i),K_MIN));
-			//if(i%5==2)
-			//	gsl_vector_set(xi,i,fmax(gsl_vector_get(xi,i),EP_MIN));
 			if(i%5==3)
 				gsl_vector_set(xi,i,fmax(gsl_vector_get(xi,i),V2_MIN));
 		}
 
-		SaveResults(xi,"../data/solve.dat",grid,modelConst);
-
 		if (iter%200 == 0)
 			SaveResults(xi,"../data/test/solve" + NumberToString(iter)  + "_step001.dat",grid,modelConst);
 
-		for(unsigned int i=0; i<xi->size;i++)
-		{
-			if((fabs(gsl_vector_get(xi,i)-gsl_vector_get(params->XiN,i))<0.000001) && iter > max_ts)
-				converge = true;
-		}
-	}while(!converge);
+		status = gsl_multiroot_test_residual (s->f, 1e-7);
+	}while(status == GSL_CONTINUE && iter < max_ts);
 	//gsl_multiroot_fsolver_free(s); 
 	return 0; 
 }
