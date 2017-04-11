@@ -53,7 +53,7 @@ int main(int argc, char ** argv)
 	gt.BeginTimer("Solving Initial Conditions");
 	double I = grid.getSize();
 	gsl_vector * xi = gsl_vector_calloc(5*(I));
-	if(SolveIC(xi,&grid,filename))
+	if(SolveIC(xi,modelConst,&grid,filename))
 	{
 		Log(logERROR) << "Error interpolating initial conditions.";
 		return 1; 

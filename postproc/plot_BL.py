@@ -8,7 +8,7 @@ u_tau = 6.37309e-02
 Re_tau = 182.088
 
 # Extract the data
-y, U, k, eps, v2, f = np.genfromtxt("../data/test/init.dat",
+y, U, k, eps, v2, f = np.genfromtxt("../data/test/solve2400_step001.dat",
                                     usecols=[0,1,2,3,4,5], unpack=True)
 yp = np.multiply(y,Re_tau)
 
@@ -26,7 +26,7 @@ fig, axarr = plt.subplots(2,2)
 axarr[0,0].semilogx(yp, U, label='$U$')
 axarr[0,1].plot(yp, k, label='$k$')
 axarr[0,1].plot(yp, v2, label='$\overline{v^2}$')
-axarr[0,0.25].plot(yp, eps, label='$\epsilon$')
+axarr[1,0].plot(yp, eps, label='$\epsilon$')
 axarr[1,1].plot(yp, np.multiply(k,f), label='$kf$')
 plt.show()
 

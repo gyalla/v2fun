@@ -57,7 +57,7 @@ int Grvy_Input_Parse(constants * modelConst,string &filename,string & outFile,
  */
 
 
-int SolveIC(gsl_vector* xi, Grid* grid, string file);
+int SolveIC(gsl_vector* xi, constants * modelConst, Grid* grid, string file);
 
 /**
  * \brief Linear interpolates inputs and places result in vector. 

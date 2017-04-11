@@ -99,11 +99,14 @@ int LinInterp(gsl_vector * Vec,double pt1,double pt2, double U1,double U2,double
 		Log(logERROR) <<  "Error: non-finite interpolation";
 		return 1; 
 	}
+
+	if(i%5==2)
+		val = val*180;
 	gsl_vector_set(Vec,i,val); 
 	return 0;
 }
 
-int SolveIC(gsl_vector * xi, Grid* grid, string file)
+int SolveIC(gsl_vector * xi, constants * modelConst,Grid* grid, string file)
 {	
 	ifstream inFile; 
 	inFile.open(file.c_str()); 
@@ -121,6 +124,7 @@ int SolveIC(gsl_vector * xi, Grid* grid, string file)
 		return 1; 
 	for(unsigned int i=0; i<(xi->size/float(5));i++)
 	{
+
 		xiCounter=5*i; //counter relative to xi vector. 
 		gridPt=gsl_vector_get(grid->y, i); //which grid point we are working on.
 		Log(logDEBUG1) <<"Working on grid point: " << gridPt;
@@ -133,12 +137,16 @@ int SolveIC(gsl_vector * xi, Grid* grid, string file)
 			tempK1 = tempK2;
 			tempEp1 = tempEp2; 
 			tempV21 = tempV22; 
+
+
 			if (! (inFile >> pt2 >> tempU2 >> tempK2 >> tempEp2 >> tempV22))
 			{
 				Log(logERROR) << "Error: Cannot get interpolation data."; 
 			}
 		}
-
+		
+		//tempEp1 = tempEp1*modelConst->reyn; 
+		//tempEp2 = tempEp2*modelConst->reyn; 
 		//interpolate each term U,k,ep,v2,f.
 		Log(logDEBUG2) << "interpolation points: " << pt1 << "," <<  pt2;
 		Log(logDEBUG2) << "interpolation values (U): " <<  tempU1 <<  "," << tempU2;
