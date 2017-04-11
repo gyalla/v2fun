@@ -14,6 +14,7 @@ using namespace std;
 #define V2_MIN 1.0e-12
 #define T_MIN  1.0e-7
 #define L_MIN  1.0e-5
+#define F_MIN  1.0e-8
 
 double ComputeT(gsl_vector * xi, constants * modelConst,int i)
 {
