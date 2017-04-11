@@ -12,7 +12,8 @@
 
 Grid::Grid(bool isUniform, double delta, double delta_v)
     : remap_param(0.97), a(remap_param*M_PI/2),
-      b(std::sin(remap_param*M_PI/2)), isUniform(isUniform) {
+      b(std::sin(remap_param*M_PI/2)), isUniform(isUniform),
+      isDeriv1Cached(false), isDeriv2Cached(false) {
   if (isUniform) {
     size = std::ceil(delta/delta_v);
   } else {
