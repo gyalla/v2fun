@@ -170,14 +170,19 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 	gsl_vector * b = gsl_vector_calloc(A->size1); 
 	gsl_vector * f = gsl_vector_calloc(A->size1);
 
-	double LOvrEta; //main terms in matrix. 
+	double LOvrEta; //main terms in matrix.
+	double Lsquared; // L^2
+	double coef1, coef2, coef3;
+	double deltaChi; // Spacing of the uniform grid.
+	double deltaChi2; // deltaChi^2
+	double Chi; // Local grid point on the uniform grid.
 	double LHS1,LHS2; // LHS of f from finite difference. 
 	unsigned int i,xiCounter; 
   double deltaEta; // Local grid spacing
 
 	gsl_vector * T = gsl_vector_calloc(A->size1);
 	gsl_vector * vT = gsl_vector_calloc(T->size);
-	for (unsigned int i = 1; i<vT->size;i++)
+	for (unsigned int i = 1; i<vT->size; i++)
 	{
 		gsl_vector_set(T,i,ComputeT(xi,modelConst,i));
 		gsl_vector_set(vT,i,ComputeEddyVisc(xi,T,modelConst,i));
@@ -190,6 +195,17 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 	// 	|    0         2*L^2/n^2 -(2*L^2/n^2 + 1) |
 	//
 
+	/** On a nonuniform grid:
+	 * d^2/dy^2 = d^2Chi/dy^2 * d/dChi + (dChi/dy)^2 * d^2/dChi^2
+	 * So:
+   *      |    1                               0                   0               |
+   * A =  | L^2(a1^2/m^2 - a2/(2*m))  -2*L^2*a1^2/m^2+1  L^2(a1^2/m^2 + a2/(2*m))  |
+   *      |    0                          L^2*a1^2/m^2      -2*L^2*a1^2/m^2+1      |
+   * Where:
+   *    a1 = dChi/dY
+   *    a2 = d^2Chi/dY^2
+   *    m  = deltaChi
+   */
 
 	gsl_matrix_set(A,0,0,1); 
 	gsl_vector_set(b,0,Computef0(xi,modelConst,grid));
@@ -197,14 +213,18 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 	for(i =1; i<A->size1-1;i++)
 	{
 		xiCounter = 5*(i-1);
-		if (i == 1)
-		  deltaEta = gsl_vector_get(grid->y,i-1);
-		else
-		  deltaEta = gsl_vector_get(grid->y,i-1) - gsl_vector_get(grid->y,i-2);
-		LOvrEta = pow(ComputeL(xi,modelConst,i),2)/pow(deltaEta,2);
-		gsl_matrix_set(A,i,i-1,LOvrEta); 
-		gsl_matrix_set(A,i,i,-( 2*LOvrEta + 1)); 
-		gsl_matrix_set(A,i,i+1,LOvrEta); 
+		deltaChi = gsl_vector_get(grid->chi, 0);
+		deltaChi2 = pow(deltaChi,2);
+		Chi = gsl_vector_get(grid->chi, i-1);
+		Lsquared = pow(ComputeL(xi,modelConst,i),2);
+		coef1 = Lsquared*(pow(grid->dChidY(Chi),2)/deltaChi2
+		                  - grid->d2ChidY2(Chi)/(2*deltaChi));
+		coef2 = -2*Lsquared*pow(grid->dChidY(Chi),2)/deltaChi2 + 1.0;
+    coef3 = Lsquared*(pow(grid->dChidY(Chi),2)/deltaChi2
+                      + grid->d2ChidY2(Chi)/(2*deltaChi));
+		gsl_matrix_set(A,i,i-1,coef1);
+		gsl_matrix_set(A,i,i,  coef2);
+		gsl_matrix_set(A,i,i+1,coef3);
 
 		LHS1 = (modelConst->C1/gsl_vector_get(T,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)) - 2.0/3.0); 
 		LHS2 = (modelConst->C2*ComputeP(xi,vT,grid,i))/gsl_vector_get(xi,xiCounter+1);
@@ -214,17 +234,20 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 			Log(logERROR) << "Error: non-finite b (" << LHS1-LHS2 << ")"; 
 			return 1; 
 		}
-
 		gsl_vector_set(b,i,LHS1-LHS2); 
 	}
 	
 	// set boundary term of matrix. 
 	i = size-1;	
 	xiCounter = 5*(i-1);
-	deltaEta = gsl_vector_get(grid->y,i-1) - gsl_vector_get(grid->y,i-2);
-	LOvrEta = pow(ComputeL(xi,modelConst,i),2)/pow(deltaEta,2);
-	gsl_matrix_set(A,i,i-1,2*LOvrEta);
-	gsl_matrix_set(A,i,i,-( 2*LOvrEta + 1)); 
+  deltaChi = gsl_vector_get(grid->chi, 0);
+  deltaChi2 = pow(deltaChi,2);
+  Chi = gsl_vector_get(grid->chi, i-1);
+  Lsquared = pow(ComputeL(xi,modelConst,i),2);
+  coef1 = Lsquared*pow(grid->dChidY(Chi),2)/deltaChi2;
+  coef2 = -2*Lsquared*pow(grid->dChidY(Chi),2)/deltaChi2 + 1.0;
+	gsl_matrix_set(A,i,i-1,coef1);
+	gsl_matrix_set(A,i,i,coef2);
 
 	LHS1 = (modelConst->C1/ComputeT(xi,modelConst,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)) - 2.0/3.0); 
 	if (!isfinite(LHS1))
@@ -240,7 +263,7 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 	int s; 
 	gsl_permutation * p = gsl_permutation_alloc(A->size1);
 	gsl_linalg_LU_decomp(A,p,&s); 
-	gsl_linalg_LU_solve(A,p,b,f); 
+	gsl_linalg_LU_solve(A,p,b,f);
 
 	// add f to xi. 
 	Log(logDEBUG) << "Setting f_0 values";
