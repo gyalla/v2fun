@@ -170,7 +170,6 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 	gsl_vector * b = gsl_vector_calloc(A->size1); 
 	gsl_vector * f = gsl_vector_calloc(A->size1);
 
-	double LOvrEta; //main terms in matrix.
 	double Lsquared; // L^2
 	double coef1, coef2, coef3;
 	double deltaChi; // Spacing of the uniform grid.
@@ -178,7 +177,6 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 	double Chi; // Local grid point on the uniform grid.
 	double LHS1,LHS2; // LHS of f from finite difference. 
 	unsigned int i,xiCounter; 
-  double deltaEta; // Local grid spacing
 
 	gsl_vector * T = gsl_vector_calloc(A->size1);
 	gsl_vector * vT = gsl_vector_calloc(T->size);
@@ -273,6 +271,13 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 		xiCounter=5*(i-1)+4; 
 		gsl_vector_set(xi,xiCounter,gsl_vector_get(f,i));
 	}
+
+	// Cleanup
+	gsl_matrix_free(A);
+	gsl_vector_free(b);
+	gsl_vector_free(f);
+	gsl_vector_free(vT);
+	gsl_vector_free(T);
 
 	return 0; 
 }
