@@ -73,6 +73,9 @@ int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 //		cout << gsl_vector_get(sysF,i) << endl; 
 //	}
 	
+	// Cleanup
+	gsl_vector_free(vT);
+	gsl_vector_free(T);
 	gsl_vector_free(tempxi);
 
 	return 0; 
