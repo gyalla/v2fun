@@ -105,10 +105,16 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 	{
 		//deltaT = fmin(0.0001,pow(10,power));
 		deltaT = 0.0001;
-		if (iter > 100)
-			deltaT = 0.001;
 		if (iter > 300)
+			deltaT = 0.001;
+		if (iter > 500)
 			deltaT = 0.01;
+		if (iter > 800)
+			deltaT = 0.1; 
+		if (iter > 900)
+			deltaT = 1; 
+		if (iter > 1000)
+			deltaT = 100; 
 
 		//deltaT = 1/modelConst->reyn + iter*pow(2,power); // start off 1/modelConst->reyn; 
 		iter++;
