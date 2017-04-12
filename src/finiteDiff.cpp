@@ -64,7 +64,7 @@ double Deriv1vT(gsl_vector * x, int i, Grid* grid)
 {
   // for vT we use normal finite difference approximation.
   double delta = gsl_vector_get(grid->chi, 0);
-  double chi = gsl_vector_get(grid->chi, (i/5));
+  double chi = gsl_vector_get(grid->chi, i-1);
   return Diff1vT(x,delta,i)*grid->dChidY(chi);
 }
 

@@ -91,11 +91,11 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 {
         double previous_residual=100; // The max residual at the previous step
         double max_residual = 100;    // The max residual at the current step
-        double deltaT;
+        double deltaT = 0.0000001;
         int diverged_count = 0;       // Tracks the number of steps where
                                       // the residual is diverging.
         const double residual_switch = 0.5; // deltaT won't increase if residual is above this limit
-        const double max_deltaT = 100;      // maximum possible value of deltaT
+        const double max_deltaT = 100.0;      // maximum possible value of deltaT
 	int status;  // status of solver
 	int power = -10;
 	int iter = 0; 
@@ -107,7 +107,6 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 	gsl_multiroot_fsolver * s = gsl_multiroot_fsolver_alloc(Type,xi->size);
 	//for time marching, starting small and getting bigger works best. 
 	//power here represents powers of 2 for deltaT.
-        deltaT = 0.001;
 	do
 	{
 		//deltaT = fmin(0.0001,pow(10,power));
@@ -166,14 +165,14 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
                 // Change the time-step
                 if (iter > 1) previous_residual = max_residual;
                 max_residual = gsl_vector_max(s->f);
-                if (max_residual/previous_residual > 2) {
+                if (max_residual/previous_residual > 2.0) {
                   diverged_count++;
                 } else {
                   diverged_count = 0;
                 }
                 if (diverged_count > 3) deltaT /= 10;
                 if (max_residual < residual_switch && deltaT < max_deltaT &&
-                    max_residual/previous_residual > 0.5 &&
+                    max_residual/previous_residual > 0.2 &&
                     max_residual/previous_residual < 1.0) {
                   deltaT *= 2;
                 }

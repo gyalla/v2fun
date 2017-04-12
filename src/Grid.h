@@ -67,26 +67,17 @@ class Grid {
 };
 
 inline double Grid::dChidY(double chi) const {
-  if (!isDeriv1Cached) {
-    if (isUniform)
-      cached_deriv1 = 1.0;
-    else
-      cached_deriv1 = b/(a*std::sqrt(1.0 - b*b*std::pow(remap(chi)-1,2)));
-    isDeriv1Cached = true;
-  }
-  return cached_deriv1;
+  if (isUniform)
+    return 1.0;
+  else
+    return b/(a*std::sqrt(1.0 - b*b*std::pow(remap(chi)-1,2)));
 }
 
 inline double Grid::d2ChidY2(double chi) const {
-  if (!isDeriv2Cached) {
-    if (isUniform)
-      cached_deriv2 = 0.0;
-    else
-      cached_deriv2 = (b*b*(b*remap(chi)-b))/
-                      (a*pow(1.0-pow(b-b*remap(chi),2),1.5));
-    isDeriv2Cached = true;
-  }
-  return cached_deriv2;
+  if (isUniform)
+    return 0.0;
+  else
+    return (b*b*(b*remap(chi)-b)) / (a*pow(1.0-pow(b-b*remap(chi),2),1.5));
 }
 
 #endif /* SRC_GRID_H_ */
