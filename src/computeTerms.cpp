@@ -121,9 +121,10 @@ double ComputeEp0(gsl_vector * xi,constants * modelConst, Grid* grid)
 double Computef0(gsl_vector * xi,constants * modelConst, Grid* grid)
 {
 	Log(logDEBUG1)<<"Compute f at wall boundary";
-  double delta_y_0 = gsl_vector_get(grid->y, 0);
-	double f0  = -(( (20*gsl_vector_get(xi,3))/( pow(modelConst->reyn,3) *
-	    ComputeEp0(xi, modelConst, grid) * pow(delta_y_0, 4))));
+        double delta_y_0 = gsl_vector_get(grid->y, 0);
+	double f0  = -(20*gsl_vector_get(xi,3))/
+                    (pow(modelConst->reyn,2) *
+                     ComputeEp0(xi, modelConst, grid) * pow(delta_y_0, 4));
 	if(!isfinite(f0))
 	{
 		Log(logERROR) << "Error: f0 non-finite (" << f0 << ")";
