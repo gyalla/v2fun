@@ -170,6 +170,22 @@ C_2\frac{\nu_T}{k}\left(\pderiv{U}{\eta}\right)^2 -
 	\label{eq:ssv2f5_nondim}
 \end{align}
 
+\subsection{Boundary conditions}
+For the turbulent channel, we only compute for $y \in [0,\delta] \iff \eta \in [0,1]$, as oppposed to the full $y \in [0,2\delta]$, by symmetry. The boundary conditions for our five dependent variables, $U, k, \ep, \chevron{v^2}, f$, are as follows: 
+\[
+U = k = \chevron{v^2} = 0 
+\]
+at $y = 0$, which comes from the no-slip condition, which then implies 
+\[
+\epsilon \to 2\nu \frac{k}{y^2}, \,\,\,\,\,\,\, f \to -\frac{20 \nu^2 \chevron{v^2} }{\ep(0) y^4}
+\]
+at $y = 0$. As a consequence of symmetry, we require homogeneous Neumann conditions on all of the dependent variables: 
+\[
+\pderiv{U}{\eta}= \pderiv{\ep}{\eta} = \pderiv{\chevron{v^2}}{\eta} = \pderiv{k}{\eta} = \pderiv{f}{\eta} = 0
+\] 
+
+
+
 
 
 \section{Non-Uniform Grid}
