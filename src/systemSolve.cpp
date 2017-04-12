@@ -5,6 +5,7 @@
 //--------------------------------------------------
 #include<math.h>
 #include<gsl/gsl_multiroots.h>
+#include<omp.h>
 #include<grvy.h>
 #include"computeTerms.h"
 #include"systemSolve.h"
@@ -44,6 +45,9 @@ int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 		Log(logERROR) << "Error setting U terms in system";
 		exit(1);
 	}
+
+	//cout << omp_get_thread_num() << " MADE IT" << endl;
+
 	if(SetKTerms(tempxi,vT,params,sysF))
 	{
 		Log(logERROR) << "Error setting k terms in system";
@@ -67,6 +71,7 @@ int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 		Log(logERROR) << "Error setting F terms in system";
 		exit(1); 
 	}
+
 	gt.EndTimer("Setting up system");
 //	for(unsigned int i = 0; i<sysF->size;i++)
 //	{
@@ -83,29 +88,32 @@ int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 
 int SetFTerms(gsl_vector * xi, gsl_vector * vT, gsl_vector * T, FParams * params, gsl_vector * sysF)
 {
-	
 	Log(logDEBUG2) << "Setting f terms\n";
-	double firstTerm,secondTerm,thirdTerm,fourthTerm; //terms as defined in doc.  
-	double val; 
 	unsigned int i; 
 	unsigned int size = xi->size/float(5) + 1; //size of single vectors. Comes from old structure of code before restructure branch in git.  
 	double xiCounter; 
 	double f0 = Computef0(xi,params->modelConst,params->grid);
 
+	#pragma omp parallel num_threads(4)
+	{
+	#pragma omp for private(xiCounter)
 	for(i = 1; i<size-1; i++)
 	{
+		double firstTerm,secondTerm,thirdTerm,fourthTerm,val; 
 		xiCounter=5*(i-1); 
 		firstTerm = -(gsl_vector_get(xi,xiCounter+4)-gsl_vector_get(params->XiN,xiCounter+4))/params->deltaT;	
 		secondTerm = pow(ComputeL(xi,params->modelConst,i),2)*Deriv2(xi,f0,xiCounter+4, params->grid);
 		thirdTerm = params->modelConst->C2*(ComputeP(xi,vT,params->grid,i)/gsl_vector_get(xi,xiCounter+1)) - gsl_vector_get(xi,xiCounter+4);
 		fourthTerm = -(params->modelConst->C1/gsl_vector_get(T,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1))-float(2)/3); 
 		val = firstTerm + secondTerm + thirdTerm + fourthTerm;
-		if (!isfinite(val))
-			return 1; 
+		//if (!isfinite(val))
+		//	return 1; 
 		gsl_vector_set(sysF,xiCounter+4,val); 
 		Log(logDEBUG3) << "f term = " << val<< " at " << i;
 	}
+	}
 
+	double firstTerm,secondTerm,thirdTerm,fourthTerm,val; 
 	//boundary terms. 
 	i=size-1;  
 	xiCounter=5*(i-1); 
@@ -123,15 +131,17 @@ int SetV2Terms(gsl_vector * xi,gsl_vector * vT,FParams * params, gsl_vector * sy
 {
 	
 	Log(logDEBUG2) << "Setting V2 terms";
-	double firstTerm,secondTerm,thirdTerm,fourthTerm;  //as defined in doc. 
-	double val; 
 	unsigned int i; 
 	unsigned int size = xi->size/float(5)+1; 
 	double xiCounter; //counter for xi vector. 
 
 	// i loops of size of U,k,ep,v2,f. 
+	#pragma omp parallel num_threads(4) 
+	{
+	#pragma omp for private(xiCounter)
 	for(i = 1; i<size-1; i++)
 	{
+		double firstTerm,secondTerm,thirdTerm,fourthTerm,val; 
 		xiCounter=5*(i-1); //xiCounter is the counter for xi. 
 		firstTerm = -(gsl_vector_get(xi,xiCounter+3)-gsl_vector_get(params->XiN,xiCounter+3))/params->deltaT;	
 		secondTerm = gsl_vector_get(xi,xiCounter+1)*gsl_vector_get(xi,xiCounter+4) - gsl_vector_get(xi,xiCounter+2)*( ( gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)));
@@ -139,11 +149,14 @@ int SetV2Terms(gsl_vector * xi,gsl_vector * vT,FParams * params, gsl_vector * sy
 		fourthTerm = Deriv1(xi,0,xiCounter+3,params->grid)*Deriv1vT(vT,i,params->grid);
 		val = firstTerm + secondTerm + thirdTerm + fourthTerm;
 		Log(logDEBUG3) << "V2 term = " << val<< " at " << i;
-		if (!isfinite(val))
-			return 1; 
+		//if (!isfinite(val))
+		//	return 1; 
 		gsl_vector_set(sysF,xiCounter+3,val); 
 	}
+	}
 
+	double val; 
+	double firstTerm,secondTerm,thirdTerm,fourthTerm;  //as defined in doc. 
 	// compute boundary terms. 
 	i=size-1; 
 	xiCounter=5*(i-1); 
@@ -163,16 +176,18 @@ int SetV2Terms(gsl_vector * xi,gsl_vector * vT,FParams * params, gsl_vector * sy
 int SetEpTerms(gsl_vector * xi, gsl_vector * vT,gsl_vector * T,FParams * params, gsl_vector * sysF)
 {
 	Log(logDEBUG2) << "Setting Ep terms";
-	double firstTerm,secondTerm,thirdTerm,fourthTerm;  //as defined in doc. 
-	double val; 
 	unsigned int i; 
 	unsigned int size = vT->size;
 	double xiCounter; 
 	double ep0 = ComputeEp0(xi,params->modelConst,params->grid);
 
 	//same loop as above. 
+	#pragma omp parallel num_threads(4) 
+	{
+	#pragma omp for private(xiCounter)
 	for (i = 1; i<size-1;i++)
 	{
+		double firstTerm,secondTerm,thirdTerm,fourthTerm,val; 
 		xiCounter=5*(i-1); 
 		firstTerm = -(gsl_vector_get(xi,xiCounter+2)-gsl_vector_get(params->XiN,xiCounter+2))/params->deltaT;	
 		secondTerm = (params->modelConst->Cep1*ComputeP(xi,vT,params->grid,i) - params->modelConst->Cep2*gsl_vector_get(xi,xiCounter+2))/gsl_vector_get(T,i);
@@ -180,11 +195,14 @@ int SetEpTerms(gsl_vector * xi, gsl_vector * vT,gsl_vector * T,FParams * params,
 		fourthTerm = (1/params->modelConst->sigmaEp)*Deriv1(xi,ep0,xiCounter+2,params->grid)*Deriv1vT(vT,i,params->grid);
 		val = firstTerm + secondTerm + thirdTerm + fourthTerm;
 		Log(logDEBUG3) << "Ep term = " << val << " at " << i;
-		if (!isfinite(val))
-			return 1; 
+		//if (!isfinite(val))
+		//	return 1; 
 		gsl_vector_set(sysF,xiCounter+2,val); 
 	}
+	}
 
+	double val; 
+	double firstTerm, secondTerm,thirdTerm,fourthTerm;  //as in doc. 
 	i=size-1;  
 	xiCounter=5*(i-1); 
 	firstTerm = -(gsl_vector_get(xi,xiCounter+2)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	
@@ -202,14 +220,16 @@ int SetEpTerms(gsl_vector * xi, gsl_vector * vT,gsl_vector * T,FParams * params,
 int SetKTerms(gsl_vector * xi, gsl_vector* vT,FParams * params,gsl_vector *sysF)
 {
 	Log(logDEBUG2) <<"Setting K terms";
-	double firstTerm, secondTerm,thirdTerm,fourthTerm;  //as in doc. 
-	double val; 
 	unsigned int i;  
 	unsigned int size=vT->size; 
 	double xiCounter; 
 	//same loops as above. 
+	#pragma omp parallel num_threads(4) 
+	{
+	#pragma omp for private(xiCounter)
 	for(i=1; i<size-1;i++)
 	{
+		double firstTerm,secondTerm,thirdTerm,fourthTerm,val; 
 		xiCounter=5*(i-1);
 		firstTerm = -(gsl_vector_get(xi,xiCounter+1)-gsl_vector_get(params->XiN,xiCounter+1))/params->deltaT;	
 		secondTerm = ComputeP(xi,vT,params->grid,i)-gsl_vector_get(xi,xiCounter+2);
@@ -217,11 +237,14 @@ int SetKTerms(gsl_vector * xi, gsl_vector* vT,FParams * params,gsl_vector *sysF)
 		fourthTerm = Deriv1(xi,0,xiCounter+1,params->grid)*Deriv1vT(vT,i,params->grid);
 		val = firstTerm + secondTerm + thirdTerm + fourthTerm; 
 		Log(logDEBUG3) << "K term = " << val<< " at "<<i;
-		if(!isfinite(val))
-			return 1; 
+		//if(!isfinite(val))
+		//	return 1; 
 		gsl_vector_set(sysF,xiCounter+1,val); 
 	}
+	}
 
+	double val; 
+	double firstTerm, secondTerm, thirdTerm;
 	i = size-1;  
 	xiCounter = 5*(i-1); 
 	firstTerm = -(gsl_vector_get(xi,xiCounter+1)-gsl_vector_get(params->XiN,xiCounter+1))/params->deltaT;	
@@ -240,34 +263,40 @@ int SetUTerms( gsl_vector * xi, gsl_vector * vT, FParams * params,gsl_vector * s
 {
 	Log(logDEBUG2) << "Setting U terms";
 	//same structure as other functions. 
-	double firstTerm, secondTerm, thirdTerm;
-	double val; 
 	unsigned int i; 
 	unsigned int size=vT->size; 
 	double xiCounter;
 
+	#pragma omp parallel num_threads(4) 
+	{
+	#pragma omp for private(xiCounter)
 	for(i=1; i<size-1; i++)
 	{
 		xiCounter = 5*(i-1);
+		//cout << omp_get_thread_num() << endl; 
 
+		double firstTerm, secondTerm, thirdTerm,val;
 		firstTerm = -(gsl_vector_get(xi,xiCounter)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	
 		secondTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*Deriv2(xi,0,xiCounter, params->grid);
 		thirdTerm = Deriv1(xi,0,xiCounter, params->grid)*Deriv1vT(vT,i, params->grid);
 		val = firstTerm + secondTerm + thirdTerm+1;  
 		Log(logDEBUG3) << "U term = " << val << " at " << i;
-		if(!isfinite(val))
-			return 1; 
+		//if(!isfinite(val))
+		//	return 1; 
 		gsl_vector_set(sysF,xiCounter,val);
 	}
+	}
 
+	double val; 
+	double firstTerm, secondTerm, thirdTerm;
 	i =size-1; 
 	xiCounter = 5*(i-1); 
 	firstTerm = -(gsl_vector_get(xi,xiCounter)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	
 	secondTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*BdryDeriv2(xi,xiCounter, params->grid);
 	val = firstTerm+secondTerm + 1; 
 	Log(logDEBUG3) << "U term = " << val << " at " << i;
-	if(!isfinite(val))
-		return 1; 
+	//if(!isfinite(val))
+	//	return 1; 
 	gsl_vector_set(sysF,xiCounter,val); 	
 	return 0; 
 }

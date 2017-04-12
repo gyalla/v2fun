@@ -19,7 +19,7 @@ Ceta = 70
 #-------------------------
 # Other paramters
 #-------------------------
-max_ts = 2000         # Maximum time step
+max_ts = 2000        # Maximum time step
 reyn = 180            # Friction Reynolds number
 uniform-grid = true   # Use a uniform grid
 
