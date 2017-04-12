@@ -107,13 +107,13 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 		deltaT = 0.001;
 		if (iter > 500)
 			deltaT = 0.01;
-		if (iter > 600)
-			deltaT = 0.1;
 		if (iter > 700)
-			deltaT = 1; 
+			deltaT = 0.1;
 		if (iter > 800)
-			deltaT = 10; 
+			deltaT = 1; 
 		if (iter > 900)
+			deltaT = 10; 
+		if (iter > 1000)
 			deltaT = 100; 
 		if (iter > 1000)
 			deltaT = 1000;
