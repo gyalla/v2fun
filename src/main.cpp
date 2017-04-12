@@ -89,7 +89,13 @@ int main(int argc, char ** argv)
 
 int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 {
-	double deltaT;
+        double previous_residual=100; // The max residual at the previous step
+        double max_residual = 100;    // The max residual at the current step
+        double deltaT;
+        int diverged_count = 0;       // Tracks the number of steps where
+                                      // the residual is diverging.
+        const double residual_switch = 0.5; // deltaT won't increase if residual is above this limit
+        const double max_deltaT = 100;      // maximum possible value of deltaT
 	int status;  // status of solver
 	int power = -10;
 	int iter = 0; 
@@ -101,10 +107,12 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 	gsl_multiroot_fsolver * s = gsl_multiroot_fsolver_alloc(Type,xi->size);
 	//for time marching, starting small and getting bigger works best. 
 	//power here represents powers of 2 for deltaT.
+        deltaT = 0.001;
 	do
 	{
 		//deltaT = fmin(0.0001,pow(10,power));
-		deltaT = 0.001;
+		/**
+                deltaT = 0.001;
 		if (iter > 500)
 			deltaT = 0.01;
 		if (iter > 700)
@@ -117,8 +125,8 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 			deltaT = 100; 
 		if (iter > 1000)
 			deltaT = 1000;
-
-		//deltaT = 1/modelConst->reyn + iter*pow(2,power); // start off 1/modelConst->reyn; 
+                */
+                //deltaT = 1/modelConst->reyn + iter*pow(2,power); // start off 1/modelConst->reyn; 
 		iter++;
 		//deltaT = fmin(pow(10,3),pow(2,power)); // start off 1/modelConst->reyn; 
 		struct FParams p = {xi,deltaT,grid,modelConst};
@@ -154,6 +162,21 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 
 		if (iter%200 == 0)
 			SaveResults(xi,"../data/test/solve" + NumberToString(iter)  + "_step001.dat",grid,modelConst);
+                
+                // Change the time-step
+                if (iter > 1) previous_residual = max_residual;
+                max_residual = gsl_vector_max(s->f);
+                if (max_residual/previous_residual > 2) {
+                  diverged_count++;
+                } else {
+                  diverged_count = 0;
+                }
+                if (diverged_count > 3) deltaT /= 10;
+                if (max_residual < residual_switch && deltaT < max_deltaT &&
+                    max_residual/previous_residual > 0.5 &&
+                    max_residual/previous_residual < 1.0) {
+                  deltaT *= 2;
+                }
 
 		status = gsl_multiroot_test_residual (s->f, 1e-7);
 	}while(status == GSL_CONTINUE && iter < max_ts);
@@ -163,7 +186,7 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 
 int print_state(int i,gsl_multiroot_fsolver * s)
 {
-	Log(logINFO) << "iteration = "<< i << ", U6 = " << gsl_vector_get(s->x,25);
+	Log(logINFO) << "iteration = "<< i << ", max = " << gsl_vector_max(s->f);
 	return 0; 
 }
 
