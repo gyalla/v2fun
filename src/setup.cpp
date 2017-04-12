@@ -205,8 +205,8 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 	 * d^2/dy^2 = d^2Chi/dy^2 * d/dChi + (dChi/dy)^2 * d^2/dChi^2
 	 * So:
    *      |    1                               0                   0               |
-   * A =  | L^2(a1^2/m^2 - a2/(2*m))  -2*L^2*a1^2/m^2+1  L^2(a1^2/m^2 + a2/(2*m))  |
-   *      |    0                          L^2*a1^2/m^2      -2*L^2*a1^2/m^2+1      |
+   * A =  | L^2(a1^2/m^2 - a2/(2*m))  -2*L^2*a1^2/m^2-1  L^2(a1^2/m^2 + a2/(2*m))  |
+   *      |    0                         2*L^2*a1^2/m^2      -2*L^2*a1^2/m^2-1      |
    * Where:
    *    a1 = dChi/dY
    *    a2 = d^2Chi/dY^2
@@ -227,7 +227,7 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 		coef1 = Lsquared*(pow(grid->dChidY(Chi),2)/deltaChi2
 		                  - grid->d2ChidY2(Chi)/(2*deltaChi));
 		coef2 = -2*Lsquared*pow(grid->dChidY(Chi),2)/deltaChi2 - 1.0;
-    coef3 = Lsquared*(pow(grid->dChidY(Chi),2)/deltaChi2
+                coef3 = Lsquared*(pow(grid->dChidY(Chi),2)/deltaChi2
                       + grid->d2ChidY2(Chi)/(2*deltaChi));
 		gsl_matrix_set(A,i,i-1,coef1);
 		gsl_matrix_set(A,i,i,  coef2);
@@ -249,7 +249,7 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 	xiCounter = 5*(i-1);
   Chi = gsl_vector_get(grid->chi, i-1);
   Lsquared = pow(ComputeL(xi,modelConst,i),2);
-  coef1 = Lsquared*pow(grid->dChidY(Chi),2)/deltaChi2;
+  coef1 = 2*Lsquared*pow(grid->dChidY(Chi),2)/deltaChi2;
   coef2 = -2*Lsquared*pow(grid->dChidY(Chi),2)/deltaChi2 - 1.0;
 	gsl_matrix_set(A,i,i-1,coef1);
 	gsl_matrix_set(A,i,i,coef2);
