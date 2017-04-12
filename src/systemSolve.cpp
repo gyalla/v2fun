@@ -233,7 +233,7 @@ int SetKTerms(gsl_vector * xi, gsl_vector* vT,FParams * params,gsl_vector *sysF)
 		xiCounter=5*(i-1);
 		firstTerm = -(gsl_vector_get(xi,xiCounter+1)-gsl_vector_get(params->XiN,xiCounter+1))/params->deltaT;	
 		secondTerm = ComputeP(xi,vT,params->grid,i)-gsl_vector_get(xi,xiCounter+2);
-		thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*Deriv2(xi,0,xiCounter+1,params->grid);
+		thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i)/1.3)*Deriv2(xi,0,xiCounter+1,params->grid);
 		fourthTerm = Deriv1(xi,0,xiCounter+1,params->grid)*Deriv1vT(vT,i,params->grid);
 		val = firstTerm + secondTerm + thirdTerm + fourthTerm; 
 		Log(logDEBUG3) << "K term = " << val<< " at "<<i;
@@ -249,7 +249,7 @@ int SetKTerms(gsl_vector * xi, gsl_vector* vT,FParams * params,gsl_vector *sysF)
 	xiCounter = 5*(i-1); 
 	firstTerm = -(gsl_vector_get(xi,xiCounter+1)-gsl_vector_get(params->XiN,xiCounter+1))/params->deltaT;	
 	secondTerm = -gsl_vector_get(xi,xiCounter+2); 
-	thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i))*BdryDeriv2(xi,xiCounter+1,params->grid);
+	thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i)/1.3)*BdryDeriv2(xi,xiCounter+1,params->grid);
 	val = firstTerm+secondTerm+thirdTerm; 
 	Log(logDEBUG3) << "K term = " << val<< " at "<<i;
 	if(!isfinite(val))
