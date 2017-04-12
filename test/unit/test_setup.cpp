@@ -12,6 +12,20 @@ int test_interp()
 	gsl_vector * xi = gsl_vector_alloc(5*(1/deltaX));
 
 	gsl_vector *truexi = gsl_vector_calloc(5*(1/deltaX)); 
+
+	struct constants Const = {
+		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
+	constants * modelConst= & Const;  
+	modelConst->reyn=1;
+	modelConst->Cmu=3; 
+	modelConst->C1=1; 
+	modelConst->C2=2; 
+	modelConst->Cep1=4; 
+	modelConst->Cep2=5; 
+	modelConst->Ceta=6; 
+	modelConst->CL=7; 
+	modelConst->sigmaEp=8;
+	
 	gsl_vector_set(truexi,0,0.5);
 	gsl_vector_set(truexi,1,1);
 	gsl_vector_set(truexi,3,-0.5);
@@ -25,7 +39,7 @@ int test_interp()
 	gsl_vector_set(truexi,16,1);
 	gsl_vector_set(truexi,18,-2);
 
-	SolveIC(xi,&grid,"./test_interp.data");
+	SolveIC(xi,modelConst,&grid,"./test_interp.data");
 
 	if (gsl_vector_equal(xi,truexi)==0)
 	{
@@ -43,13 +57,14 @@ int test_Grvy_Input()
 	constants * modelConst= &Const; 
 	string filename,outFile;
 	bool uniformGrid;
-	if(Grvy_Input_Parse(modelConst,filename,outFile,uniformGrid))
+	int max_ts; 
+	if(Grvy_Input_Parse(modelConst,filename,outFile,uniformGrid,max_ts))
 	{ 
 		cout << "FAIL: Getting inputs" << endl; 
 		return 1; 
 	}
 
-	if( (modelConst->reyn != 2000) || (modelConst->Cmu != 0.19) || (modelConst->C1 != 0.4)|| (modelConst->C2 != 0.3) || (modelConst->sigmaEp != 1.3) || (modelConst->CL != 0.3) || (modelConst->Cep2 != 1.9) || (modelConst->Cep1 != 1.55) || (modelConst->Ceta != 70) || (filename.compare("../data/Reyn_2000.dat")!=0) || (outFile.compare("../data/v2fResults_2000.dat")!=0))
+	if( (modelConst->reyn != 2000) || (modelConst->Cmu != 0.19) || (modelConst->C1 != 0.4)|| (modelConst->C2 != 0.3) || (modelConst->sigmaEp != 1.3) || (modelConst->CL != 0.3) || (modelConst->Cep2 != 1.9) || (modelConst->Cep1 != 1.55) || (modelConst->Ceta != 70) || (filename.compare("../data/Reyn_2000.dat")!=0) || (outFile.compare("../data/v2fResults_2000.dat")!=0) || (max_ts !=1))
 	{
 		cout << "FAIL: Getting inputs" << endl; 
 		return 1; 

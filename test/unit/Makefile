@@ -17,9 +17,9 @@ OTHER   := ../../src/finiteDiff.cpp \
 
 
 $(EXEC): $(OBJ)
-	$(LINK.o) $(OTHER) -o $@ $^ $(INC) $(CFLAGS) $(LDFLAGS) $(LDLIBS)
+	$(LINK.o) $(OTHER) -fopenmp -o $@ $^ $(INC) $(CFLAGS) $(LDFLAGS) $(LDLIBS)
 %.o: %.cpp
-	$(COMPILE.c)  $< -o $@ $(INC) $(CFLAGS)
+	$(COMPILE.c)  $< -fopenmp -o $@ $(INC) $(CFLAGS)
 
 check: 
 	$(RM) test_output.txt
