@@ -344,7 +344,23 @@ since $f$ is initialized at zero.}
 
 
 %%% Re_tau = 5200 case
+\section{Results at $\mathrm{Re}_{\tau} = 5200$}
 After verifying our code on the $Re_{\tau} = 180$ case, we ran our code at $Re_{\tau} = 5200$, so as to compare it with the DNS results of \cite{Lee}. The results can be found......
+
+Excellent agreement was found for the $U$ profile.  This is a testament to the strength of the $\overline{v^2}-f$ model, especially in the near-wall region.  Good agreement was found for both the inner and outer layer, including the viscous sublayer.
+
+The agreement were not as good for $k$ or $\overline{v^2}$.  This matches what was seen for $Re_{\tau} = 180$ in Durbin's paper \cite{durbin180}, as discussed in the previous section.  The lack of agreement also reflects the nature of the $\overline{v^2}-f$ model, where $U$ is usually the quantitiy of interest, whose model is built upon parameters $k$, $\epsilon$, $\overline{v^2}$ and $f$.  Due to the differences between reality and the model for $U$, the parameters such as $k$ do not have to be precise to give the correct behavior for $U$. Nevertheless, the overall behavior of $k$ and $\overline{v^2}$ is still close to the DNS data.
+
+Similarly, a comparison of the RANS results for $\varepsilon$ with the DNS data shows slight difference, especially near the wall. Nevertheless, the overall behavior is still close to the DNS data.
+
+The RANS results for the $Re_{\tau} = 5200$ case were also compared to the log-law.  The ``universal values'' given by Pope \cite{pope} were not as good as the values derived from DNS by Lee and Moser \cite{Lee}.  These values are $\kappa = 0.384$ and $B = 4.27$.  A comparison of the RANS results with the theoretical log-law is shown in Fig. \ref{fig:loglaw}. This agreement with the values put forth by Lee and Moser is logical, since the RANS $U$ profile closely matches the DNS results.
+
+\begin{figure}
+ \centering
+ \includegraphics[width=\textwidth]{loglaw_5200}
+ \caption{Comparison of the $\mathrm{Re}_{\tau} = 5200$ results with the expected power-law and log-law behavior near the wall. The values of $\kappa = 0.384$ and $B = 4.27$ give good agreement between the log-law and the RANS results.}
+ \label{fig:loglaw}
+\end{figure}
 
 
 \clearpage

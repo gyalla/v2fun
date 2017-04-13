@@ -59,7 +59,7 @@ DNS = vars("../data/init_5200.dat")
 fig, ax = plt.subplots()
 v2f.plot_BL(fig, ax)
 ax.legend(loc='best')
-fig.set_size_inches(7,5, forward=True)
+fig.set_size_inches(8,6, forward=True)
 fig.savefig('../doc/turbulence/figs/loglaw_5200.png')
 plt.show()
 
