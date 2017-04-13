@@ -41,7 +41,7 @@
 We begin by developing the $k-\epsilon$ model for channel flow with Durbin's
 $\overline{v^2}-f$ formulation of the eddy viscosity near
 the wall. We chose this wall treatment since it fundamentally addresses the fact that near
-the wall, the eddy viscosity transports momentum in the vertical direction, and
+the wall, the eddy viscosity transports momentum in the verticle direction, and
 thus it should be a function of only the wall normal velocity fluctuations. The
 three-dimensional $\overline{v^2}-f$ model equations are given as:
 
@@ -130,7 +130,7 @@ The constants are defined as follows:
 \end{multicols}
 
 \subsection{Boundary conditions}
-For the turbulent channel, we only compute for $y \in [0,\delta] $, as opposed to the full $y \in [0,2\delta]$, by symmetry. The boundary conditions for our five dependent variables, $U, k, \ep, \overline{v^2}, f$, are as follows: 
+For the turbulent channel, we only compute for $y \in [0,\delta] $, as oppposed to the full $y \in [0,2\delta]$, by symmetry. The boundary conditions for our five dependent variables, $U, k, \ep, \overline{v^2}, f$, are as follows: 
 \[
 U = k = \overline{v^2} = 0 
 \]
@@ -198,7 +198,7 @@ at $y = 0$.
 
 \section{Discretization of the governing equations}
 
-\subsection{Temporal Discretization and Time-Marching}
+\subsection{Temporal discretization and Time-Marching}
 As described in the previous section, we want to solve the steady state
 $\overline{v^2}-f$ equations for fully developed channel flow. We could try and
 do this by discretizing the steady equations and writing a nonlinear solver, but
@@ -215,7 +215,7 @@ step,i.e., we can just take a single Newton iteration and go to the next step.
 
 To be more specific, if $F(\xi) = 0$ is the system of equations given by
 \eqref{eq:ssv2f1_nondim}-\eqref{eq:ssv2f5_nondim}, where, $\xi \equiv (U, k,
-\ep, \overline{v^2}, f)^T$, then we will start with an initial guess $\xi_0$ and
+\ep, \overline{v^2}, f)^T$, then we will start with an inital guess $\xi_0$ and
 solve $\partial \xi / \partial t = F(\xi)$, until $\partial \xi / \partial t
 \approx 0$. Generally, this works best if you start with a small
 time step and then gradually increase the time step until it is very large at
