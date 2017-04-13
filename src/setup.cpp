@@ -100,8 +100,8 @@ int LinInterp(gsl_vector * Vec,double pt1,double pt2, double U1,double U2,double
 		return 1; 
 	}
 
-	if(i%5==2)
-		val = val*modelConst->reyn;
+	//if(i%5==2)
+	//	val = val*modelConst->reyn;
 	gsl_vector_set(Vec,i,val); 
 	return 0;
 }
@@ -116,15 +116,15 @@ int SolveIC(gsl_vector * xi, constants * modelConst,Grid* grid, string file)
 	double pt2,tempU2,tempK2,tempEp2,tempV22;
 	double gridPt,xiCounter;
 		
+	//double tempf1,tempf2; 
 	// read in first two line. 
-	if (!(inFile >> pt1 >> tempU1 >> tempK1 >> tempEp1 >> tempV21))
+	if (!(inFile >> pt1 >> tempU1 >> tempK1 >> tempEp1 >> tempV21))// >> tempf1))
 		return 1; 
 
-	if (!(inFile >> pt2 >> tempU2 >> tempK2 >> tempEp2 >> tempV22))
+	if (!(inFile >> pt2 >> tempU2 >> tempK2 >> tempEp2 >> tempV22))// >> tempf2))
 		return 1; 
 	for(unsigned int i=0; i<(xi->size/float(5));i++)
 	{
-
 		xiCounter=5*i; //counter relative to xi vector. 
 		gridPt=gsl_vector_get(grid->y, i); //which grid point we are working on.
 		Log(logDEBUG1) <<"Working on grid point: " << gridPt;
@@ -137,16 +137,15 @@ int SolveIC(gsl_vector * xi, constants * modelConst,Grid* grid, string file)
 			tempK1 = tempK2;
 			tempEp1 = tempEp2; 
 			tempV21 = tempV22; 
+			//tempf1 = tempf2; 
 
 
-			if (! (inFile >> pt2 >> tempU2 >> tempK2 >> tempEp2 >> tempV22))
+			if (! (inFile >> pt2 >> tempU2 >> tempK2 >> tempEp2 >> tempV22)) // >> tempf2))
 			{
 				Log(logERROR) << "Error: Cannot get interpolation data."; 
 			}
 		}
 		
-		//tempEp1 = tempEp1*modelConst->reyn; 
-		//tempEp2 = tempEp2*modelConst->reyn; 
 		//interpolate each term U,k,ep,v2,f.
 		Log(logDEBUG2) << "interpolation points: " << pt1 << "," <<  pt2;
 		Log(logDEBUG2) << "interpolation values (U): " <<  tempU1 <<  "," << tempU2;
@@ -161,6 +160,8 @@ int SolveIC(gsl_vector * xi, constants * modelConst,Grid* grid, string file)
 			return 1; 
 		if(LinInterp(xi,pt1,pt2,tempV21,tempV22,gridPt,xiCounter+3,modelConst))
 			return 1; 
+		//if(LinInterp(xi,pt1,pt2,tempf1,tempf2,gridPt,xiCounter+4,modelConst))
+		//	return 1; 
 	}
 
 	inFile.close();
@@ -254,7 +255,8 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 	gsl_matrix_set(A,i,i-1,coef1);
 	gsl_matrix_set(A,i,i,coef2);
 
-	LHS1 = (modelConst->C1/ComputeT(xi,modelConst,i))*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)) - 2.0/3.0); 
+	LHS1 = (modelConst->C1/gsl_vector_get(T,i)*( (gsl_vector_get(xi,xiCounter+3)/gsl_vector_get(xi,xiCounter+1)) - 2.0/3.0)); 
+
 	if (!isfinite(LHS1))
 	{
 		Log(logERROR) << "Error: non-finite b (" << LHS1 << ")"; 
