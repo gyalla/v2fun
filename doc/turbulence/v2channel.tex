@@ -8,6 +8,7 @@
 \usepackage{graphicx}
 %%\usepackage{caption} <--- I don't actually know if we need these two
 %%\usepackage{subcaption}     <--
+\usepackage{subcaption}
 \usepackage{amsfonts,amsthm,amsmath,mathtools,graphicx,geometry}
 \usepackage{enumitem} 
 \usepackage{multicol}
@@ -371,35 +372,35 @@ since $f$ is initialized at zero.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results for larger $Re_\tau$}
 \subsection{$Re_\tau = 5,200$ case}
-After verifying our code on the $Re_{\tau} = 180$ case, we ran our code at $Re_{\tau} = 5200$, so as to compare it with the DNS results of \cite{Lee}. The results can be found below. 
-
+After verifying our code on the $Re_{\tau} = 180$ case, we ran our code at $Re_{\tau} = 5200$, so as to compare it with the DNS results of \cite{Lee}. The results can be seen in Fig. \ref{fig:Re5200_all}.
 \begin{figure}
 	\centering
-	\begin{subfigure}[b] %% plot U vs y^+
-		\includegraphics[width=0.7\textwidth]{}
-		\caption{(a) Mean velocity profile, $U$}
-		\label{fig: results_U_5200}
+	\begin{subfigure}[b]{0.45\textwidth} %% plot U vs y^+
+		\includegraphics[width=\textwidth]{U_5200}
+		\caption{}
+		\label{fig:results_U_5200}
 	\end{subfigure}
 	~
-	\begin{subfigure}[b] %% plot k vs y^+
-		\includegraphics[width=0.7\textwidth]{}
-		\caption{(b) Turbulent kinetic energy, $k$}
-		\label{fig: results_k_5200}
+	\begin{subfigure}[b]{0.45\linewidth} %% plot eps vs y^+
+		\includegraphics[width=\textwidth]{eps_5200}
+		\caption{}
+		\label{fig:results_k_5200}
 	\end{subfigure}
 	% begin new line for subfigure
 	
-	\begin{subfigure}[b] %% plot v2 vs y^+
-		\includegraphics[width=0.7\textwidth]{}
-		\caption{(c) Wall normal velocity fluctuations, $\chevron{v^2}$}
-		\label{fig: results_v2_5200}
+	\begin{subfigure}[b]{0.45\textwidth} %% plot k, v2 vs y
+		\includegraphics[width=\textwidth]{k_y_5200}
+		\caption{}
+		\label{fig:results_v2_5200}
 	\end{subfigure}
-	~	
-	\begin{subfigure}[b] %% plot eps vs y^+
-		\includegraphics[width=0.7\textwidth]{}
-		\caption{(d) Energy dissipation, $\ep$}
-		\label{fig: results_eps_5200}
+	~
+	\begin{subfigure}[b]{0.45\textwidth} %% plot k, v2 vs y^+
+		\includegraphics[width=\textwidth]{k_yp_5200}
+		\caption{}
+		\label{fig:results_eps_5200}
 	\end{subfigure}	
-	\caption{Steady state solutions for $Re_\tau = 5200$}
+	\caption{Steady state solutions for $Re_\tau = 5200$. (a) The mean velocity, $U$. (b) The dissipation, $\varepsilon^+$, normalized in wall-units. (c) The turbulent kinetic energy, $k$, and the wall-normal velocity variance, $\overline{v^2}$, normalized by the channel width. (d) $k$ and $\overline{v^2}$, normalized by wall-units}
+	\label{fig:Re5200_all}
 \end{figure}
 
 Excellent agreement was found for the $U$ profile.  This is a testament to the strength of the $\overline{v^2}-f$ model, especially in the near-wall region.  Good agreement was found for both the inner and outer layer, including the viscous sublayer.
