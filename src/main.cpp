@@ -61,11 +61,11 @@ int main(int argc, char ** argv)
 	Log(logINFO) << "Solving initial conditions for f";
 
 
-	if(Solve4f0(xi,modelConst,&grid))
-	{
-		Log(logERROR) << "Error initializing f";
-		return 1; 
-	}
+	//if(Solve4f0(xi,modelConst,&grid))
+	//{
+	//	Log(logERROR) << "Error initializing f";
+	//	return 1; 
+	//}
 	gt.EndTimer("Solving Initial Conditions");
 
 	SaveResults(xi,"../data/init.dat",&grid,modelConst);
@@ -91,16 +91,14 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 {
         double previous_residual=100; // The max residual at the previous step
         double max_residual = 100;    // The max residual at the current step
-        double deltaT = 0.0000001;
+        double deltaT = 0.000001;
         int diverged_count = 0;       // Tracks the number of steps where
                                       // the residual is diverging.
         const double residual_switch = 0.5; // deltaT won't increase if residual is above this limit
-        const double max_deltaT = 100.0;      // maximum possible value of deltaT
+        const double max_deltaT = 1000.0;      // maximum possible value of deltaT
 	int status;  // status of solver
-	int power = -10;
 	int iter = 0; 
 	int inner_iter = 0; 
-	bool converge = false; 
 	//set up solver
 	Log(logINFO) <<"Setting up Solver";
 	const gsl_multiroot_fsolver_type * Type = gsl_multiroot_fsolver_dnewton; //dnewton for newton solver;
@@ -110,21 +108,22 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 	do
 	{
 		//deltaT = fmin(0.0001,pow(10,power));
-		/**
-                deltaT = 0.001;
-		if (iter > 500)
-			deltaT = 0.01;
-		if (iter > 700)
+		/*
+                deltaT = 0.01;
+		if (iter > 5000)
 			deltaT = 0.1;
-		if (iter > 800)
-			deltaT = 1; 
-		if (iter > 900)
+		if (iter > 7000)
+			deltaT = 1;
+		if (iter > 8000)
 			deltaT = 10; 
-		if (iter > 1000)
+		if (iter > 9000)
 			deltaT = 100; 
-		if (iter > 1000)
-			deltaT = 1000;
-                */
+		if (iter > 10000)
+			deltaT = 1000; 
+		if (iter > 10000)
+			deltaT = 10;
+			*/
+	
                 //deltaT = 1/modelConst->reyn + iter*pow(2,power); // start off 1/modelConst->reyn; 
 		iter++;
 		//deltaT = fmin(pow(10,3),pow(2,power)); // start off 1/modelConst->reyn; 
@@ -159,8 +158,8 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 				gsl_vector_set(xi,i,fmax(gsl_vector_get(xi,i),V2_MIN));
 		}
 
-		if (iter%200 == 0)
-			SaveResults(xi,"../data/test/solve" + NumberToString(iter)  + "_step001.dat",grid,modelConst);
+		if (iter%50 == 0)
+			SaveResults(xi,"../data/test/solve" + NumberToString(iter)  + ".dat",grid,modelConst);
                 
                 // Change the time-step
                 if (iter > 1) previous_residual = max_residual;
