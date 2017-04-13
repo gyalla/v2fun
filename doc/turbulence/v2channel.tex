@@ -278,6 +278,9 @@ If we use $\delta = 1$ as our channel width, then $y = \tilde{y}$ and $\delta_v 
 Using a value of $\eta = .97$ for the mapping parameter, the number of points required for $\mathrm{Re}_{\tau}=5200$ and $\mathrm{Re}_{\tau}=10000$ is 390 and 735 respectively. This is significantly lower than the uniform grid sizes of 5,200 and 10,000.
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Code verification and description of results
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Code Verification}
 
 We implemented a number of verification tests to make sure that our model was
@@ -286,6 +289,8 @@ $10,000$. Notably, we ensured that the model converged to the laminar solution
 after setting $\nu_T \rightarrow 0$ and tested the model with Reynolds numbers
 of 180 and 2,000. 
 
+
+%%% Laminar case
 Testing the laminar case verified our grid formulation, interpolation of DNS
 results for initial conditions, and that our numerical solver was working
 properly for the velocity equation, Eqn.
@@ -305,6 +310,8 @@ our $\chevron{v^2}-f$ model. }
  \label{fig:laminar}
 \end{figure}
 
+
+%%% Re_tau = 180 case
 Our next test was with $Re_\tau = 180$, which provided a more involved
 verification of the model. Here we referred to $\chevron{v^2} - f$ and DNS
 solutions plotted in \cite{durbin180}. Plots from this paper are shown in Fig.  We show steady solutions to each of the terms in
@@ -319,6 +326,8 @@ at this Reynolds number in Fig. \ref{fig:results_180}.
 \end{figure}
 
 
+%%% Re_tau = 5200 case
+After verifying our code on the $Re_{\tau} = 180$ case, we ran our code at $Re_{\tau} = 5200$, so as to compare it with the DNS results of \cite{Lee}. The results can be found......
 
 
 \clearpage
