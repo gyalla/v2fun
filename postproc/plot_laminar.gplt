@@ -1,0 +1,15 @@
+set terminal png
+set output 'laminar_NU.png'
+
+set title "Laminar Mean Velocity Results" 
+set xlabel "y/d" 
+set ylabel "U^+"
+
+set key bottom
+#plot '../data/init_lam.dat' using 1:2 w linesp title "Inital U^+",\
+#'../data/init_lam.dat' using 1:7 w linesp title "Analytic Solution",\
+#'../data/v2fResults_lam.dat' using 1:2 w linesp title "U^+"\
+
+plot '../data/init_lamNU.dat' using 1:2 w linesp title "Inital U^+",\
+'../data/init_lamNU.dat' using 1:7 w linesp title "Analytic Solution",\
+'../data/v2fResults_lamNU.dat' using 1:2 w linesp title "U^+"\
