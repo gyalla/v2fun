@@ -290,11 +290,11 @@ In order to acheive a near-wall resolution on the order of $\Delta y ~ \delta_v$
  \Delta \chi = \frac{\sin^{-1}(b\delta_v -b)}{a}+1
 \end{equation}
 
-If we use $\delta = 1$ as our channel width, then $y = \tilde{y}$ and $\delta_v = 1/\mathrm{Re}_{\tau}$.  This leads to an equation for the required number of grid points, $n$, as:
+If we use $\delta = 1$ as our channel width, then $y = \tilde{y}$ and $\delta_v = 1/Re_{\tau}$.  This leads to an equation for the required number of grid points, $n$, as:
 \begin{equation}
- n = \frac{a}{\sin^{-1}(b/\mathrm{Re}_{\tau}-b)+a}
+ n = \frac{a}{\sin^{-1}(b/Re_{\tau}-b)+a}
 \end{equation}
-Using a value of $\eta = .97$ for the mapping parameter, the number of points required for $\mathrm{Re}_{\tau}=5200$ and $\mathrm{Re}_{\tau}=10000$ is 390 and 735 respectively. This is significantly lower than the uniform grid sizes of 5,200 and 10,000.
+Using a value of $\eta = .97$ for the mapping parameter, the number of points required for $Re_{\tau}=5200$ and $Re_{\tau}=10000$ is 390 and 735 respectively. This is significantly lower than the uniform grid sizes of 5,200 and 10,000.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -371,6 +371,8 @@ since $f$ is initialized at zero.}
 %%% Re_tau = 5,200; 10,000 cases
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results for larger $Re_\tau$}
+
+
 \subsection{$Re_\tau = 5,200$ case}
 After verifying our code on the $Re_{\tau} = 180$ case, we ran our code at $Re_{\tau} = 5200$, so as to compare it with the DNS results of \cite{Lee}. The results can be seen in Fig. \ref{fig:Re5200_all}.
 \begin{figure}
@@ -399,7 +401,7 @@ After verifying our code on the $Re_{\tau} = 180$ case, we ran our code at $Re_{
 		\caption{}
 		\label{fig:results_eps_5200}
 	\end{subfigure}	
-	\caption{Steady state solutions for $Re_\tau = 5200$. (a) The mean velocity, $U$. (b) The dissipation, $\varepsilon^+$, normalized in wall-units. (c) The turbulent kinetic energy, $k$, and the wall-normal velocity variance, $\overline{v^2}$, normalized by the channel width. (d) $k$ and $\overline{v^2}$, normalized by wall-units}
+	\caption{Steady state solutions for $Re_{\tau} = 5200$. (a) The mean velocity, $U$. (b) The dissipation, $\varepsilon^+$, normalized in wall-units. (c) The turbulent kinetic energy, $k$, and the wall-normal velocity variance, $\overline{v^2}$, normalized by the channel width. (d) $k$ and $\overline{v^2}$, normalized by wall-units}
 	\label{fig:Re5200_all}
 \end{figure}
 
@@ -409,20 +411,63 @@ The agreement were not as good for $k$ or $\overline{v^2}$.  This matches what w
 
 Similarly, a comparison of the RANS results for $\varepsilon$ with the DNS data shows slight difference, especially near the wall. Nevertheless, the overall behavior is still close to the DNS data.
 
-The RANS results for the $Re_{\tau} = 5200$ case were also compared to the log-law.  The ``universal values'' given by Pope \cite{pope} were not as good as the values derived from DNS by Lee and Moser \cite{Lee}.  These values are $\kappa = 0.384$ and $B = 4.27$.  A comparison of the RANS results with the theoretical log-law is shown in Fig. \ref{fig:loglaw}. This agreement with the values put forth by Lee and Moser is logical, since the RANS $U$ profile closely matches the DNS results.
+\subsection{$Re_{\tau} = 10000$ case}
+
+Results for the $Re_{\tau} = 10000$ case are shown in Fig. \ref{fig:Re10000_all}.  Also shown in this figure are the results for $Re_{\tau} = 5200$.  The $U$ and $\varepsilon$ profiles are almost exactly the same when normalized by $y^+$ units, with a slightly longer log-law region at the higher Reynolds number.
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth} %% plot U vs y^+
+		\includegraphics[width=\textwidth]{U_10000}
+		\caption{}
+		\label{fig:results_U_10000}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.45\linewidth} %% plot eps vs y^+
+		\includegraphics[width=\textwidth]{eps_10000}
+		\caption{}
+		\label{fig:results_k_10000}
+	\end{subfigure}
+	% begin new line for subfigure
+	
+	\begin{subfigure}[b]{0.45\textwidth} %% plot k, v2 vs y
+		\includegraphics[width=\textwidth]{k_y_10000}
+		\caption{}
+		\label{fig:results_v2_10000}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.45\textwidth} %% plot k, v2 vs y^+
+		\includegraphics[width=\textwidth]{k_yp_10000}
+		\caption{}
+		\label{fig:results_eps_10000}
+	\end{subfigure}	
+	\caption{A comparison of steady state solutions for $Re_{\tau} = 5200$ and $Re_{\tau} = 10000$. (a) The mean velocity, $U$. (b) The dissipation, $\varepsilon^+$, normalized in wall-units. (c) The turbulent kinetic energy, $k$, and the wall-normal velocity variance, $\overline{v^2}$, normalized by the channel width. (d) $k$ and $\overline{v^2}$, normalized by wall-units}
+	\label{fig:Re10000_all}
+\end{figure}
+
+\subsection{Log-Law Parameters}
+
+The RANS results for the $Re_{\tau} = 5200$ case were also compared to the log-law.  The ``universal values'' given by Pope \cite{pope} were not as good as the values derived from DNS by Lee and Moser \cite{Lee}.  These values are $\kappa = 0.384$ and $B = 4.27$.  A comparison of the RANS results with the theoretical log-law is shown in Fig. \ref{fig:loglaw}. This agreement with the values put forth by Lee and Moser is logical, since the RANS $U$ profile closely matches the DNS results.  For the $Re_{\tau} = 10000$ case, a linear-log regression was used to fit the log-law to the data between $y^+ = 30$ and $\eta < 0.3$.  In this region, we obtained values of $\kappa = 0.378$ and $B = 4.013$, with a correlation coefficient of $r = 0.999$.  These are slightly lower than the previous values, but the fit is still very good in the log-law region, as shown in Fig. \ref{fig:loglaw10000}.
 
 \begin{figure}
  \centering
  \includegraphics[width=\textwidth]{loglaw_5200}
- \caption{Comparison of the $\mathrm{Re}_{\tau} = 5200$ results with the expected power-law and log-law behavior near the wall. The values of $\kappa = 0.384$ and $B = 4.27$ give good agreement between the log-law and the RANS results.}
+ \caption{Comparison of the $Re_{\tau} = 5200$ results with the expected power-law and log-law behavior near the wall. The values of $\kappa = 0.384$ and $B = 4.27$ give good agreement between the log-law and the RANS results.}
  \label{fig:loglaw}
+\end{figure}
+
+\begin{figure}
+ \centering
+ \includegraphics[width=\textwidth]{loglaw_5200}
+ \caption{Comparison of the $Re_{\tau} = 10000$ results with the expected power-law and log-law behavior near the wall. The values of $\kappa = 0.378$ and $B = 4.013$ give good agreement between the log-law and the RANS results.}
+ \label{fig:loglaw10000}
 \end{figure}
 
 
 \clearpage
 \begin{thebibliography}{3}
 \bibitem{Lee}
-Lee, Myoungkyu and R.D. Moser, ``Direct numerical simulation of turbulent channel flow up to $\mathrm{Re}_{\tau}=5200$,'' J. Fluid Mech. 774 (2015) 395–415. doi:10.1017/jfm.2015.268.
+Lee, Myoungkyu and R.D. Moser, ``Direct numerical simulation of turbulent channel flow up to $Re_{\tau}=5200$,'' J. Fluid Mech. 774 (2015) 395–415. doi:10.1017/jfm.2015.268.
 \bibitem{Durbin}
     Durbin, Paul A., and BA Pettersson Reif. \textit{Statistical theory and
 modeling for turbulent flows}. John Wiley \& Sons, 2011.
