@@ -1,0 +1,13 @@
+set term png 
+set output 'All_Profiles.png'
+
+set title "Mean Velocity Profiles" 
+set xlabel "y/d" 
+set ylabel "U^+"
+
+set key bottom 
+
+plot '../data/v2fResults_180.dat' using 1:2 w linesp title "Re_t = 180",\
+'../data/v2fResults_2000.dat' using 1:2 w linesp title "Re_t = 2000",\
+'../data/v2fResults_5200.dat' using 1:2 w linesp title "Re_t = 5200",\
+'../data/v2fResults_10000.dat' using 1:2 w linesp title "Re_t = 10000"
