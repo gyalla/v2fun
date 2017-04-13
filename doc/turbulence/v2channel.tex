@@ -15,7 +15,7 @@
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand{\red}[1]{\textcolor{red}{#1}}
 %% define command for averaging operator
-\newcommand{\overline}[1]{\left\langle #1 \right\rangle}
+\newcommand{\chevron}[1]{\left\langle #1 \right\rangle}
 \newcommand{\pderiv}[3][]{% \pderiv[<order>]{<func>}{<var>} 
   \ensuremath{\frac{\partial^{#1} {#2}}{\partial {#3}^{#1}}}}
 \newcommand{\noi}{\noindent}
@@ -40,11 +40,9 @@
 
 We begin by developing the $k-\epsilon$ model for channel flow with Durbin's
 $\overline{v^2}-f$ formulation of the eddy viscosity near
-the wall. We chose this wall treatment since it fundamentally
-addresses the fact that near the wall, the eddy viscosity is a function of the
-wall normal velocity. Out of the models which we have been introduced to, this
-formulation seems to be the best tradeoff between complexity and theoretical
-backing for anisotropy near the wall.    
+the wall. We chose this wall treatment since it fundamentally addresses the fact that near
+the wall, the eddy viscosity transports momentum in the verticle direction, and
+thus it should be a function of the wall normal velocity fluctuations.
 
 Although we are ultimately interested in fully developed channel flow, so that averaged quantities that are independent of time, we choose not to discretize the steady Reynolds averaged Navier-Stokes equations for computational reasons. As is well known, the convergence of nonlinear solvers for discrete systems of nonlinear equations (e.g. Newton's method) requires the initial guess be in a neighborhood of the solution. Hence, unless a very accurate initial guess is provided, a nonlinear solver for the $\overline{v^2}-f$ model will diverge. To circumvent this issue, we choose to evolve our initial guess forward in time until a steady state is reached. This procedure is detailed in section 1.3. 
 
