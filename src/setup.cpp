@@ -91,7 +91,7 @@ int Grvy_Input_Parse(constants * modelConst,string & filename,string & outFile, 
 	return 0;
 }
 
-int LinInterp(gsl_vector * Vec,double pt1,double pt2, double U1,double U2,double gridPt,int i )
+int LinInterp(gsl_vector * Vec,double pt1,double pt2, double U1,double U2,double gridPt, int i, constants * modelConst )
 {
 	double val = U1 + (gridPt-pt1)*( (U2-U1)/(pt2-pt1));
 	if (!isfinite(val))
@@ -101,7 +101,7 @@ int LinInterp(gsl_vector * Vec,double pt1,double pt2, double U1,double U2,double
 	}
 
 	if(i%5==2)
-		val = val*180;
+		val = val*modelConst->reyn;
 	gsl_vector_set(Vec,i,val); 
 	return 0;
 }
@@ -153,13 +153,13 @@ int SolveIC(gsl_vector * xi, constants * modelConst,Grid* grid, string file)
 		Log(logDEBUG2) << "interpolation values (k): " <<tempK1<< "," << tempK2;
 		Log(logDEBUG2) << "interpolation values (ep): " << tempEp1<< "," << tempEp1;
 		Log(logDEBUG2) << "interpolation values (v2): " << tempV21 <<  "," << tempV21;
-		if(LinInterp(xi,pt1,pt2,tempU1,tempU2,gridPt,xiCounter))
+		if(LinInterp(xi,pt1,pt2,tempU1,tempU2,gridPt,xiCounter,modelConst))
 			return 1; 
-		if(LinInterp(xi,pt1,pt2,tempK1,tempK2,gridPt,xiCounter+1))
+		if(LinInterp(xi,pt1,pt2,tempK1,tempK2,gridPt,xiCounter+1,modelConst))
 			return 1; 
-		if(LinInterp(xi,pt1,pt2,tempEp1,tempEp2,gridPt,xiCounter+2))
+		if(LinInterp(xi,pt1,pt2,tempEp1,tempEp2,gridPt,xiCounter+2,modelConst))
 			return 1; 
-		if(LinInterp(xi,pt1,pt2,tempV21,tempV22,gridPt,xiCounter+3))
+		if(LinInterp(xi,pt1,pt2,tempV21,tempV22,gridPt,xiCounter+3,modelConst))
 			return 1; 
 	}
 

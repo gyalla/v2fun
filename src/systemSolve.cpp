@@ -13,6 +13,8 @@
 using namespace std; 
 using namespace GRVY;
 
+#define THREADS 4
+
 // The structure of this function is fixed by the definition of gsl_multiroot solvers. 
 int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 {
@@ -94,7 +96,7 @@ int SetFTerms(gsl_vector * xi, gsl_vector * vT, gsl_vector * T, FParams * params
 	double xiCounter; 
 	double f0 = Computef0(xi,params->modelConst,params->grid);
 
-	#pragma omp parallel num_threads(4)
+	#pragma omp parallel num_threads(THREADS)
 	{
 	#pragma omp for private(xiCounter)
 	for(i = 1; i<size-1; i++)
@@ -136,7 +138,7 @@ int SetV2Terms(gsl_vector * xi,gsl_vector * vT,FParams * params, gsl_vector * sy
 	double xiCounter; //counter for xi vector. 
 
 	// i loops of size of U,k,ep,v2,f. 
-	#pragma omp parallel num_threads(4) 
+	#pragma omp parallel num_threads(THREADS) 
 	{
 	#pragma omp for private(xiCounter)
 	for(i = 1; i<size-1; i++)
@@ -182,7 +184,7 @@ int SetEpTerms(gsl_vector * xi, gsl_vector * vT,gsl_vector * T,FParams * params,
 	double ep0 = ComputeEp0(xi,params->modelConst,params->grid);
 
 	//same loop as above. 
-	#pragma omp parallel num_threads(4) 
+	#pragma omp parallel num_threads(THREADS) 
 	{
 	#pragma omp for private(xiCounter)
 	for (i = 1; i<size-1;i++)
@@ -205,7 +207,7 @@ int SetEpTerms(gsl_vector * xi, gsl_vector * vT,gsl_vector * T,FParams * params,
 	double firstTerm, secondTerm,thirdTerm,fourthTerm;  //as in doc. 
 	i=size-1;  
 	xiCounter=5*(i-1); 
-	firstTerm = -(gsl_vector_get(xi,xiCounter+2)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	
+	firstTerm = -(gsl_vector_get(xi,xiCounter+2)-gsl_vector_get(params->XiN,xiCounter+2))/params->deltaT;	
 	secondTerm = - (params->modelConst->Cep2*gsl_vector_get(xi,xiCounter+2))/gsl_vector_get(T,i); 
 	thirdTerm = (1/params->modelConst->reyn + gsl_vector_get(vT,i)/params->modelConst->sigmaEp)*BdryDeriv2(xi,xiCounter+2,params->grid);
 	val = firstTerm + secondTerm + thirdTerm;
@@ -224,7 +226,7 @@ int SetKTerms(gsl_vector * xi, gsl_vector* vT,FParams * params,gsl_vector *sysF)
 	unsigned int size=vT->size; 
 	double xiCounter; 
 	//same loops as above. 
-	#pragma omp parallel num_threads(4) 
+	#pragma omp parallel num_threads(THREADS) 
 	{
 	#pragma omp for private(xiCounter)
 	for(i=1; i<size-1;i++)
@@ -267,7 +269,7 @@ int SetUTerms( gsl_vector * xi, gsl_vector * vT, FParams * params,gsl_vector * s
 	unsigned int size=vT->size; 
 	double xiCounter;
 
-	#pragma omp parallel num_threads(4) 
+	#pragma omp parallel num_threads(THREADS) 
 	{
 	#pragma omp for private(xiCounter)
 	for(i=1; i<size-1; i++)

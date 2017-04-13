@@ -70,9 +70,10 @@ int SolveIC(gsl_vector* xi, constants * modelConst, Grid* grid, string file);
  * \param U2 \f$y_0\f$ in the formula given. 
  * \param gridPt \f$x\f$ in the formula given. 
  * \param i position in xi to place result. 
+ * \param modelConstants pointer to structcontaining model constants. 
  * \return Error code (0 = success).
  */
-int LinInterp(gsl_vector * Vec,double pt1,double pt2, double U1,double U2,double gridPt,int i );
+int LinInterp(gsl_vector * Vec,double pt1,double pt2, double U1,double U2,double gridPt,int i, constants * modelConst );
 
 /**
  * \brief Solve for initical conditions for f. 
