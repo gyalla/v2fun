@@ -116,19 +116,19 @@ C_2\frac{\nu_T}{k}\left(\pderiv{U}{y}\right)^2 -
 The constants are defined as follows: 
 \begin{multicols}{2}
 \begin{enumerate}
-	\item $C_\mu = 0.09$
+	\item $C_\mu = 0.19$
         \item $C_k = 1.0$
-	\item $\sigma_\ep = 1.3$
-	\item $C_2 = 0.4$	
+	\item $\sigma_\ep = 1.6$
+	\item $C_2 = 0.3$	
 \end{enumerate}
 \columnbreak 
 
 \begin{itemize}
 	\item[5.] $C_1 = 0.3$
-	\item[6.] $C_{\ep 1} = 1.4[1 + 0.045 \sqrt{k/\overline{v^2}}]$
-	\item[7.] $C_{\ep 2} = 1.92$  
-	\item[8.] $C_\eta = 16$
-	\item[9.] $C_L = 0.2$
+	\item[6.] $C_{\ep 1} = 1.55$
+	\item[7.] $C_{\ep 2} = 1.9$  
+	\item[8.] $C_\eta = 70$
+	\item[9.] $C_L = 0.3$
 \end{itemize}
 \end{multicols}
 
@@ -220,9 +220,9 @@ To be more specific, if $F(\xi) = 0$ is the system of equations given by
 \eqref{eq:ssv2f1_nondim}-\eqref{eq:ssv2f5_nondim}, where, $\xi \equiv (U, k,
 \ep, \overline{v^2}, f)^T$, then we will start with an initial guess $\xi_0$ and
 solve $\partial \xi / \partial t = F(\xi)$, until $\partial \xi / \partial t
-\approx 0$. Generally, this works best if you start with a small
-time step and then gradually increase the time step until it is very large at
-which point you're essentially trying to solve the steady problem from a
+\approx 0$. Generally, this works best by starting with a small
+time step and then gradually increasing the time step until it is very large. At
+this point we are essentially solving the steady problem from a
 different initial guess. Using a backward Euler scheme implies we are solving 
 
 \begin{equation}\label{xi_eqn_time_discrete}
@@ -262,39 +262,44 @@ F_{\Delta \eta}(\xi^{n+1}) \approx 0 .
 
 
 \section{Non-Uniform Grid}
-In order to reduce the computational requirements, a non-uniform spacing of points was used.  This allows a fine resolution near the wall, where the resolution must be on the order of the wall-units, and a coarse resolution in the center of the channel.  A set of uniform points, $\chi$, was defined such that $\chi=0$ corresponds to the channel wall and $\chi=1$ corresponds to the centerline.  This set of uniform points was remapped to the nonuniform mesh, $\tilde{y} = y/\delta$, using the mapping function used by Lee and Moser \cite{Lee},
+In order to reduce the computational requirements, a non-uniform spacing of points was used.  This allows a fine resolution near the wall, where the resolution must be on the order of the wall-units, and a coarse resolution in the center of the channel.  A set of uniform points, $\chi$, was defined such that $\chi=0$ corresponds to the channel wall and $\chi=1$ corresponds to the centerline.  This set of uniform points was remapped to the nonuniform mesh, $\eta = y/\delta$, using the mapping function used by Lee and Moser \cite{Lee},
 \begin{equation} \label{eq:mapping}
- \frac{y}{\delta} = \frac{\sin(\eta (\chi-1) \pi/2)}{\sin(\eta \pi/2)}+1, \quad 0 \le \chi \le 1
+ \eta = \frac{y}{\delta} = \frac{\sin(\lambda (\chi-1) \pi/2)}{\sin(\lambda \pi/2)}+1, \quad 0 \le \chi \le 1
 \end{equation}
-where $\eta$ is an adjustable parameter that controls the resolution near the wall. When $\eta$ is equal to 1, the wall-spacing is finest.  When $\eta$ is very small, the mesh is approximately uniform.  For our simulation, we use $\eta = 0.97$.  Using a value other than $\eta = \pm 1$ prevents the derivative of $y$ with respect to $\chi$ from going to zero at the walls.
+where $\lambda$ is an adjustable parameter that controls the resolution near the
+wall. When $\lambda$ is equal to 1, the wall-spacing is finest.  When $\lambda$
+is very small, the mesh is approximately uniform.  For our simulation, we use
+$\lambda = 0.97$.  Using a value other than $\lambda = \pm 1$ prevents the
+derivative of $y$ with respect to $\chi$ from going to zero at the walls.
 
-The formula in Eq. \ref{eq:mapping} can be simplified by defining a few constants based on $\eta$:
+The formula in Eq. \ref{eq:mapping} can be simplified by defining a few
+constants based on $\lambda$:
 \begin{equation}
- \frac{y}{\delta} = \frac{\sin\big((\chi-1)a\big)}{b}+1, \quad 0 \le \chi \le 1
+ \eta = \frac{y}{\delta} = \frac{\sin\big((\chi-1)a\big)}{b}+1, \quad 0 \le \chi \le 1
 \end{equation}
-where $a = \eta \pi/2$ and $b = \sin (\eta \pi/2)$.
+where $a = \lambda \pi/2$ and $b = \sin (\lambda \pi/2)$.
 
 The inverse mapping and its derivatives can be written as:
 \begin{align}
   \chi &= \frac{\sin^{-1}(by-b)}{a} + 1 \\
-  \frac{\mathrm{d}\chi}{\mathrm{d}\tilde{y}} &= \frac{b}{a \sqrt{1-b^2(y-1)^2}} \label{eq:chi-y-1} \\
-  \frac{\mathrm{d}^2\chi}{\mathrm{d}\tilde{y}^2} &= \frac{b^2(by-b)}{a\big(1-(b-by)^2\big)^{3/2}} \label{eq:chi-y-2}
+  \frac{\mathrm{d}\chi}{\mathrm{d}\eta} &= \frac{b}{a \sqrt{1-b^2(y-1)^2}} \label{eq:chi-y-1} \\
+  \frac{\mathrm{d}^2\chi}{\mathrm{d}\eta^2} &= \frac{b^2(by-b)}{a\big(1-(b-by)^2\big)^{3/2}} \label{eq:chi-y-2}
 \end{align}
-where $a$ is a constant equal to the denominator in Eq. \ref{eq:mapping}.  Using the chain rule, the derivatives of a variable $\phi$ on the nonuniform grid, $\tilde{y}$ can be computed using derivatives on the uniform grid, $\chi$ as follows:
+where $a$ is a constant equal to the denominator in Eq. \ref{eq:mapping}.  Using the chain rule, the derivatives of a variable $\phi$ on the nonuniform grid, $\eta$ can be computed using derivatives on the uniform grid, $\chi$ as follows:
 \begin{align}
- \pderiv{\phi}{\tilde{y}} &= \frac{\mathrm{d}\chi}{\mathrm{d}\tilde{y}} \pderiv{\phi}{\chi} \label{eq:phi-y-1} \\
- \pderiv[2]{\phi}{\tilde{y}} &= \frac{\mathrm{d}^2\chi}{\mathrm{d}\tilde{y}^2} \pderiv{\phi}{\chi} + \Big(\frac{\mathrm{d}\chi}{\mathrm{d}\tilde{y}} \Big)^2 \pderiv[2]{\phi}{\chi}  \label{eq:phi-y-2} 
+ \pderiv{\phi}{\eta} &= \frac{\mathrm{d}\chi}{\mathrm{d}\eta} \pderiv{\phi}{\chi} \label{eq:phi-y-1} \\
+ \pderiv[2]{\phi}{\eta} &= \frac{\mathrm{d}^2\chi}{\mathrm{d}\eta^2} \pderiv{\phi}{\chi} + \Big(\frac{\mathrm{d}\chi}{\mathrm{d}\eta} \Big)^2 \pderiv[2]{\phi}{\chi}  \label{eq:phi-y-2} 
 \end{align}
 In order to acheive a near-wall resolution on the order of $\Delta y ~ \delta_v$, the distance between the first two grid points must be $\delta_v$.  This leads to the equation:
 \begin{equation}
  \Delta \chi = \frac{\sin^{-1}(b\delta_v -b)}{a}+1
 \end{equation}
 
-If we use $\delta = 1$ as our channel width, then $y = \tilde{y}$ and $\delta_v = 1/\mathrm{Re}_{\tau}$.  This leads to an equation for the required number of grid points, $n$, as:
+If we use $\delta = 1$ as our channel width, then $y = \eta$ and $\delta_v = 1/\mathrm{Re}_{\tau}$.  This leads to an equation for the required number of grid points, $n$, as:
 \begin{equation}
  n = \frac{a}{\sin^{-1}(b/\mathrm{Re}_{\tau}-b)+a}
 \end{equation}
-Using a value of $\eta = .97$ for the mapping parameter, the number of points required for $\mathrm{Re}_{\tau}=5200$ and $\mathrm{Re}_{\tau}=10000$ is 390 and 735 respectively. This is significantly lower than the uniform grid sizes of 5,200 and 10,000.
+Using a value of $\lambda = .97$ for the mapping parameter, the number of points required for $\mathrm{Re}_{\tau}=5200$ and $\mathrm{Re}_{\tau}=10000$ is 390 and 735 respectively. This is significantly lower than the uniform grid sizes of 5,200 and 10,000.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -334,11 +339,11 @@ analytic solution.}
 Our next test was with $Re_\tau = 180$, which provided a more involved
 verification of the model. Here we referred to $\overline{v^2} - f$ and DNS
 solutions plotted in \cite{durbin180}. Plots from this paper are shown in Fig.
-\ref{fig:durbin180} and we show steady solutions to each of the terms in
+\ref{fig:durbin180} and we show steady solutions to each of the terms
 at this Reynolds number in Fig. \ref{fig:results_180}. Our solution looks almost
 identical to Durbin's $\overline{v^2}-f$ results, and even disagrees with the DNS
 data in the same regions of the channel. The model results agree with the DNS
-data quite well, however, showing the strength of the $\overline{v^2}-f$ model
+data quite well, showing the strength of the $\overline{v^2}-f$ model
 in capturing the near wall behavior in channel flow. Our verified results at
 this stage gave us confidence that the model would behave well at high Reynolds
 numbers.
@@ -359,10 +364,10 @@ behave while verifying our model.}
  \centering
  \includegraphics[width=\textwidth]{results_180}
  \caption{Steady state solution to the $\overline{v^2}-f$ model, Eqns.
-(\ref{eq:ssv2f1_nondim})-(\ref{eq:ssv2f5_nondim}), at $Re_\tau=180$. The solid
-black line shows results from our model, and the red dotted line shows
-interpolated DNS results from \cite{Lee}. Note we show no initial data for $kf$
-since $f$ is initialized at zero.}
+(\ref{eq:ssv2f1_nondim})-(\ref{eq:ssv2f5_nondim}), at $Re_\tau=180$. The red
+lines show results from our model while the blue lines show our
+initial conditions which are interpolated DNS results from \cite{Lee}. Note we
+show no initial data for $kf$ since $f$ is initialized at zero.}
  \label{fig:results_180}
 \end{figure}
 
@@ -409,7 +414,9 @@ The agreement were not as good for $k$ or $\overline{v^2}$.  This matches what w
 
 Similarly, a comparison of the RANS results for $\varepsilon$ with the DNS data shows slight difference, especially near the wall. Nevertheless, the overall behavior is still close to the DNS data.
 
-The RANS results for the $Re_{\tau} = 5200$ case were also compared to the log-law.  The ``universal values'' given by Pope \cite{pope} were not as good as the values derived from DNS by Lee and Moser \cite{Lee}.  These values are $\kappa = 0.384$ and $B = 4.27$.  A comparison of the RANS results with the theoretical log-law is shown in Fig. \ref{fig:loglaw}. This agreement with the values put forth by Lee and Moser is logical, since the RANS $U$ profile closely matches the DNS results.
+The RANS results for the $Re_{\tau} = 5200$ case were also compared to the
+log-law.  The ``universal values'' given by Pope \cite{pope} did not fit as well
+as the values derived from DNS by Lee and Moser \cite{Lee}.  These values are $\kappa = 0.384$ and $B = 4.27$.  A comparison of the RANS results with the theoretical log-law is shown in Fig. \ref{fig:loglaw}. This agreement with the values put forth by Lee and Moser is logical, since the RANS $U$ profile closely matches the DNS results.
 
 \begin{figure}
  \centering
