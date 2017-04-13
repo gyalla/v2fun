@@ -46,8 +46,10 @@ wall normal velocity. Out of the models which we have been introduced to, this
 formulation seems to be the best tradeoff between complexity and theoretical
 backing for anisotropy near the wall.    
 
-The unsteady incompressible Reynolds averaged Navier-Stokes equations, 
-$k-\epsilon$, and $\chevron{v^2}-f$ model equations are as follows:
+Although we are ultimately interested in fully developed channel flow, so that averaged quantities that are independent of time, we choose not to discretize the steady Reynolds averaged Navier-Stokes equations for computational reasons. As is well known, the convergence of nonlinear solvers for discrete systems of nonlinear equations (e.g. Newton's method) requires the initial guess be in a neighborhood of the solution. Hence, unless a very accurate initial guess is provided, a nonlinear solver for the $\chevron{v^2}-f$ model will diverge. To circumvent this issue, we choose to evolve our initial guess forward in time until a steady state is reached. This procedure is detailed in section 1.3. 
+
+We thus consider the unsteady incompressible Reynolds averaged Navier-Stokes equations, 
+$k-\epsilon$, and $\chevron{v^2}-f$ model equations, which are given as:
 
 \begin{align}
 \pderiv{U_i}{x_i} &= 0 \label{eq:continuity} \\
@@ -63,7 +65,7 @@ $k-\epsilon$, and $\chevron{v^2}-f$ model equations are as follows:
 \pderiv{\chevron{v^2}}{t} + U_j\pderiv{\chevron{v^2}}{x_j} &= kf +
 \pderiv{}{x_j}\left((\nu_T+\nu)\pderiv{\chevron{v^2}}{x_j}\right) - \epsilon
 \frac{\chevron{v^2}}{k} \\
-L^2 \nabla^2 f - f &= -C_2 \frac{\mathcal{P}}{k} + \frac{C_1}{T} \left(
+\pderiv{f}{t} + U_j \pderiv{f}{x_j} &=  f -  L^2 \nabla^2 f  -C_2 \frac{\mathcal{P}}{k} + \frac{C_1}{T} \left(
 \frac{\chevron{v^2}}{k} - \frac{2}{3} \right) 
 %r_{ij} &= -\nu_T \left(\pderiv{U_i}{x_j} + \pderiv{U_j}{x_i}\right) + \frac{2
 %k}{3}\delta_{ij} \\ 
@@ -108,7 +110,7 @@ imply that the original system, Eqns.
 \pderiv{}{y}\left((\nu+\frac{\nu_T}{\sigma_\ep})\pderiv{\ep}{y}\right) \\
         \pderiv{\chevron{v^2}}{t} &= kf - \frac{1}{T}\chevron{v^2} +
 \pderiv{}{y}\left((\nu+\nu_T)\pderiv{\chevron{v}}{y}\right) \\
-        0 &= \left( L^2\nabla^2 - I\right)f +
+        \pderiv{f}{t} &= \left( L^2\frac{\partial^2}{\partial y^2} - I\right)f +
 C_2\frac{\nu_T}{k}\left(\pderiv{U}{y}\right)^2 -
 \frac{C_1}{T}\left(\frac{\chevron{v^2}}{k}-\frac{2}{3}\right)
 	\label{eq:ssv2f5}
@@ -164,7 +166,7 @@ For ease of exposition, we abuse notation and drop the $+$ superscript everywher
 \pderiv{}{\eta}\left(\left(\frac{1}{Re_{\tau}}+\frac{\nu_T}{\sigma_\ep}\right)\pderiv{\ep}{\eta}\right) \\
         \pderiv{\chevron{v^2}}{t} &= kf - \frac{1}{T}\chevron{v^2} +
 \pderiv{}{\eta}\left(\left(\frac{1}{Re_{\tau}}+\nu_T\right)\pderiv{\chevron{v}}{\eta}\right) \\
-        0 &= \left( \frac{L^2}{\delta^2} \frac{\partial^2}{\partial \eta^2} - I\right)f +
+        \pderiv{f}{t} &= \left( \frac{L^2}{\delta^2} \frac{\partial^2}{\partial \eta^2} - I\right)f +
 C_2\frac{\nu_T}{k}\left(\pderiv{U}{\eta}\right)^2 -
 \frac{C_1}{T}\left(\frac{\chevron{v^2}}{k}-\frac{2}{3}\right)
 	\label{eq:ssv2f5_nondim}
@@ -184,8 +186,39 @@ at $y = 0$. As a consequence of symmetry, we require homogeneous Neumann conditi
 \pderiv{U}{\eta}= \pderiv{\ep}{\eta} = \pderiv{\chevron{v^2}}{\eta} = \pderiv{k}{\eta} = \pderiv{f}{\eta} = 0
 \] 
 
+\subsection{Time marching and initial conditions}
+As mentioned at the beginning of the write up, we evolve an initial condition forward in time in order to ensure that the statistics from our simulations are truly independent of time. We first obtain our initial condition for $U, k, \ep, \chevron{v^2}$ by interpolating DNS data from \cite{Lee}, and our initial condition for $f$ comes from solving the elliptic version of \eqref{eq:ssv2f5_nondim}, i.e. with $\partial f/\partial t = 0$.  
 
+\section{Discretization of the governing equations}
+\subsection{Temporal discretization}
+If we define $\xi \equiv (U, k, \ep, \chevron{v^2}, f)^T$, then the governing equations \eqref{eq:ssv2f1_nondim}-\eqref{eq:ssv2f5_nondim} can be succinctly written as 
+\begin{equation}\label{xi_eqn}
+\pderiv{\xi}{t} = F(\xi)
+\end{equation}
+where of course $F$ is the nonlinear function that produces the right hand side of \eqref{eq:ssv2f1_nondim}-\eqref{eq:ssv2f5_nondim}. We choose to discretize \eqref{xi_eqn} in time with a backward Euler scheme, which gives
+\begin{equation}\label{xi_eqn_time_discrete}
+\frac{\xi^{n+1} - \xi^n}{\Delta t} = F(\xi^{n+1}).
+\end{equation}
 
+\subsection{Spatial discretization}
+We choose to discretize our spatial derivatives with a centered differencing, so that 
+\[
+\pderiv{\varphi}{x} \approx \frac{\varphi_{i+1}-\varphi_{i-1}}{2\Delta x} 
+\]
+and 
+\[
+\frac{\partial^2 \varphi}{\partial x^2} \approx \frac{ \varphi_{i+1} - 2\varphi_i + \varphi_{i-1} }{(\Delta x)^2} 
+\]
+for dummy dependent and independent variables $\varphi$ and $x$, respectively. Note that these approximations hold for a uniform grid spacing $\Delta x$; the non-uniform grid case is detailed below. The fully discrete version of \eqref{xi_eqn_time_discrete} then becomes 
+\begin{equation}\label{xi_eqn_fully_discrete}
+\frac{\xi_i^{n+1} - \xi_i^n}{\Delta t} = F_{\Delta \eta}(\xi_i^{n+1}) \implies G(\xi^{n+1}_i) = 0 
+\end{equation}
+where $F_{\Delta \eta}$ is the discrete version of $F$ and $G(\xi_i^{n+1}) \equiv \xi^{n+1}_i - \xi^n_i - \Delta t F_{\Delta \eta}(\xi_i^{n+1})$. 
+
+Given this setup, we march forward in time from $\xi^0$, performing one iteration of Newton's method per time step. Only one iteration is performed because we do not require temporal accuracy. Once $|\xi^{n+1}-\xi^n|$ is below some prescribed tolerance, we terminate our iterations and arrive at the approximate solution $\xi^{n+1}$ such that
+\[
+F_{\Delta \eta}(\xi^{n+1}) \approx 0 .
+\]
 
 
 \section{Non-Uniform Grid}
