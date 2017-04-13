@@ -290,7 +290,7 @@ where $a$ is a constant equal to the denominator in Eq. \ref{eq:mapping}.  Using
  \pderiv{\phi}{\eta} &= \frac{\mathrm{d}\chi}{\mathrm{d}\eta} \pderiv{\phi}{\chi} \label{eq:phi-y-1} \\
  \pderiv[2]{\phi}{\eta} &= \frac{\mathrm{d}^2\chi}{\mathrm{d}\eta^2} \pderiv{\phi}{\chi} + \Big(\frac{\mathrm{d}\chi}{\mathrm{d}\eta} \Big)^2 \pderiv[2]{\phi}{\chi}  \label{eq:phi-y-2} 
 \end{align}
-In order to acheive a near-wall resolution on the order of $\Delta y ~ \delta_v$, the distance between the first two grid points must be $\delta_v$.  This leads to the equation:
+In order to achieve a near-wall resolution on the order of $\Delta y ~ \delta_v$, the distance between the first two grid points must be $\delta_v$.  This leads to the equation:
 \begin{equation}
  \Delta \chi = \frac{\sin^{-1}(b\delta_v -b)}{a}+1
 \end{equation}
@@ -350,7 +350,7 @@ Our next test was to compare our results from the $\overline{v^2} - f$ model
 with Durbin's results given in \cite{durbin180}, for a $Re_\tau = 180$. This provided a more involved
 verification of the model. Durbin's $\overline{v^2}-f$ results are shown in Fig.
 \ref{fig:durbin180} and ours are shown in Fig. \ref{fig:results_180}. In each
-plot, the $\overline{v^2}-f$ results are compared with the cooresponding DNS
+plot, the $\overline{v^2}-f$ results are compared with the corresponding DNS
 data.  Our solution looks almost
 identical to Durbin's $\overline{v^2}-f$ results, and even disagrees with the DNS
 data in the same regions of the channel as Durbin. Our verified results at
@@ -426,13 +426,19 @@ After verifying our code on the $Re_{\tau} = 180$ case, we ran our code at $Re_{
 
 Excellent agreement was found for the $U$ profile.  This is a testament to the strength of the $\overline{v^2}-f$ model, especially in the near-wall region.  Good agreement was found for both the inner and outer layer, including the viscous sublayer.
 
-The agreement were not as good for $k$ or $\overline{v^2}$.  This matches what was seen for $Re_{\tau} = 180$ in Durbin's paper \cite{durbin180}, as discussed in the previous section.  The lack of agreement also reflects the nature of the $\overline{v^2}-f$ model, where $U$ is usually the quantitiy of interest, whose model is built upon parameters $k$, $\epsilon$, $\overline{v^2}$ and $f$.  Due to the differences between reality and the model for $U$, the parameters such as $k$ do not have to be precise to give the correct behavior for $U$. Nevertheless, the overall behavior of $k$ and $\overline{v^2}$ is still close to the DNS data.
+The agreement were not as good for $k$ or $\overline{v^2}$.  This matches what was seen for $Re_{\tau} = 180$ in Durbin's paper \cite{durbin180}, as discussed in the previous section.  The lack of agreement also reflects the nature of the $\overline{v^2}-f$ model, where $U$ is usually the quantity of interest, whose model is built upon parameters $k$, $\epsilon$, $\overline{v^2}$ and $f$.  Due to the differences between reality and the model for $U$, the parameters such as $k$ do not have to be precise to give the correct behavior for $U$. Nevertheless, the overall behavior of $k$ and $\overline{v^2}$ is still close to the DNS data.
 
 Similarly, a comparison of the RANS results for $\varepsilon$ with the DNS data shows slight difference, especially near the wall. Nevertheless, the overall behavior is still close to the DNS data.
 
 \subsection{$Re_{\tau} = 10000$ case}
 
-Results for the $Re_{\tau} = 10000$ case are shown in Fig. \ref{fig:Re10000_all}.  Also shown in this figure are the results for $Re_{\tau} = 5200$.  The $U$ and $\varepsilon$ profiles are almost exactly the same when normalized by $y^+$ units, with a slightly longer log-law region at the higher Reynolds number.
+Results for the $Re_{\tau} = 10000$ case are shown in Fig.
+\ref{fig:Re10000_all}.  Also shown in this figure are the results for $Re_{\tau}
+= 5200$.  The $U$ and $\varepsilon$ profiles are almost exactly the same when
+normalized by $y^+$ units, with a slightly longer log-law region at the higher
+Reynolds number. In Fig. \ref{fig:all_prof} we show the mean velocity profiles
+given by the $\overline{v^2}-f$ equation for $Re_\tau = 180, 2000, 5200,$ and
+$10,000$. 
 
 \begin{figure}
 	\centering
@@ -464,6 +470,15 @@ Results for the $Re_{\tau} = 10000$ case are shown in Fig. \ref{fig:Re10000_all}
 	\label{fig:Re10000_all}
 \end{figure}
 
+\begin{figure}[!ht]
+	\centering
+	\includegraphics{All_Profiles.png}
+	\caption{Results from the $\overline{v^2}-f$ model at $Re_\tau =
+180,2000,5200,10000$.}
+	\label{fig:all_prof}
+\end{figure}
+
+
 \subsection{Log-Law Parameters}
 
 The RANS results for the $Re_{\tau} = 5200$ case were also compared to the
@@ -484,7 +499,6 @@ For the $Re_{\tau} = 10000$ case, a linear-log regression was used to fit the lo
  \caption{Comparison of the $Re_{\tau} = 10000$ results with the expected power-law and log-law behavior near the wall. The values of $\kappa = 0.378$ and $B = 4.013$ give good agreement between the log-law and the RANS results.}
  \label{fig:loglaw10000}
 \end{figure}
-
 
 \clearpage
 \begin{thebibliography}{3}
