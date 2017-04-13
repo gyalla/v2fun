@@ -32,7 +32,7 @@
   /Author   (Gopal Yalla, Clark Pederson, Tim Smith, Sean Carney)
 }
 \graphicspath{ {figs/} }
-\DeclareGraphicsExtensions{.png}
+\DeclareGraphicsExtensions{{.png,.pdf}}
 
 \begin{document}
 \maketitle
@@ -54,7 +54,7 @@ $k-\epsilon$, and $\chevron{v^2}-f$ model equations, which are given as:
 \begin{align}
 \pderiv{U_i}{x_i} &= 0 \label{eq:continuity} \\
 \pderiv{U_i}{t} + U_j\pderiv{U_i}{x_j} &= -\pderiv{P}{x_i} +
-\pderiv{}{x_j}\left(\nu\pderiv{U_i}{x_j} - \chevron{u_i u_j}\right) \\
+\pderiv{}{x_j}\left(\nu\pderiv{U_i}{x_j} - r_{ij}\right) \\
 \pderiv{k}{t} + U_j\pderiv{k}{x_j} &= -r_{ij}\pderiv{U_i}{x_j} - \epsilon +
 \pderiv{}{x_j}\left(\frac{\nu_T}{\sigma_k}\pderiv{k}{x_j}\right) +
 \nu\frac{\partial^2 k}{\partial x_j \partial x_j} \\
@@ -65,7 +65,7 @@ $k-\epsilon$, and $\chevron{v^2}-f$ model equations, which are given as:
 \pderiv{\chevron{v^2}}{t} + U_j\pderiv{\chevron{v^2}}{x_j} &= kf +
 \pderiv{}{x_j}\left((\nu_T+\nu)\pderiv{\chevron{v^2}}{x_j}\right) - \epsilon
 \frac{\chevron{v^2}}{k} \\
-\pderiv{f}{t} + U_j \pderiv{f}{x_j} &=  f -  L^2 \nabla^2 f  -C_2 \frac{\mathcal{P}}{k} + \frac{C_1}{T} \left(
+0 &=  f -  L^2 \nabla^2 f  -C_2 \frac{\mathcal{P}}{k} + \frac{C_1}{T} \left(
 \frac{\chevron{v^2}}{k} - \frac{2}{3} \right) 
 %r_{ij} &= -\nu_T \left(\pderiv{U_i}{x_j} + \pderiv{U_j}{x_i}\right) + \frac{2
 %k}{3}\delta_{ij} \\ 
@@ -76,6 +76,8 @@ $k-\epsilon$, and $\chevron{v^2}-f$ model equations, which are given as:
 \noi where 
 
 \begin{align*}
+r_{ij} &= -\nu_T\left(\pderiv{U_i}{x_j} + \pderiv{U_j}{x_i}\right) +
+\frac{2k}{3}\delta_{ij}\\
 \nu_T &= \frac{3}{2}C_\mu \chevron{v^2} T \\
 \mathcal{P} &= \nu_T\left( \pderiv{U_j}{x_i} + \pderiv{U_i}{x_j}\right)\pderiv{U_j}{x_i} \\
 T &= \max \left\{ \frac{k}{\ep} , 6 \left( \frac{v}{\ep} \right)^{\frac{1}{2}}
@@ -110,7 +112,7 @@ imply that the original system, Eqns.
 \pderiv{}{y}\left((\nu+\frac{\nu_T}{\sigma_\ep})\pderiv{\ep}{y}\right) \\
         \pderiv{\chevron{v^2}}{t} &= kf - \frac{1}{T}\chevron{v^2} +
 \pderiv{}{y}\left((\nu+\nu_T)\pderiv{\chevron{v}}{y}\right) \\
-        \pderiv{f}{t} &= \left( L^2\frac{\partial^2}{\partial y^2} - I\right)f +
+        0 &= \left( L^2\frac{\partial^2}{\partial y^2} - I\right)f +
 C_2\frac{\nu_T}{k}\left(\pderiv{U}{y}\right)^2 -
 \frac{C_1}{T}\left(\frac{\chevron{v^2}}{k}-\frac{2}{3}\right)
 	\label{eq:ssv2f5}
@@ -134,6 +136,20 @@ The constants are defined as follows:
 	\item[9.] $C_L = 0.2$
 \end{itemize}
 \end{multicols}
+
+\subsection{Boundary conditions}
+For the turbulent channel, we only compute for $y \in [0,\delta] $, as oppposed to the full $y \in [0,2\delta]$, by symmetry. The boundary conditions for our five dependent variables, $U, k, \ep, \chevron{v^2}, f$, are as follows: 
+\[
+U = k = \chevron{v^2} = 0 
+\]
+at $y = 0$, which comes from the no-slip condition, which then implies 
+\[
+\epsilon \to 2\nu \frac{k}{y^2}, \,\,\,\,\,\,\, f \to -\frac{20 \nu^2 \chevron{v^2} }{\ep(0) y^4}
+\]
+at $y = 0$. As a consequence of symmetry, we require homogeneous Neumann conditions on all of the dependent variables: 
+\[
+\pderiv{U}{y}= \pderiv{\ep}{y} = \pderiv{\chevron{v^2}}{y} = \pderiv{k}{y} = \pderiv{f}{y} = 0
+\] 
 
 \subsection{Nondimensionalization of the governing equations}
 Here we nondimensionalize \eqref{eq:ssv2f1}-\eqref{eq:ssv2f5} using the characteristic velocity scale $u_{\tau}$ (the friction velocity) and length scale $\delta$. We then make the following nondimensionalizations:
@@ -166,28 +182,29 @@ For ease of exposition, we abuse notation and drop the $+$ superscript everywher
 \pderiv{}{\eta}\left(\left(\frac{1}{Re_{\tau}}+\frac{\nu_T}{\sigma_\ep}\right)\pderiv{\ep}{\eta}\right) \\
         \pderiv{\chevron{v^2}}{t} &= kf - \frac{1}{T}\chevron{v^2} +
 \pderiv{}{\eta}\left(\left(\frac{1}{Re_{\tau}}+\nu_T\right)\pderiv{\chevron{v}}{\eta}\right) \\
-        \pderiv{f}{t} &= \left( \frac{L^2}{\delta^2} \frac{\partial^2}{\partial \eta^2} - I\right)f +
+        0 &= \left( \frac{L^2}{\delta^2} \frac{\partial^2}{\partial \eta^2} - I\right)f +
 C_2\frac{\nu_T}{k}\left(\pderiv{U}{\eta}\right)^2 -
 \frac{C_1}{T}\left(\frac{\chevron{v^2}}{k}-\frac{2}{3}\right)
 	\label{eq:ssv2f5_nondim}
 \end{align}
 
-\subsection{Boundary conditions}
-For the turbulent channel, we only compute for $y \in [0,\delta] \iff \eta \in [0,1]$, as oppposed to the full $y \in [0,2\delta]$, by symmetry. The boundary conditions for our five dependent variables, $U, k, \ep, \chevron{v^2}, f$, are as follows: 
+\noi with this formulation, the boundary conditions are the same except for
+$\epsilon$ and $f$ at the wall. These become:  
+
 \[
-U = k = \chevron{v^2} = 0 
+\epsilon \to 2\frac{k}{Re_{\tau}y^2}, \,\,\,\,\,\,\, f \to -\frac{20
+\chevron{v^2} }{Re_\tau^2 \ep(0) y^4}
 \]
-at $y = 0$, which comes from the no-slip condition, which then implies 
-\[
-\epsilon \to 2\nu \frac{k}{y^2}, \,\,\,\,\,\,\, f \to -\frac{20 \nu^2 \chevron{v^2} }{\ep(0) y^4}
-\]
-at $y = 0$. As a consequence of symmetry, we require homogeneous Neumann conditions on all of the dependent variables: 
-\[
-\pderiv{U}{\eta}= \pderiv{\ep}{\eta} = \pderiv{\chevron{v^2}}{\eta} = \pderiv{k}{\eta} = \pderiv{f}{\eta} = 0
-\] 
+at $y = 0$.  
 
 \subsection{Time marching and initial conditions}
-As mentioned at the beginning of the write up, we evolve an initial condition forward in time in order to ensure that the statistics from our simulations are truly independent of time. We first obtain our initial condition for $U, k, \ep, \chevron{v^2}$ by interpolating DNS data from \cite{Lee}, and our initial condition for $f$ comes from solving the elliptic version of \eqref{eq:ssv2f5_nondim}, i.e. with $\partial f/\partial t = 0$.  
+As mentioned at the beginning of the write up, we evolve an initial condition
+forward in time in order to ensure that the statistics from our simulations are
+truly independent of time. We first obtain our initial condition for $U, k, \ep,
+\chevron{v^2}$ by interpolating DNS data from \cite{Lee}. For $f$ we were only
+able to get convergent results when we used an initial condition of all zeros.
+We originally tried solving the elliptic equation for $f$ given the initial
+interpolated results, however this always caused the time marching to diverge.
 
 \section{Discretization of the governing equations}
 \subsection{Temporal discretization}
@@ -215,7 +232,11 @@ for dummy dependent and independent variables $\varphi$ and $x$, respectively. N
 \end{equation}
 where $F_{\Delta \eta}$ is the discrete version of $F$ and $G(\xi_i^{n+1}) \equiv \xi^{n+1}_i - \xi^n_i - \Delta t F_{\Delta \eta}(\xi_i^{n+1})$. 
 
-Given this setup, we march forward in time from $\xi^0$, performing one iteration of Newton's method per time step. Only one iteration is performed because we do not require temporal accuracy. Once $|\xi^{n+1}-\xi^n|$ is below some prescribed tolerance, we terminate our iterations and arrive at the approximate solution $\xi^{n+1}$ such that
+Given this setup, we march forward in time from $\xi^0$, performing one
+iteration of Newton's method per time step. Only one iteration is performed
+because we do not require temporal accuracy. Once $|\xi^{n+1}-\xi^n|$ is below
+some prescribed tolerance (here we chose $10^{-7}$), we terminate our iterations
+and arrive at the approximate solution $\xi^{n+1}$ such that
 \[
 F_{\Delta \eta}(\xi^{n+1}) \approx 0 .
 \]
@@ -257,7 +278,66 @@ If we use $\delta = 1$ as our channel width, then $y = \tilde{y}$ and $\delta_v 
 Using a value of $\eta = .97$ for the mapping parameter, the number of points required for $\mathrm{Re}_{\tau}=5200$ and $\mathrm{Re}_{\tau}=10000$ is 390 and 735 respectively. This is significantly lower than the uniform grid sizes of 5,200 and 10,000.
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Code verification and description of results
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Code Verification}
 
+We implemented a number of verification tests to make sure that our model was
+working as expected before computing results for $Re_\tau = 5,200$ and
+$10,000$. Notably, we ensured that the model converged to the laminar solution
+after setting $\nu_T \rightarrow 0$ and tested the model with Reynolds numbers
+of 180 and 2,000. 
+
+
+%%% Laminar case
+Testing the laminar case verified our grid formulation, interpolation of DNS
+results for initial conditions, and that our numerical solver was working
+properly for the velocity equation, Eqn.
+(\ref{eq:ssv2f1_nondim}). The velocity profile is shown for the laminar case in Fig.
+\ref{fig:laminar}, where the solution has nearly converged to the analytic
+solution: 
+
+\begin{equation*}
+  U(y) = -\frac{Re_\tau}{2}y^2 - 2y \, .
+\end{equation*}
+
+\begin{figure}
+ \centering
+ \includegraphics[width=.7\textwidth]{}
+ \caption{Steady state solution to Eqn. (\ref{eq:ssv2f1_nondim}) computed with
+our $\chevron{v^2}-f$ model. }
+ \label{fig:laminar}
+\end{figure}
+
+
+%%% Re_tau = 180 case
+Our next test was with $Re_\tau = 180$, which provided a more involved
+verification of the model. Here we referred to $\chevron{v^2} - f$ and DNS
+solutions plotted in \cite{durbin180}. Plots from this paper are shown in Fig.  We show steady solutions to each of the terms in
+at this Reynolds number in Fig. \ref{fig:results_180}.
+
+\begin{figure}
+ \centering
+ \includegraphics[width=0.7\textwidth]{durbin180}
+ \caption{Steady solutions for channel flow at $Re_\tau=180$ from DNS (circles)
+and the $\chevron{v^2}-f$ model (lines) taken from \cite{durbin180}. Top left shows $U$, top right shows $k$
+(solid) and $\chevron{v^2}$ (dashed), bottom left shows $\epsilon$, and bottom
+right shows $kf$ (solid line).}
+ \label{fig:durbin180}
+\end{figure}
+
+\begin{figure}
+ \centering
+ \includegraphics[width=.7\textwidth]{}
+ \caption{Steady state solution to the $\chevron{v^2}-f$ model, Eqns.
+(\ref{eq:ssv2f1_nondim})-(\ref{eq:ssv2f5_nondim}), at $Re_\tau=180$. }
+ \label{fig:results_180}
+\end{figure}
+
+
+%%% Re_tau = 5200 case
+After verifying our code on the $Re_{\tau} = 180$ case, we ran our code at $Re_{\tau} = 5200$, so as to compare it with the DNS results of \cite{Lee}. The results can be found......
 
 
 \clearpage
@@ -269,6 +349,9 @@ Lee, Myoungkyu and R.D. Moser, ``Direct numerical simulation of turbulent channe
 modeling for turbulent flows}. John Wiley \& Sons, 2011.
 \bibitem{pope}
         Pope, Stephen B. \textit{Turbulent flows}. (2001): 2020.
+\bibitem{durbin180}
+        Durbin, Paul A. "Near-wall turbulence closure modeling without “damping
+functions”." Theoretical and Computational Fluid Dynamics 3.1 (1991): 1-13.
  
 \newpage
 
