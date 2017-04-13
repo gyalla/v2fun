@@ -60,7 +60,7 @@ int Grvy_Input_Parse(constants * modelConst,string & filename,string & outFile, 
 
 	if(!iparse.Read_Var("Cep1",&(modelConst->Cep1)))
 		return 1; 
-	Log(logINFO) << "---> Cep1 = " << modelConst->CL;
+	Log(logINFO) << "---> Cep1 = " << modelConst->Cep1;
 
 	if(!iparse.Read_Var("Cep2", &(modelConst->Cep2)))
 		return 1; 
