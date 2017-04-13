@@ -309,16 +309,25 @@ after setting $\nu_T \rightarrow 0$ and tested the model with $Re_\tau = 180$.
 
 
 %%% Laminar case
-Testing the laminar case verified our grid formulation, interpolation of DNS
-results for initial conditions, and that our numerical solver was working
-properly for the velocity equation, Eqn.
-(\ref{eq:ssv2f1_nondim}). The velocity profile is shown for the laminar case in Fig.
-\ref{fig:laminar}, where the solution has converged to the analytic
-solution: 
+In the laminar case ($\nu_T = 0$), the mean velocity equations become, 
+
+\begin{equation*}
+	\frac{1}{Re_\tau} \frac{\partial^2 U}{\partial \eta^2} +1 = 0 \;,
+\end{equation*}
+
+\noi which has an analytic solution of 
 
 \begin{equation*}
   U(y) = -\frac{Re_\tau}{2}\left(y^2 - 2y\right) \, .
 \end{equation*}
+
+\noi This analytic solution and the computed velocity profile for the laminar
+case are shown in Fig.
+\ref{fig:laminar}. Clearly the solution has converged to the analytic
+solution. Testing the laminar case verified our grid formulation, interpolation of DNS
+results for initial conditions, and that our numerical solver was working
+properly for the velocity equation, Eqn.
+(\ref{eq:ssv2f1_nondim}). 
 
 \begin{figure}
  \centering
@@ -331,17 +340,21 @@ analytic solution.}
 
 
 %%% Re_tau = 180 case
-Our next test was with $Re_\tau = 180$, which provided a more involved
-verification of the model. Here we referred to $\overline{v^2} - f$ and DNS
-solutions plotted in \cite{durbin180}. Plots from this paper are shown in Fig.
-\ref{fig:durbin180} and we show steady solutions to each of the terms in
-at this Reynolds number in Fig. \ref{fig:results_180}. Our solution looks almost
+Our next test was to compare our results from the $\overline{v^2} - f$ model
+with Durbin's results given in \cite{durbin180}, for a $Re_\tau = 180$. This provided a more involved
+verification of the model. Durbin's $\overline{v^2}-f$ results are shown in Fig.
+\ref{fig:durbin180} and ours are shown in Fig. \ref{fig:results_180}. In each
+plot, the $\overline{v^2}-f$ results are compared with the cooresponding DNS
+data.  Our solution looks almost
 identical to Durbin's $\overline{v^2}-f$ results, and even disagrees with the DNS
-data in the same regions of the channel. The model results agree with the DNS
-data quite well, however, showing the strength of the $\overline{v^2}-f$ model
-in capturing the near wall behavior in channel flow. Our verified results at
+data in the same regions of the channel as Durbin. Our verified results at
 this stage gave us confidence that the model would behave well at high Reynolds
 numbers.
+
+%The model results agree with the DNS
+%data quite well, however, showing the strength of the $\overline{v^2}-f$ model
+%in capturing the near wall behavior in channel flow. 
+
 
 \begin{figure}
  \centering
