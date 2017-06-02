@@ -1,16 +1,22 @@
 /**
-\mainpage The V2-Fun Package
+\mainpage 
+
+\section main The V2-Fun Package
 
 <b>Author</b>: Gopal Yalla
 
-Built by: gry88 on stampede.tacc.utexas.edu
+Built by: gopal on elea.ices.utexas.edu
 
 Build Date: 12/9/2016
 <hr>
 
-\section Overview
+\subsection Overview
 
-The V2-Fun package is a tool for computing fully developed channel flow using a v2-f model. This code was written as a final project for CSE380, and makes use of the following design principles: 
+The V2-Fun package is a C++ tool for computing fully developed channel flow using a v2-f model. This code was written as a final project for CSE380, and makes use of the following design principles: 
+
+<img src="http://users.ices.utexas.edu/~gopal/All_Profiles.png" style="float: left; height: 8cm; width: 8cm; margin-left: 9%; margin-bottom: 0.5em;">
+<img src="http://users.ices.utexas.edu/~gopal/loglaw_10000.png" style="float: left; height: 8cm; width: 8cm; margin-left: 3%;margin-bottom: 0.5em;">
+<img src="http://users.ices.utexas.edu/~gopal/Results_10000.png" style="height: 8cm; width: 8cm;margin-left: 3%; margin-bottom: 0.5em;">
 
 <ul>
 <li> Documentation.
@@ -28,15 +34,15 @@ The latest version of v2fun can be download <a href="http://users.ices.utexas.ed
 </ul>
 
 
-\section doc Other Documentation
+\subsection doc Other Documentation
 
 The model documentation can be found <a href="http://users.ices.utexas.edu/~gopal/v2fun/writeup-paper.pdf">here</a>. Several of the variable names in the code follow the naming scheme used in that document. This doxygen page details each header file and class in the source code that is included by `main.cpp'. Lastely, a beamer presentation thoroughly detailing each design feature can be found <a href="http://users.ices.utexas.edu/~gopal/v2fun/talk.pdf">here</a>.  
 
-\section bugs Reporting Comments and Bugs
+\subsection bugs Reporting Comments and Bugs
 
 Bugs in the code and errors or omissions in the documentation can be reported to gopal@ices.utexas.edu. Requests and contributions (and good grades) are welcome at the same e-mail address.
 
-\section note Notice 
+\subsection note Notice 
 
 The current version of v2fun doesn't fully work just yet (hence the `fun' part, because I still had a lot of fun making it!) On most runs of the code, the viscous dissipation term goes nagative resulting in NANs when computing the turbulent length and time scale. However, the code will run as is, since time marching is disabled, and instead the temporal step size is made extremely small and only one iteration of the solver is performed to ensure the dissipation terms stays positive. The README file contains instructions on how to enable time marching. I believe the error in v2fun may be related to the following problems:
 

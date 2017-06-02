@@ -1,7 +1,9 @@
 /** 
 \page install Installation and Usage
 
-\section Installation
+\section inu Installation and Usage
+
+\subsection Installation
 
 To get the latest version of v2fun directly on Stampede, run the command:
 
@@ -16,8 +18,8 @@ Follow this command with:
 Before building v2fun, one must load the appropriate modules, namely gsl and grvy. A typical way to do this would be:
 
 <div class="fragment"><pre class="fragment">> module load gcc/4.7.1
-> module load gsl
-> module load grvy
+\> module load gsl
+\> module load grvy
 </pre></div><p><a class="anchor" id="Installation"></a> </p>
 
 After loading the requisite modules and moving into the 'v2fun_Yalla/' directory, issue a make command in the root directory to see all available targets, i.e., 
@@ -46,7 +48,8 @@ Only the Makefile in the root directory should be called as it interacts with th
 
 To verify that the software is working properly, a test option is provided to run a short suite of functionality tests against the local build. To run, issue a 'make check' to initiate the tests. If succesful, output similar to the following will be generated: 
 
-<div class="fragment"><pre class="fragment">> make check
+<div class="fragment"><pre><pre class="fragment">
+> make check
 -------------------------------------------------------
 Running Unit Test Suite
 -------------------------------------------------------
@@ -66,7 +69,7 @@ PASS: Setting v2 terms in system
 PASS: Setting f terms in system
 PASS: Putting system together 
 -------------------------------------------------------
- </pre></div><p><a class="anchor" id="Installation"></a> </p>
+</pre></pre></div><p><a class="anchor" id="Installation"></a> </p>
 
 Finally, to check the code coverage of the unit tests, issue a 'make coverage' to run lcov on the test suite and save the coverage info and html files in the directory test/unit/ as follows: 
 
@@ -75,7 +78,7 @@ Finally, to check the code coverage of the unit tests, issue a 'make coverage' t
 
 The current code coverage results can be found <a href="http://users.ices.utexas.edu/~gopal/v2fun/lcov_html/">here</a>.
 
-\section usage Usage
+\subsection usage Usage
 
 To begin using v2fun, enter the src/ directory. The main way to interact with v2fun is through the input file <i>input_file.txt</i>, which is parsed by the GRVY library. The parameters are detailed in the input file provided. Specifically, one can adjust model constants, change the step size in the wall normal direction, and indicate which data file from the data/ directory to use for initial conditions. Two data files are provided with v2fun (one for Reynolds number 180, and one for Reynolds number 2000), and the README file in the data/ directory explains how to easily generate more. Additionally, a paramter for logging is included to suppress or expand the program output. Once the input file is to your liking, run v2fun as, 
 
@@ -84,7 +87,7 @@ To begin using v2fun, enter the src/ directory. The main way to interact with v2
 
 The result of the code will be written to the output file specified in the input file. A simple gnuplotting script to view the resulting mean velocity profile is contained in the test/system/ directory. Once the bugs are fixed, we hope to include more features for viewing and verifying the results. 
 
-\section directree Directory Tree 
+\subsection directree Directory Tree 
 
 In case you get lost, a detailed directory tree is below: 
 
