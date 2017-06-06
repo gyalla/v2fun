@@ -12,22 +12,7 @@ Build Date: 12/9/2016
 
 \subsection Overview
 
-The V2-Fun package is a C++ tool for computing fully developed channel flow using a v2-f model. This code was written as a final project for CSE380, and makes use of the following design principles: 
-
-<img src="http://users.ices.utexas.edu/~gopal/All_Profiles.png" style="float: left; height: 8cm; width: 8cm; margin-left: 9%; margin-bottom: 0.5em;">
-<img src="http://users.ices.utexas.edu/~gopal/loglaw_10000.png" style="float: left; height: 8cm; width: 8cm; margin-left: 3%;margin-bottom: 0.5em;">
-<img src="http://users.ices.utexas.edu/~gopal/Results_10000.png" style="height: 8cm; width: 8cm;margin-left: 3%; margin-bottom: 0.5em;">
-
-<ul>
-<li> Documentation.
-<li> Version Control. 
-<li> Build systems. 
-<li> Verification. 
-<li> Code Coverage.
-<li> Profiling / Optimization. 
-</ul>
-
-The latest version of v2fun can be download <a href="http://users.ices.utexas.edu/~gopal/v2fun/v2fun_Yalla.tar">here</a>. The current release of v2fun includes the .git directory for completion, which accounts for a majority of the files. The code is written in C++ and makes use of the external libraries <a href="https://www.gnu.org/software/gsl/">GSL</a> and <a href="http://users.ices.utexas.edu/~csim/grvy/html/index.html">GRVY</a>. The code should be run on Stampede at the Texas Advanced Computing Center. To aid in usage and installation, please see the related pages:
+The V2-Fun package is a tool for computing fully developed channel flow using a v2-f model. This code was originally written as a final project for Dr. Chris Simmon's <em>Tools and Techniques of Computational Science</em> class and later updted for Dr. Robert Moser's <em>Turbulence</em> class, with the help of Clark Peterson, Tim Smith, and Sean Carney. The latest version of v2fun can be download <a href="http://users.ices.utexas.edu/~gopal/v2fun/v2fun_Yalla.tar">here</a>. The code is written in C++ and makes use of the external libraries <a href="https://www.gnu.org/software/gsl/">GSL</a> and <a href="http://users.ices.utexas.edu/~csim/grvy/html/index.html">GRVY</a>. To aid in usage and installation, please see the related pages:
 
 <ul>
 <li> \ref install
@@ -42,17 +27,15 @@ The model documentation can be found <a href="http://users.ices.utexas.edu/~gopa
 
 Bugs in the code and errors or omissions in the documentation can be reported to gopal@ices.utexas.edu. Requests and contributions (and good grades) are welcome at the same e-mail address.
 
+\subsection ex Example
+
+Below are results obtained using v2fun. The figures show the profiles for Reynolds Number = 180,2000,5200,10000, the log-law for Re=10000, and the terms in the v2f model for Re=5200,10000, respectively.  
+<img src="http://users.ices.utexas.edu/~gopal/All_Profiles.png" style="float: left; height: 8cm; width: 8cm; margin-left: 9%; margin-bottom: 0.5em;">
+<img src="http://users.ices.utexas.edu/~gopal/loglaw_10000.png" style="float: left; height: 8cm; width: 8cm; margin-left: 3%;margin-bottom: 0.5em;">
+<img src="http://users.ices.utexas.edu/~gopal/Results_10000.png" style="height: 8cm; width: 8cm;margin-left: 3%; margin-bottom: 0.5em;">
 \subsection note Notice 
 
-The current version of v2fun doesn't fully work just yet (hence the `fun' part, because I still had a lot of fun making it!) On most runs of the code, the viscous dissipation term goes nagative resulting in NANs when computing the turbulent length and time scale. However, the code will run as is, since time marching is disabled, and instead the temporal step size is made extremely small and only one iteration of the solver is performed to ensure the dissipation terms stays positive. The README file contains instructions on how to enable time marching. I believe the error in v2fun may be related to the following problems:
-
-<ul>
-<li> The initial guess derived by interpolating DNS data may be off for the v2-f model so gsl's Newton solver is diverging. 
-<li> The approximation to the Jacobian in gsl's multiroot solver is not sufficient for this problem. 
-<li> The model constants need to be corrected, or perhaps a CFL condition is not satisfied by the step sizes. 
-</ul>
-
-We hope to fix this bug in a future release, as well as implement regression tests such as asymptotic error analysis, convergence of certain statistical quantities, and a method of manufactured solution. 
+We hope to implement regression tests such as asymptotic error analysis, convergence of certain statistical quantities, and a method of manufactured solution in the future.
 
 \cond
 
