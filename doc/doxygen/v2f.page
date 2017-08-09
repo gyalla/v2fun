@@ -12,10 +12,10 @@ Build Date: 12/9/2016
 
 \subsection Overview
 
-The V2-Fun package is a tool for computing fully developed channel flow using a v2-f model. This code was originally written as a final project for Dr. Chris Simmon's <em>Tools and Techniques of Computational Science</em> class and later updted for Dr. Robert Moser's <em>Turbulence</em> class, with the help of Clark Peterson, Tim Smith, and Sean Carney. The latest version of v2fun can be download <a href="http://users.ices.utexas.edu/~gopal/v2fun/v2fun_Yalla.tar">here</a>. The code is written in C++ and makes use of the external libraries <a href="https://www.gnu.org/software/gsl/">GSL</a> and <a href="http://users.ices.utexas.edu/~csim/grvy/html/index.html">GRVY</a>. To aid in usage and installation, please see the related pages:
+The V2-Fun package is a tool for computing fully developed channel flow using a v2-f model. This code was originally written as a final project for Dr. Chris Simmon's <em>Tools and Techniques of Computational Science</em> class and later updated for Dr. Robert Moser's <em>Turbulence</em> class, with the help of Clark Peterson, Tim Smith, and Sean Carney. The latest version of v2fun can be download <a href="http://users.ices.utexas.edu/~gopal/v2fun/v2fun.tar">here</a>. The code is written in C++ and makes use of the external libraries <a href="https://www.gnu.org/software/gsl/">GSL</a> and <a href="http://users.ices.utexas.edu/~csim/grvy/html/index.html">GRVY</a>. To aid in usage and installation, please see the related pages:
 
 <ul>
-<li> \ref install
+<li> \ref install "Installation and Usage"
 </ul>
 
 
