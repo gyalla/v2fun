@@ -87,11 +87,11 @@ int test_Save_Results()
 	SaveResults(xi,"test_output.txt",&grid,modelConst);
 	ifstream inFile; 
 	inFile.open("test_output.txt");
-	inFile >> temp >> temp >> temp >> temp >> temp >> temp;  
+	inFile >> temp >> temp >> temp >> temp >> temp >> temp >> temp;  
 	for(unsigned int i = 0; i<xi->size;i+=5)
 	{
 		inFile >> temp; 
-		if (fabs(temp - (deltaEta*(i/float(5)+1)))>0.000001)
+		if (fabs(temp - (deltaEta*((i+5)/5)))>0.000001)
 		{
 			cout << "FAIL: Saving results" << endl; 
 			return 1; 

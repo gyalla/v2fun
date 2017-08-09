@@ -308,15 +308,15 @@ void SaveResults(gsl_vector * xi, string filename, Grid* grid,constants * modelC
 	//	gsl_vector_set(y_p,i,gsl_vector_get(grid->xi,i)*modelConst->reyn);
 	for(unsigned int i = 0; i<xi->size;i+=5)
 	{
-		//outFile << gsl_vector_get(y_p,i/5.0) << " ";
 		outFile << gsl_vector_get(grid->y, i/5) << "\t";
 		outFile << gsl_vector_get(xi,i) << "\t";
 		outFile << gsl_vector_get(xi,i+1) << "\t";
 		outFile << gsl_vector_get(xi,i+2) << "\t";
 		outFile << gsl_vector_get(xi,i+3) << "\t";
 		outFile << gsl_vector_get(xi,i+4) << "\t";
-		val = -90*(pow(gsl_vector_get(grid->y,i/5),2)-2*gsl_vector_get(grid->y,i/5));
-		outFile << val << endl;
+//		val = -90*(pow(gsl_vector_get(grid->y,i/5),2)-2*gsl_vector_get(grid->y,i/5));
+//		outFile << val << endl;
+		outFile << endl;
 		
 	}
 

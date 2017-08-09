@@ -119,9 +119,9 @@ int SetkTerms_test()
 		gsl_vector_set(vT,i,ComputeEddyVisc(xi,T,params->modelConst,i));
 	}
 	SetKTerms(xi,vT,params,sysF); 
-	gsl_vector_set(trueF,0,1140);
-	gsl_vector_set(trueF,1,-1046.23085463); 
-	gsl_vector_set(trueF,2,-433.69219381);
+	gsl_vector_set(trueF,0,1081.84615384615);   
+	gsl_vector_set(trueF,1,-691.769316176064);
+	gsl_vector_set(trueF,2,-337.763226012716);
 
 	double tol = 0.0000001;
 	for(unsigned int i =0; i<trueF->size;i++)
@@ -129,10 +129,10 @@ int SetkTerms_test()
 		if(fabs(gsl_vector_get(sysF,5*i+1)-gsl_vector_get(trueF,i))>tol)
 		{
 			cout <<"FAIL: Setting k terms in system" << endl;
-      cout << "    At Index: " << i << std::endl;
+  			cout << "    At Index: " << i << std::endl;
 			cout << "    Expected: " << gsl_vector_get(trueF,i);
-      cout << "    Found: " << gsl_vector_get(sysF,5*i+1) << std::endl;
-      cout << "    Tolerance: " << tol << std::endl;
+			cout << "    Found: " << gsl_vector_get(sysF,5*i+1) << std::endl;
+      			cout << "    Tolerance: " << tol << std::endl;
 			return 1; 
 		}
 	}
@@ -252,7 +252,7 @@ int SetFTerms_test()
 	}
 
 	SetFTerms(xi,vT,T,params,sysF); 
-	gsl_vector_set(trueF,0,-27570.111111112);
+	gsl_vector_set(trueF,0,-48150.1111110979);
 	gsl_vector_set(trueF,1,76.916666666666); 
 	gsl_vector_set(trueF,2,-7959.2566001196);
 
@@ -262,10 +262,10 @@ int SetFTerms_test()
 		if(fabs(gsl_vector_get(sysF,5*i+4)-gsl_vector_get(trueF,i))>0.0000001)
 		{
 			cout <<"FAIL: Setting f terms in system" << endl;
-      cout << "    At Index: " << i << std::endl;
-      cout << "    Expected: " << gsl_vector_get(trueF,i);
-      cout << "    Found: " << gsl_vector_get(sysF,5*i+4) << std::endl;
-      cout << "    Tolerance: " << tol << std::endl;
+			cout << "    At Index: " << i << std::endl;
+			cout << "    Expected: " << gsl_vector_get(trueF,i);
+			cout << "    Found: " << setprecision(15) << gsl_vector_get(sysF,5*i+4) << std::endl;
+			cout << "    Tolerance: " << tol << std::endl;
 			return 1; 
 		}
 	}
@@ -295,9 +295,9 @@ int SysF_test()
 	gsl_vector_set(trueF,10,-420.69219382);
 
 	//K TERMS	
-	gsl_vector_set(trueF,1,1140);
-	gsl_vector_set(trueF,6,-1046.23085463); 
-	gsl_vector_set(trueF,11,-433.69219381);
+	gsl_vector_set(trueF,1,1081.84615384615);
+	gsl_vector_set(trueF,6,-691.769316176064);
+	gsl_vector_set(trueF,11,-337.763226012716);
 
 	//ep 
 	gsl_vector_set(trueF,2,146.83333333);
@@ -308,7 +308,7 @@ int SysF_test()
 	gsl_vector_set(trueF,8,518.38457268119); 
 	gsl_vector_set(trueF,13,-756.051054299727);
 
-	gsl_vector_set(trueF,4,-27570.1111111112);
+	gsl_vector_set(trueF,4,-48150.1111110979);
 	gsl_vector_set(trueF,9,76.916666666666); 
 	gsl_vector_set(trueF,14,-7959.2566001196);
 
@@ -320,9 +320,9 @@ int SysF_test()
 		{
 			cout << "FAIL: Putting system together" << endl;
 			cout << "    At Index: " << i << std::endl;
-      cout << "    Expected: " << gsl_vector_get(trueF,i);
-      cout << "    Found: " << gsl_vector_get(F,i) << std::endl;
-      cout << "    Tolerance: " << tol << std::endl;
+			cout << "    Expected: " << gsl_vector_get(trueF,i);
+			cout << "    Found: " << setprecision(15) << gsl_vector_get(F,i) << std::endl;
+			cout << "    Tolerance: " << tol << std::endl;
 			return 1; 
 		}
 	}

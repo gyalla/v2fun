@@ -166,10 +166,11 @@ int Computef0_test()
 	constants * modelConst= & Const;  
 	Setuptest(xi,modelConst);
 	double deltaEta = 0.5;
-  Grid grid(true, 1.0, deltaEta);
+  	Grid grid(true, 1.0, deltaEta);
 
-	if(fabs(Computef0(xi,modelConst,&grid)+23.333333333)>0.0000001)
+	if(fabs(Computef0(xi,modelConst,&grid)+46.6666667)>0.0000001)
 	{
+		cout << Computef0(xi,modelConst,&grid) << endl;
 		cout << "FAIL: Compute redistribution at Wall" << endl; 
 		return 1; 
 	}
