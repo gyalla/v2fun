@@ -7,14 +7,14 @@
 using namespace std; 
 
 int test_loglevel();
-int main()
+int main(int argc,char ** argv)
 {
 	cout << "--------------------------------------------------" << endl;
 	cout << "Running Unit Test Suite" << endl; 
 	cout << "--------------------------------------------------" << endl << endl; 
 
 	test_interp();
-	test_Grvy_Input();
+	test_Grvy_Input(argc,argv);
 	test_Save_Results();
 
 	test_remapping();

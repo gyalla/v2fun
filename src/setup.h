@@ -34,16 +34,17 @@ struct constants {
 /**
  * \brief Parse inputs. 
  *
- * Uses the GRVY Library to parse inputs from file.
+ * Uses the Boost Library to parse inputs from file.
  * \param modelConst pointer to struct containing model constants. 
  * \param filename Defines data file to use for initial conditions. 
  * \param outFile Defines file to write results to.
  * \param uniformGrid If true, the grid will be uniform.
  * \param max_ts Defines maximum time steps taken before exiting..
+ * \param restarting If true, the simulation is picking up where left off. Data file contains f.
  * \return Error code (0 = success).
  */
-int Grvy_Input_Parse(constants * modelConst,string &filename,string & outFile,
-                     bool &uniformGrid, int &max_ts);
+int Input_Parse(constants * modelConst,string &filename,string & outFile,
+                     bool &uniformGrid, int &max_ts, bool &restarting,int ac,char ** av);
 
 /**
  * \brief Solve for initial conditions.  
@@ -53,11 +54,12 @@ int Grvy_Input_Parse(constants * modelConst,string &filename,string & outFile,
  * \param xi pointer to vector of \f$ U,k,\epsilon,\overline{v^2},f\f$.
  * \param grid - A point to the grid of points
  * \param file filename to get data from. 
+ * \param restarting If true, the simulation is picking up where left off. Data file contains f.
  * \return Error code (0 = success). 
  */
 
 
-int SolveIC(gsl_vector* xi, constants * modelConst, Grid* grid, string file);
+int SolveIC(gsl_vector* xi, constants * modelConst, Grid* grid, string file,bool restarting);
 
 /**
  * \brief Linear interpolates inputs and places result in vector. 
@@ -70,10 +72,11 @@ int SolveIC(gsl_vector* xi, constants * modelConst, Grid* grid, string file);
  * \param U2 \f$y_0\f$ in the formula given. 
  * \param gridPt \f$x\f$ in the formula given. 
  * \param i position in xi to place result. 
+ * \param restarting If true, the simulation is picking up where left off. Data file contains f.
  * \param modelConstants pointer to structcontaining model constants. 
  * \return Error code (0 = success).
  */
-int LinInterp(gsl_vector * Vec,double pt1,double pt2, double U1,double U2,double gridPt,int i, constants * modelConst );
+int LinInterp(gsl_vector * Vec,double pt1,double pt2, double U1,double U2,double gridPt,int i, constants * modelConst, bool restarting );
 
 /**
  * \brief Solve for initical conditions for f. 

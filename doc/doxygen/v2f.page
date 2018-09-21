@@ -21,7 +21,7 @@ The V2-Fun package is a tool for computing fully developed channel flow using a 
 
 \subsection doc Other Documentation
 
-The model documentation can be found <a href="http://users.ices.utexas.edu/~gopal/v2fun/writeup-paper.pdf">here</a>. Several of the variable names in the code follow the naming scheme used in that document. This doxygen page details each header file and class in the source code that is included by `main.cpp'. Lastely, a beamer presentation thoroughly detailing each design feature can be found <a href="http://users.ices.utexas.edu/~gopal/v2fun/talk.pdf">here</a>.  
+The model documentation can be found <a href="http://users.ices.utexas.edu/~gopal/v2fun/writeup-paper.pdf">here</a>. Several of the variable names in the code follow the naming scheme used in that document. This doxygen page details each header file and class in the source code that is included by `main.cpp'. 
 
 \subsection bugs Reporting Comments and Bugs
 

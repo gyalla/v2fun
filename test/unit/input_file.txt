@@ -22,13 +22,14 @@ Ceta = 70
 #-------------------------
 max_ts = 1 
 reyn = 2000		# Reynolds number 
-deltaEta = 0.01		#step size in wall normal direction. Should be ~ 1/reyn 
+uniform-grid = false  # Use a uniform grid
+restarting = false
 
 #--------------------------------------------------------------------------------
 # Files: files for Reynolds number 180 and 2000 are included in the data directory
 #--------------------------------------------------------------------------------
-data_filename = ../data/Reyn_2000.dat 
-output_filename = ../data/v2fResults_2000.dat	
+data_filename =data/Reyn_2000.dat 
+output_filename =output/v2fResults_2000.dat	
 
 
 #---------------------------------------------------

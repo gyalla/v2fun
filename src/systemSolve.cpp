@@ -6,14 +6,12 @@
 #include<math.h>
 #include<gsl/gsl_multiroots.h>
 #include<omp.h>
-#include<grvy.h>
 #include"computeTerms.h"
 #include"systemSolve.h"
 #include"finiteDiff.h"
 using namespace std; 
-using namespace GRVY;
 
-#define THREADS 4
+#define THREADS 1
 
 // The structure of this function is fixed by the definition of gsl_multiroot solvers. 
 int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
@@ -39,8 +37,6 @@ int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 		gsl_vector_set(vT,i,ComputeEddyVisc(tempxi,T,params->modelConst,i));
 	}
 
-	GRVY_Timer_Class gt; 
-	gt.BeginTimer("Setting up system");
 	//Set each term based on functions below. 
 	if(SetUTerms(tempxi,vT,params,sysF))
 	{
@@ -74,7 +70,6 @@ int SysF(const gsl_vector * xi, void * p, gsl_vector * sysF)
 		exit(1); 
 	}
 
-	gt.EndTimer("Setting up system");
 //	for(unsigned int i = 0; i<sysF->size;i++)
 //	{
 //		cout << gsl_vector_get(sysF,i) << endl; 
@@ -115,7 +110,7 @@ int SetFTerms(gsl_vector * xi, gsl_vector * vT, gsl_vector * T, FParams * params
 	}
 	}
 
-	double firstTerm,secondTerm,thirdTerm,fourthTerm,val; 
+	double firstTerm,secondTerm,thirdTerm,val; 
 	//boundary terms. 
 	i=size-1;  
 	xiCounter=5*(i-1); 
@@ -158,7 +153,7 @@ int SetV2Terms(gsl_vector * xi,gsl_vector * vT,FParams * params, gsl_vector * sy
 	}
 
 	double val; 
-	double firstTerm,secondTerm,thirdTerm,fourthTerm;  //as defined in doc. 
+	double firstTerm,secondTerm,thirdTerm;  //as defined in doc. 
 	// compute boundary terms. 
 	i=size-1; 
 	xiCounter=5*(i-1); 
@@ -204,7 +199,7 @@ int SetEpTerms(gsl_vector * xi, gsl_vector * vT,gsl_vector * T,FParams * params,
 	}
 
 	double val; 
-	double firstTerm, secondTerm,thirdTerm,fourthTerm;  //as in doc. 
+	double firstTerm, secondTerm,thirdTerm;  //as in doc. 
 	i=size-1;  
 	xiCounter=5*(i-1); 
 	firstTerm = -(gsl_vector_get(xi,xiCounter+2)-gsl_vector_get(params->XiN,xiCounter+2))/params->deltaT;	
@@ -290,7 +285,7 @@ int SetUTerms( gsl_vector * xi, gsl_vector * vT, FParams * params,gsl_vector * s
 	}
 
 	double val; 
-	double firstTerm, secondTerm, thirdTerm;
+	double firstTerm, secondTerm; //as in doc
 	i =size-1; 
 	xiCounter = 5*(i-1); 
 	firstTerm = -(gsl_vector_get(xi,xiCounter)-gsl_vector_get(params->XiN,xiCounter))/params->deltaT;	

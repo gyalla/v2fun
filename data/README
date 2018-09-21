@@ -1,4 +1,4 @@
-This file explains how to extract initial condition from Moser data. Data is organized as
+This file explains how to extract initial condition from Moser & Lee's data. Data is organized as
 
   		gridpoints | U | k | ep | v2 
  
@@ -11,8 +11,8 @@ and can be found in the following files:
  v2         = 4th column in *vel_fluc_prof.dat = 10 in paste
 
 
-To generate files, first clear out headers on top of files and run:  
+To generate files, first clear out headers on top of files and run (example):  
 
 paste LM_Channel_0180_mean_prof.dat LM_Channel_0180_vel_fluc_prof.dat LM_Channel_0180_RSTE_k_prof.dat | awk '{print $1 " " $3 " " $15 " " $23 " " $10}' > Reyn_180.dat
 
-*** IMPORTANT *** mosers data does not compute value at y+ = 1, but we need it for interpolation so just copy the last line.
+*** IMPORTANT *** Mosers data does not compute value at y+ = 1, but we need it for interpolation so just copy the last line and set the last grid point to 1 

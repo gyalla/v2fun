@@ -1,5 +1,4 @@
 #include<iostream>
-#include<grvy.h>
 #include<fstream> 
 #include<math.h>
 #include"../../src/setup.h"
@@ -39,7 +38,7 @@ int test_interp()
 	gsl_vector_set(truexi,16,1);
 	gsl_vector_set(truexi,18,-2);
 
-	SolveIC(xi,modelConst,&grid,"./test_interp.data");
+	SolveIC(xi,modelConst,&grid,"./test_interp.data",false);
 
 	if (gsl_vector_equal(xi,truexi)==0)
 	{
@@ -50,7 +49,7 @@ int test_interp()
 	return 0;
 }
 
-int test_Grvy_Input()
+int test_Grvy_Input(int argc,char** argv)
 { 	
 	struct constants Const = {
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
@@ -58,18 +57,20 @@ int test_Grvy_Input()
 	string filename,outFile;
 	bool uniformGrid;
 	int max_ts; 
-	if(Grvy_Input_Parse(modelConst,filename,outFile,uniformGrid,max_ts))
+	bool restarting;
+	if(Input_Parse(modelConst,filename,outFile,uniformGrid,max_ts,restarting,argc,argv))
 	{ 
 		cout << "FAIL: Getting inputs" << endl; 
 		return 1; 
 	}
 
-	if( (modelConst->reyn != 2000) || (modelConst->Cmu != 0.19) || (modelConst->C1 != 0.4)|| (modelConst->C2 != 0.3) || (modelConst->sigmaEp != 1.3) || (modelConst->CL != 0.3) || (modelConst->Cep2 != 1.9) || (modelConst->Cep1 != 1.55) || (modelConst->Ceta != 70) || (filename.compare("../data/Reyn_2000.dat")!=0) || (outFile.compare("../data/v2fResults_2000.dat")!=0) || (max_ts !=1))
+	if( (modelConst->reyn != 2000) || (modelConst->Cmu != 0.19) || (modelConst->C1 != 0.4)|| (modelConst->C2 != 0.3) || (modelConst->sigmaEp != 1.3) || (modelConst->CL != 0.3) || (modelConst->Cep2 != 1.9) || (modelConst->Cep1 != 1.55) || (modelConst->Ceta != 70) || (filename.compare("data/Reyn_2000.dat")!=0) || (outFile.compare("output/v2fResults_2000.dat")!=0) || (max_ts !=1))
 	{
 		cout << "FAIL: Getting inputs" << endl; 
 		return 1; 
 	}
 
+	cout << "PASS: Parsing Input File" << endl; 
 	return 0; 
 }
 
@@ -87,13 +88,16 @@ int test_Save_Results()
 	SaveResults(xi,"test_output.txt",&grid,modelConst);
 	ifstream inFile; 
 	inFile.open("test_output.txt");
-	inFile >> temp >> temp >> temp >> temp >> temp >> temp >> temp;  
+	if (!inFile)
+		cout <<"Error opening test file" << endl; 
+	inFile >> temp >> temp >> temp >> temp >> temp >> temp;
 	for(unsigned int i = 0; i<xi->size;i+=5)
 	{
 		inFile >> temp; 
 		if (fabs(temp - (deltaEta*((i+5)/5)))>0.000001)
 		{
-			cout << "FAIL: Saving results" << endl; 
+			cout << temp << " " << deltaEta*((i+5)/5) << endl; 
+			cout << "FAIL: Saving results 1" << endl; 
 			return 1; 
 		}
 		for(unsigned int j=0;j<5;j++)

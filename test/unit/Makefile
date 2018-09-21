@@ -23,7 +23,7 @@ $(EXEC): $(OBJ)
 
 check: 
 	$(RM) test_output.txt
-	./test
+	./test -c input_file.txt
 
 .PHONY: clobber clean
 clobber:

@@ -4,7 +4,7 @@
 // 12/3/2016 - (gyalla) Written for CSE380 final project. 
 //--------------------------------------------------
 #include<iostream>
-#include<grvy.h>
+#include<iomanip>
 #include<gsl/gsl_multiroots.h>
 #include<math.h>
 #include"systemSolve.h"
@@ -18,31 +18,29 @@
 #define T_MIN  1.0e-7
 #define L_MIN  1.0e-5
 
-using namespace GRVY;
 using namespace std; 
 //function declarations. 
 int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts);
-int print_state(int i,gsl_multiroot_fsolver * s);
+int print_state(int i,gsl_multiroot_fsolver * s, string status, double deltaT, double maxres);
+void Print_Program_Info();
 
 std::string NumberToString ( int Number);
 int main(int argc, char ** argv)
 {
 	// Parse inputs 
+	Print_Program_Info();
 	Log(logINFO) << "Parsing inputs";
-	bool   uniform_grid;
+	bool uniform_grid, restarting;
         int max_ts;
 	struct constants Const = {
 		.reyn=0,.Cmu=0,.C1=0,.C2=0,.Cep1=0,.Cep2=0,.Ceta=0,.CL=0,.sigmaEp=0};
 	constants * modelConst = &Const; 
 	string filename, outFile;
-	GRVY_Timer_Class gt; 
-	gt.BeginTimer("Getting Inputs");
-	if(Grvy_Input_Parse(modelConst,filename,outFile, uniform_grid, max_ts))
+	if(Input_Parse(modelConst,filename,outFile, uniform_grid, max_ts,restarting,argc,argv))
 	{
 		Log(logERROR) << "Error parsing inputs";
 		return 1; 
 	}
-	gt.EndTimer("Getting Inputs");
 
 	// Make a new grid object
 	Grid grid(uniform_grid, 1.0, 1.0/Const.reyn);
@@ -50,39 +48,34 @@ int main(int argc, char ** argv)
 
 	// Solving for initial conditions 
 	Log(logINFO) << "Solving initial conditions for U,k,ep,v2";
-	gt.BeginTimer("Solving Initial Conditions");
 	double I = grid.getSize();
 	gsl_vector * xi = gsl_vector_calloc(5*(I));
-	if(SolveIC(xi,modelConst,&grid,filename))
+
+	if(SolveIC(xi,modelConst,&grid,filename,restarting))
 	{
 		Log(logERROR) << "Error interpolating initial conditions.";
 		return 1; 
 	}
-	Log(logINFO) << "Solving initial conditions for f";
 
-
-	//if(Solve4f0(xi,modelConst,&grid))
-	//{
-	//	Log(logERROR) << "Error initializing f";
-	//	return 1; 
-	//}
-	gt.EndTimer("Solving Initial Conditions");
+	if (!restarting)
+	{
+	        Log(logINFO) << "Solving initial conditions for f";
+		if(Solve4f0(xi,modelConst,&grid))
+		{
+			Log(logERROR) << "Error initializing f";
+			return 1; 
+		}
+	}
+	
 
 	SaveResults(xi,"../data/init.dat",&grid,modelConst);
 	// Newton Solve. 
 	Log(logINFO) << "Solving system...";
-	gt.BeginTimer("Newton Solve + Time Marching");
 	NewtonSolve(xi,modelConst,&grid,max_ts);
-	gt.EndTimer("Newton Solve + Time Marching");
 
 	//writing data to output
 	Log(logINFO) << "Writing results to " << outFile;
-	gt.BeginTimer("Writing results to output"); 
 	SaveResults(xi,outFile,&grid,modelConst);
-	gt.EndTimer("Writing results to output"); 
-
-	// summarize timiing.
-	gt.Summarize();
 
 	return 0; 
 }
@@ -130,20 +123,18 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 		struct FParams p = {xi,deltaT,grid,modelConst};
 		FParams * params = &p; 
 		gsl_multiroot_function F = {&SysF,xi->size,params};
-		Log(logINFO) << "Setting up System";
+		//Log(logINFO) << "Setting up System";
 		gsl_multiroot_fsolver_set(s,&F,xi); 
 		//only need one iteration per deltaT since we don't care about temporal accuracy. 
 		//We are just trying to get to the fully developed region of flow. 
 		do
 		{
 			inner_iter++; 
-			Log(logINFO) << "Iterating (deltaT = " << deltaT << ")";
 			status = gsl_multiroot_fsolver_iterate(s);
-			print_state(iter,s); 
 			if(status)
 				break;
 			//status = gsl_multiroot_test_residual(s->f,0.001);
-			Log(logINFO) << string(gsl_strerror(status));
+			print_state(iter,s,string(gsl_strerror(status)),deltaT,max_residual); 
 		} while(inner_iter < 1);
 		inner_iter =0;
 		//xi = gsl_multiroot_fsolver_root(s); 
@@ -182,9 +173,11 @@ int NewtonSolve(gsl_vector * xi,constants * modelConst, Grid* grid, int max_ts)
 	return 0; 
 }
 
-int print_state(int i,gsl_multiroot_fsolver * s)
+int print_state(int i,gsl_multiroot_fsolver * s,string status, double deltaT, double maxres)
 {
-	Log(logINFO) << "iteration = "<< i << ", max = " << gsl_vector_max(s->f);
+	Log(logINFO) << setw(11)<< "Iteration: " << setw(7) << std::left <<  i << "\tdeltaT = " << setw(10) << std::left << setprecision(5) << deltaT 
+		<< setw(14) << "\tMax Residual: " << setw(10) << std::left << setprecision(5) << maxres << "\t GSL SOLVER STATUS: " << status;
+	//Log(logINFO) << "iteration = "<< i << ", max = " << gsl_vector_max(s->f);
 	return 0; 
 }
 
@@ -193,4 +186,16 @@ std::string NumberToString ( int Number)
 	std::ostringstream ss;
         ss << Number;
         return ss.str();
+}
+
+void Print_Program_Info()
+{
+	cout<<"\n";
+	cout<< "____   ____________          _______________ __________    \n"; 
+	cout<< "\\   \\ /   /\\_____  \\         \\_   _____/    |   \\      \\   \n";
+	cout<<" \\   Y   /  /  ____/   ______ |    __) |    |   /   |   \\  \n";
+	cout<<"  \\     /  /       \\  /_____/ |     \\  |    |  /    |    \\ \n";
+	cout<<"   \\___/   \\_______ \\         \\___  /  |______/\\____|__  / \n";
+	cout<<"   		   \\/             \\/                   \\/  \n";
+	cout<<"\n";
 }

@@ -7,9 +7,8 @@
 
 README
 	V2-FUN is a tool for computing fully developed channel flow using a v2-f
-	model...made fun, because it doesn't work just yet, but I had a lot of
-	fun making it. The code is written in C++ and makes use of external
-	libraries including gsl and grvy. For more information about the
+	model...made fun! The code is written in C++ and makes use of external
+	libraries including gsl, boost, and grvy. For more information about the
 	features in v2fun as well as installation and usage instructions, please
 	visit the website:
 
@@ -19,21 +18,12 @@ README
 	
 INSTALLATION
 
-	The latest release of v2fun can be found on the website above. Currently
-	the code only works on Stampede at the Texas Advanced Computing Center.
-	After downloading the tarball to Stampede and untar-ing it, one must
-	load the gsl and grvy modules. A typical way to do this might be:
-
-	> module load gcc/4.7.1
-	> module load gsl
-	> module load grvy 
-
 	After loading the requisite libraries, issue a make command in the root
 	directory to see all available targets, i.e., 
 
 	> make 
 	Available make targets:
-  	install   : build main program in /src/
+  	all       : build main program in /src/
     	check     : build and run test unit test suite in /test/unit
       	coverage  : build tests w/ coverage option, run lcov, and generate html in 
 			/test/unit/lcov_html
@@ -41,7 +31,7 @@ INSTALLATION
 
 	To install v2fun in the src/ directory run, 
 
-	> make install 
+	> make all
 
 	To verify that the software is working properly, a test option is provided
 	to run a short suite of functionality tests against the local
@@ -74,9 +64,7 @@ INSTALLATION
 
 	> make coverage 
 
-	Note: Since lcov is not installed by default on stampede, a copy is
-	provided in the include/ directory.  The current code coverage results
-	may be viewed at: 
+	The current code coverage results may be viewed at: 
 
 		http://users.ices.utexas.edu/~gopal/v2fun/lcov_html/
 
@@ -98,15 +86,6 @@ USAGE:
 
 	The result of the code will written to the specified output file in
 	perfect format for gnuplotting. 
-	
-	Note: The current version of v2fun, doesn't work with time marching
-	enabled, as the energy dissipation at the wall goes negative, which
-	causes an error in computing the turbulent length and time scales.
-	Instead, when you run v2fun as is, deltaT is set to be extremly small to
-	avoid such errors, and no marching is performed. This is just to have
-	working code to submit. To enable time marching, simply uncomment line
-	91 in main.cpp and comment out line 90, as described in the code. 
-
 
 DIRECTORY TREE
 	
@@ -135,16 +114,7 @@ CONTACT
 
 NOTICE
 
-	In a future version we hope to not only correct the code, but also study
-	asymptotic error analysis, the convergence of certain statistical
-	quantities, and implement a method of manufactured solution.  Aside from
-	a bug in the code, the current failures in v2fun may come from: 
-
-	- The initial guess derived by interpolating DNS data may be off for the
-	  v2-f model so gsl's Newton solver diverges. 
-	- The approximation to the Jacobian in gsl's multiroot solver is not
-	  sufficient for this problem. 
-	- The model constants may be off, or perhaps a certain CFL condition is
-	  not satisfied by the step sizes.
+	In a future version we hope to study asymptotic error analysis, 
+	and implement a method of manufactured solution. 
 
 12/9/2016
