@@ -33,11 +33,14 @@ check:
 	$(MAKE) -C ./test/unit check
 
 coverage:
+	@echo "-------------------------------------------------------"
+	@echo   Note: Must have lcov installed to use coverage feature
+	@echo "-------------------------------------------------------"
 	$(MAKE) -C ./test/unit clean
 	$(MAKE) -C ./test/unit CFLAGS="-O0 -g -Wall --coverage" LDFLAGS="${LDFLAGS} --coverage"
 	$(MAKE) -C ./test/unit check 
-	./include/lcov/bin/lcov -b ./test/unit --directory ./test/unit --directory ./src/ -no-external -c  -o coverage.info
-	./include/lcov/bin/genhtml coverage.info -o lcov_html/
+	lcov -b ./test/unit --directory ./test/unit --directory ./src/ -no-external -c  -o coverage.info
+	genhtml coverage.info -o lcov_html/
 	mv coverage.info test/unit/
 	mv lcov_html test/unit/
 	@echo

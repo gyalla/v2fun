@@ -82,6 +82,7 @@ Finally, to check the code coverage of the unit tests, issue a 'make coverage' t
 <div class="fragment"><pre class="fragment">> make coverage
 </pre></div><p><a class="anchor" id="Installation"></a> </p>
 
+Note, lcov must be installed to use this feature. 
 The current code coverage results can be found <a href="http://users.ices.utexas.edu/~gopal/software/v2fun/lcov_html/">here</a>.
 
 \subsection usage Usage
