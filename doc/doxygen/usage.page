@@ -86,7 +86,7 @@ The current code coverage results can be found <a href="http://users.ices.utexas
 
 \subsection usage Usage
 
-The main way to interact with v2fun is through the input file <i>input_file.txt</i> located in the input/ directory, which is parsed by the BOOST library. The parameters are detailed in the input file provided. Specifically, one can adjust model constants, change the step size in the wall normal direction, and indicate which data file from the data/ directory to use for initial conditions. Two data files are provided with v2fun (one for Reynolds number 180, and one for Reynolds number 2000), and the README file in the data/ directory explains how to easily generate more. Additionally, a paramter for logging is included to suppress or expand the program output. Once the input file is to your liking, run v2fun as, 
+The main way to interact with v2fun is through the input file <i>input_file.txt</i> located in the input/ directory, which is parsed by the BOOST library. The parameters are detailed in the input file provided. Specifically, one can adjust model constants, change the step size in the wall normal direction, and indicate which data file from the data/ directory to use for initial conditions. Three data files are provided with v2fun (one for Reynold's number 180, one for Reynold's number 2000, and one for Reynold's number 5200), and the README file in the data/ directory explains how to easily generate more. Additionally, a paramter for logging is included to suppress or expand the program output. Once the input file is to your liking, run v2fun as, 
 
 <div class="fragment"><pre class="fragment">> ./v2fun
 </pre></div><p><a class="anchor" id="Installation"></a> </p>
