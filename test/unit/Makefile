@@ -25,13 +25,12 @@ check:
 	$(RM) test_output.txt
 	./test -c input_file.txt
 
-.PHONY: clobber clean
-clobber:
-	-$(RM) $(EXEC)
+.PHONY: clean
+clean: 
 	-rm -rf lcov_html
 	-rm -f coverage.info
-clean: 
 	-$(RM) $(OBJ)
 	-$(RM) $(COV1)
 	-$(RM) $(COV2)
+	-$(RM) $(EXEC)
 	

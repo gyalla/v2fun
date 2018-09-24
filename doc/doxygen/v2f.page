@@ -21,12 +21,19 @@ To aid in usage and installation, please see the related pages:
 
 <ul>
 <li> \ref install "Installation and Usage"
+<li> <a href="http://users.ices.utexas.edu/~gopal/software/v2fun/v2fun_doc.pdf"><b>Model Documentation</b></a>, <a href="http://users.ices.utexas.edu/~gopal/software/v2fun/turbulence-v2channel.pdf"><b>Tubulence Documentation \& Results</b></a>
+<li> <a href="http://users.ices.utexas.edu/~gopal/software/v2fun/lcov_html/index.html"><b>Code Coverage</b></a>
 </ul>
 
 
 \subsection doc Other Documentation
 
-The model documentation can be found <a href="http://users.ices.utexas.edu/~gopal/v2fun/writeup-paper.pdf">here</a>. Several of the variable names in the code follow the naming scheme used in that document. Additionally, this doxygen page details each header file and class found in the source code.
+As mentioned above, the model documentation can be found <a href="http://users.ices.utexas.edu/~gopal/software/v2fun/v2fun_doc.pdf">here</a>, 
+as well as <a href="http://users.ices.utexas.edu/~gopal/software/v2fun/turbulence-v2channel.pdf">here</a> ---
+the latter of which includes results obtained using the v2fun package. Several of the variable names in the code follow the naming scheme used in the documentation. 
+
+Additionally, this doxygen page details each header file and class found in the source code.
+
 
 \subsection bugs Reporting Comments and Bugs
 
@@ -43,5 +50,6 @@ Below are results obtained using v2fun. The figures show the profiles for Reynol
 
 \htmlonly<img src="figure/temp.png" width="700px" height="300px" align="middle"/> \endhtmlonly
 \endcond
+
 
 */

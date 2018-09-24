@@ -14,10 +14,9 @@ $(EXECDIR)/$(EXEC): $(OBJ)
 %.o: %.cpp
 	$(COMPILE.c) $< -fopenmp -o $@ $(INC)
 
-.PHONY: clobber clean 
-clobber:
+.PHONY: clean 
+clean:
 	-$(RM) gmon.out
 	-$(RM) $(EXEC)
-clean: 
 	-rm $(OBJ)
 

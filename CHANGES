@@ -1,0 +1,7 @@
+Version 0.2.0
+	*Switched from GRVY to BOOST for input parsing
+	*Bug fixes
+Version 0.1.0
+	*Added nonuniform grid abilitiy 
+	*Many other new unit tests, bug fixes
+Version 0.0.0
