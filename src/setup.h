@@ -41,6 +41,8 @@ struct constants {
  * \param uniformGrid If true, the grid will be uniform.
  * \param max_ts Defines maximum time steps taken before exiting..
  * \param restarting If true, the simulation is picking up where left off. Data file contains f.
+ * \param ac Arguement count passed to main. 
+ * \param av Arguement vector passed to main. 
  * \return Error code (0 = success).
  */
 int Input_Parse(constants * modelConst,string &filename,string & outFile,

@@ -37,7 +37,7 @@ info:
 	@echo "  all       : build main program in /src/"
 	@echo "  check	    : build and run test unit test suite in /test/unit"
 	@echo "  coverage  : build tests with coverage option, run lcov, and generate html in /test/unit/lcov_html"
-	@echo "  doc	    : build documentation (doxygen page, and writeup)" 
+	@echo "  doc	    : build documentation (doxygen page)" 
 all:
 	$(MAKE) -C ./src/  
 
@@ -55,6 +55,10 @@ coverage:
 	./include/lcov/bin/genhtml coverage.info -o lcov_html/
 	mv coverage.info test/unit/
 	mv lcov_html test/unit/
+	@echo
+	@echo "-------------------------------------------"
+	@echo   Now check test/unit/lcov_html/ for results!
+	@echo "-------------------------------------------"
 love:
 	@echo "not war?"
 
@@ -62,18 +66,15 @@ love:
 clobber: clean 
 	-$(MAKE) -C ./src/ clobber
 	-$(MAKE) -C ./test/unit/ clobber
-	-$(MAKE) -C ./doc/writeup clean
 	-cd doc/doxygen && rm -rf html && rm -rf latex
 	-cd ./test/system/ && rm -rf Sol.png
 	-rm -rf $(EXEC)
 clean: 
 	-$(MAKE) -C ./test/unit/ clean
 	-$(MAKE) -C ./src/ clean
-	-$(MAKE) -C ./doc/writeup clean
 	
 
 doc:
-	$(MAKE) -C ./doc/writeup/
 	cd doc/doxygen/ && doxygen v2f.dox
 
 

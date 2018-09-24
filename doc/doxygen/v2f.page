@@ -7,12 +7,17 @@
 
 Built by: gopal on elea.ices.utexas.edu
 
-Build Date: 12/9/2016
+Build Date: 09/24/2018
 <hr>
 
 \subsection Overview
 
-The V2-Fun package is a tool for computing fully developed channel flow using a v2-f model. This code was originally written as a final project for Dr. Chris Simmon's <em>Tools and Techniques of Computational Science</em> class and later updated for Dr. Robert Moser's <em>Turbulence</em> class, with the help of Clark Peterson, Tim Smith, and Sean Carney. The latest version of v2fun can be download <a href="http://users.ices.utexas.edu/~gopal/v2fun/v2fun.tar">here</a>. The code is written in C++ and makes use of the external libraries <a href="https://www.gnu.org/software/gsl/">GSL</a> and <a href="http://users.ices.utexas.edu/~csim/grvy/html/index.html">GRVY</a>. To aid in usage and installation, please see the related pages:
+The V2-Fun package is a tool for computing fully developed channel flow using the v2-f turbulence model. 
+This code was originally written as a final project for Dr. Chris Simmon's <em>Tools and Techniques of Computational Science</em> class 
+and later updated for Dr. Robert Moser's <em>Turbulence</em> class, with the help of Clark Peterson, Tim Smith, and Sean Carney. 
+The latest version of v2fun can be download <a href="http://users.ices.utexas.edu/~gopal/v2fun/v2fun.tar">here</a>. 
+The code is written in C++ and makes use of the external libraries <a href="https://www.gnu.org/software/gsl/">GSL</a> and <a href="http://boost.org">BOOST</a>. 
+To aid in usage and installation, please see the related pages:
 
 <ul>
 <li> \ref install "Installation and Usage"
@@ -21,21 +26,18 @@ The V2-Fun package is a tool for computing fully developed channel flow using a 
 
 \subsection doc Other Documentation
 
-The model documentation can be found <a href="http://users.ices.utexas.edu/~gopal/v2fun/writeup-paper.pdf">here</a>. Several of the variable names in the code follow the naming scheme used in that document. This doxygen page details each header file and class in the source code that is included by `main.cpp'. 
+The model documentation can be found <a href="http://users.ices.utexas.edu/~gopal/v2fun/writeup-paper.pdf">here</a>. Several of the variable names in the code follow the naming scheme used in that document. Additionally, this doxygen page details each header file and class found in the source code.
 
 \subsection bugs Reporting Comments and Bugs
 
-Bugs in the code and errors or omissions in the documentation can be reported to gopal@ices.utexas.edu. Requests and contributions (and good grades) are welcome at the same e-mail address.
+Bugs in the code and errors or omissions in the documentation can be reported to gopal@ices.utexas.edu. Requests and contributions are welcome at the same e-mail address.
 
-\subsection ex Example
+\subsection ex Example Results
 
 Below are results obtained using v2fun. The figures show the profiles for Reynolds Number = 180,2000,5200,10000, the log-law for Re=10000, and the terms in the v2f model for Re=5200,10000, respectively.  
 <img src="http://users.ices.utexas.edu/~gopal/All_Profiles.png" style="float: left; height: 8cm; width: 8cm; margin-left: 9%; margin-bottom: 0.5em;">
 <img src="http://users.ices.utexas.edu/~gopal/loglaw_10000.png" style="float: left; height: 8cm; width: 8cm; margin-left: 3%;margin-bottom: 0.5em;">
 <img src="http://users.ices.utexas.edu/~gopal/Results_10000.png" style="height: 8cm; width: 8cm;margin-left: 3%; margin-bottom: 0.5em;">
-\subsection note Notice 
-
-We hope to implement regression tests such as asymptotic error analysis, convergence of certain statistical quantities, and a method of manufactured solution in the future.
 
 \cond
 

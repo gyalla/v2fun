@@ -1,8 +1,10 @@
-/*
- * Grid.h
+/**
+ * \file
+ * \author clarkp, Gopal Yalla
+ *
+ * \brief Defines class used for either a uniform or non-uniform grid. 
  *
  *  Created on: Apr 5, 2017
- *      Author: clarkp
  */
 
 #ifndef SRC_GRID_H_

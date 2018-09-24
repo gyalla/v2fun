@@ -26,8 +26,9 @@
 
 # executables #
 ###############
-src/v2fun
+v2fun
 test/unit/test
+
 
 # doxygen #
 ############

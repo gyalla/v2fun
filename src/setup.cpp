@@ -236,17 +236,16 @@ int Solve4f0(gsl_vector * xi, constants * modelConst, Grid* grid)
 	// 	|    0         2*L^2/n^2 -(2*L^2/n^2 + 1) |
 	//
 
-	/** On a nonuniform grid:
-	 * d^2/dy^2 = d^2Chi/dy^2 * d/dChi + (dChi/dy)^2 * d^2/dChi^2
-	 * So:
-   *      |    1                               0                   0               |
-   * A =  | L^2(a1^2/m^2 - a2/(2*m))  -2*L^2*a1^2/m^2-1  L^2(a1^2/m^2 + a2/(2*m))  |
-   *      |    0                         2*L^2*a1^2/m^2      -2*L^2*a1^2/m^2-1      |
-   * Where:
-   *    a1 = dChi/dY
-   *    a2 = d^2Chi/dY^2
-   *    m  = deltaChi
-   */
+	// On a nonuniform grid:
+	// d^2/dy^2 = d^2Chi/dy^2 * d/dChi + (dChi/dy)^2 * d^2/dChi^2
+	// So:
+   //      |    1                               0                   0               |
+   // A =  | L^2(a1^2/m^2 - a2/(2*m))  -2*L^2*a1^2/m^2-1  L^2(a1^2/m^2 + a2/(2*m))  |
+   //      |    0                         2*L^2*a1^2/m^2      -2*L^2*a1^2/m^2-1      |
+   // Where:
+   //    a1 = dChi/dY
+   //    a2 = d^2Chi/dY^2
+   //    m  = deltaChi
 
 	gsl_matrix_set(A,0,0,1); 
 	gsl_vector_set(b,0,Computef0(xi,modelConst,grid));
