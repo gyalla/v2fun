@@ -5,19 +5,9 @@
 
 \subsection Installation
 
-To get the latest version of v2fun, run the command:
+To get the latest version of v2fun, clone from github via:
 
-<div class="fragment"><pre class="fragment">> wget http://users.ices.utexas.edu/~gopal/software/v2fun/v2fun.tar
-</pre></div><p><a class="anchor" id="Installation"></a> </p>
-
-Follow this command with: 
-
-<div class="fragment"><pre class="fragment">> tar -xf v2fun.tar
-</pre></div><p><a class="anchor" id="Installation"></a> </p>
-
-or clone from github via:
-
-<div class="fragment"><pre class="fragment">> git clone 
+<div class="fragment"><pre class="fragment">> git clone https://github.com/gyalla/v2fun.git
 </pre></div><p><a class="anchor" id="Installation"></a> </p>
 
 
@@ -83,7 +73,7 @@ Finally, to check the code coverage of the unit tests, issue a 'make coverage' t
 </pre></div><p><a class="anchor" id="Installation"></a> </p>
 
 Note, lcov must be installed to use this feature. 
-The current code coverage results can be found <a href="http://users.ices.utexas.edu/~gopal/software/v2fun/lcov_html/">here</a>.
+The current code coverage results can be found <a href="http://users.ices.utexas.edu/~gopal/software/v2fun/lcov_html/src/">here</a>.
 
 \subsection usage Usage
 

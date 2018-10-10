@@ -5,7 +5,6 @@
 		   \___/   \_______ \         \___  /  |______/\____|__  /
 				   \/             \/                   \/
 
-README
 	V2-FUN is a tool for computing fully developed channel flow using a v2-f
 	turbulence model! The code is written in C++ and makes use of external
 	libraries including gsl, and boost. For more information about the

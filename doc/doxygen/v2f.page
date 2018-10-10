@@ -22,7 +22,7 @@ To aid in usage and installation, please see the related pages:
 <ul>
 <li> \ref install "Installation and Usage"
 <li> <a href="http://users.ices.utexas.edu/~gopal/software/v2fun/v2fun_doc.pdf"><b>Model Documentation</b></a>, <a href="http://users.ices.utexas.edu/~gopal/software/v2fun/turbulence-v2channel.pdf"><b>Tubulence Documentation \& Results</b></a>
-<li> <a href="http://users.ices.utexas.edu/~gopal/software/v2fun/lcov_html/index.html"><b>Code Coverage</b></a>
+<li> <a href="http://users.ices.utexas.edu/~gopal/software/v2fun/lcov_html/src/"><b>Code Coverage</b></a>
 </ul>
 
 
